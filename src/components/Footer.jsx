@@ -98,7 +98,7 @@ export default function Footer({ onOpenAssistance }) {
                 </svg>
               </a>
               <a
-                href="https://wa.me/971501234567"
+                href="https://wa.me/971525453323"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-lg bg-white/5 hover:bg-[#25D366] hover:text-white flex items-center justify-center text-white/80 transition-colors"
@@ -155,25 +155,25 @@ export default function Footer({ onOpenAssistance }) {
             
             <div className="space-y-3 text-xs text-white/80">
               <a
-                href="tel:+97142345678"
+                href="tel:+971525453323"
                 className="flex items-start gap-3 hover:text-white transition-colors group"
               >
                 <Phone className="w-4 h-4 text-[#09A9D4] shrink-0 mt-0.5" />
                 <div>
-                  <div className="font-semibold text-white">+971 4 234 5678</div>
+                  <div className="font-semibold text-white">+971 52 545 3323</div>
                   <div className="text-[10px] text-white/50">Central Dubai Office</div>
                 </div>
               </a>
 
               <a
-                href="https://wa.me/971501234567"
+                href="https://wa.me/971525453323"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-start gap-3 hover:text-white transition-colors"
               >
                 <MessageCircle className="w-4 h-4 text-[#25D366] shrink-0 mt-0.5" />
                 <div>
-                  <div className="font-semibold text-white">+971 50 123 4567</div>
+                  <div className="font-semibold text-white">+971 52 545 3323</div>
                   <div className="text-[10px] text-white/50">Direct WhatsApp Dispatch</div>
                 </div>
               </a>
@@ -192,8 +192,9 @@ export default function Footer({ onOpenAssistance }) {
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-[#09A9D4] shrink-0 mt-0.5" />
                 <div>
-                  <div className="font-semibold text-white">Business Bay / Deira</div>
-                  <div className="text-[10px] text-white/50">Dubai, United Arab Emirates</div>
+                  <div className="font-semibold text-white">Office S20, Ground Floor, Arzoo Building</div>
+                  <div className="text-[11px] text-white/70">Sharjah Islamic Bank Bldg, Near Al Twar Center</div>
+                  <div className="text-[10px] text-white/50">Al Qusais Metro Exit 02, Al Nahda Rd, Dubai, UAE</div>
                 </div>
               </div>
 

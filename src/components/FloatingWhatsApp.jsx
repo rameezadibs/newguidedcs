@@ -23,7 +23,7 @@ export default function FloatingWhatsApp() {
 
       {/* Floating Button with Official WhatsApp SVG Logo */}
       <a
-        href="https://wa.me/971501234567?text=Hello%20New%20Guide%20Team,%20I%20would%20like%20to%20inquire%20about%20UAE%20document%20clearing%20and%20business%20services."
+        href="https://wa.me/971525453323?text=Hello%20New%20Guide%20Team,%20I%20would%20like%20to%20inquire%20about%20UAE%20document%20clearing%20and%20business%20services."
         target="_blank"
         rel="noopener noreferrer"
         onMouseEnter={() => setShowTooltip(true)}

@@ -89,7 +89,7 @@ export default function FinalCta({ onOpenAssistance }) {
 
           {/* Secondary CTA: Call / WhatsApp */}
           <a
-            href="https://wa.me/971501234567?text=Hello%20New%20Guide%20Team,%20I%20would%20like%20assistance%20with%20UAE%20document%20clearing%20and%20business%20services."
+            href="https://wa.me/971525453323?text=Hello%20New%20Guide%20Team,%20I%20would%20like%20assistance%20with%20UAE%20document%20clearing%20and%20business%20services."
             target="_blank"
             rel="noopener noreferrer"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded bg-white/10 hover:bg-white/20 border border-white/20 hover:border-white/40 text-white text-xs sm:text-sm font-bold tracking-widest uppercase transition-all duration-300 shadow-sm"

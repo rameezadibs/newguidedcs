@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Menu, X, Phone } from 'lucide-react';
+import { ArrowRight, Menu, X, Phone, MessageCircle, ChevronRight, ShieldCheck } from 'lucide-react';
 
 export default function Navbar({ onOpenAssistance }) {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -9,20 +9,20 @@ export default function Navbar({ onOpenAssistance }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 40) {
+      if (window.scrollY > 30) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
       }
 
       // Update active nav based on scroll position
-      const sections = ['home', 'about', 'services', 'difference', 'process', 'insights', 'contact'];
+      const sections = ['home', 'about', 'services', 'difference', 'process', 'contact'];
       for (const section of sections) {
         const el = document.getElementById(section);
         if (el) {
           const rect = el.getBoundingClientRect();
-          if (rect.top <= 140 && rect.bottom >= 140) {
-            setActiveSection(section === 'difference' || section === 'process' ? 'services' : section);
+          if (rect.top <= 160 && rect.bottom >= 140) {
+            setActiveSection(section);
             break;
           }
         }
@@ -34,11 +34,12 @@ export default function Navbar({ onOpenAssistance }) {
   }, []);
 
   const navLinks = [
-    { name: 'Home', href: '#home', id: 'home' },
-    { name: 'About', href: '#about', id: 'about' },
-    { name: 'Services', href: '#services', id: 'services' },
-    { name: 'Blogs', href: '#insights', id: 'insights' },
-    { name: 'Contact', href: '#contact', id: 'contact' },
+    { num: '01', name: 'Home', href: '#home', id: 'home' },
+    { num: '02', name: 'Who We Are', href: '#about', id: 'about' },
+    { num: '03', name: 'Our Services', href: '#services', id: 'services' },
+    { num: '04', name: 'Why Choose Us', href: '#difference', id: 'difference' },
+    { num: '05', name: 'How It Works', href: '#process', id: 'process' },
+    { num: '06', name: 'Contact', href: '#contact', id: 'contact' },
   ];
 
   const handleNavClick = (e, href) => {
@@ -52,13 +53,8 @@ export default function Navbar({ onOpenAssistance }) {
 
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-[#123D88]/10 py-3.5'
-            : 'bg-transparent py-5'
-        }`}
-      >
+      {/* Crisp White Navbar Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm border-b border-[#123D88]/10 py-3.5 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between gap-4">
             
@@ -69,7 +65,6 @@ export default function Navbar({ onOpenAssistance }) {
               className="flex items-center shrink-0 group focus:outline-none"
               aria-label="New Guide Documents Clearing Services Co."
             >
-              {/* Ample horizontal space provided so full text and emblem remain 100% visible and unclipped */}
               <div className="h-10 sm:h-12 md:h-14 flex items-center">
                 <img
                   src="/new-guide-logo.png"
@@ -89,10 +84,10 @@ export default function Navbar({ onOpenAssistance }) {
                     key={link.name}
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    className={`relative px-4 py-2 text-sm font-medium transition-colors duration-200 ${
+                    className={`relative px-4 py-2 text-sm transition-colors duration-200 ${
                       isActive
-                        ? 'text-[#071D45] font-semibold'
-                        : 'text-[#667085] hover:text-[#123D88]'
+                        ? 'text-[#071D45] font-extrabold'
+                        : 'text-[#667085] font-medium hover:text-[#123D88]'
                     }`}
                   >
                     {link.name}
@@ -110,16 +105,13 @@ export default function Navbar({ onOpenAssistance }) {
               })}
             </nav>
 
-            {/* RIGHT: CTA Button */}
+            {/* RIGHT: CTA Button (Desktop) */}
             <div className="hidden sm:flex items-center gap-3">
               <button
                 onClick={onOpenAssistance}
-                className="group relative inline-flex items-center justify-center gap-2.5 px-5 py-2.5 rounded text-sm font-medium text-white bg-[#123D88] hover:bg-[#071D45] border border-[#09A9D4]/40 hover:border-[#09A9D4] shadow-sm transition-all duration-300 overflow-hidden"
+                className="group relative inline-flex items-center justify-center gap-2.5 px-5 py-2.5 rounded-xl text-xs font-extrabold tracking-widest uppercase text-white bg-[#123D88] hover:bg-[#071D45] shadow-md transition-all duration-300 overflow-hidden"
               >
-                {/* Subtle cyan accent light sweep */}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-[#09A9D4]/20 to-transparent pointer-events-none" />
-                
-                <span className="relative z-10 tracking-wide font-semibold text-xs uppercase">
+                <span className="relative z-10">
                   Get Assistance
                 </span>
                 <ArrowRight className="w-4 h-4 text-[#09A9D4] transition-transform duration-300 group-hover:translate-x-1 relative z-10" />
@@ -130,10 +122,10 @@ export default function Navbar({ onOpenAssistance }) {
             <div className="flex sm:hidden items-center gap-2">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 rounded text-[#071D45] hover:bg-black/5 focus:outline-none transition-colors"
+                className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-[#071D45] focus:outline-none transition-colors"
                 aria-label="Toggle Navigation Menu"
               >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                {mobileMenuOpen ? <X className="w-6 h-6 text-[#09A9D4]" /> : <Menu className="w-6 h-6 text-[#071D45]" />}
               </button>
             </div>
 
@@ -141,57 +133,107 @@ export default function Navbar({ onOpenAssistance }) {
         </div>
       </header>
 
-      {/* Mobile Drawer Menu */}
+      {/* Crisp White Mobile Navigation Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.25 }}
-            className="fixed inset-x-0 top-[60px] z-40 bg-white/98 backdrop-blur-xl border-b border-[#123D88]/10 shadow-xl px-6 py-6 sm:hidden"
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-x-0 top-[64px] bottom-0 z-40 bg-white text-[#071D45] flex flex-col justify-between overflow-y-auto px-6 py-6 border-b border-slate-200 shadow-2xl sm:hidden"
           >
-            <div className="flex flex-col space-y-4">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className={`text-base font-medium py-2 flex items-center justify-between border-b border-gray-100 ${
-                    activeSection === link.id
-                      ? 'text-[#071D45] font-bold text-[#123D88]'
-                      : 'text-[#667085]'
-                  }`}
-                >
-                  <span>{link.name}</span>
-                  {activeSection === link.id && (
-                    <span className="w-2 h-2 rounded-full bg-[#09A9D4]" />
-                  )}
-                </a>
-              ))}
+            <div className="relative z-10 space-y-6">
 
-              <div className="pt-2">
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onOpenAssistance();
-                  }}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded text-sm font-semibold uppercase tracking-wider text-white bg-[#123D88] border border-[#09A9D4]/40 shadow-sm"
-                >
-                  <span>Get Assistance</span>
-                  <ArrowRight className="w-4 h-4 text-[#09A9D4]" />
-                </button>
+              {/* Mobile Category Eyebrow Tag */}
+              <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200">
+                <span className="w-6 h-[2px] bg-[#09A9D4]" />
+                <span className="text-[11px] font-mono font-bold tracking-widest text-[#09A9D4] uppercase">
+                  NAVIGATION MENU
+                </span>
               </div>
 
-              <div className="pt-2 flex items-center justify-between text-xs text-[#667085]">
-                <a href="tel:+97142345678" className="flex items-center gap-1.5 hover:text-[#123D88]">
-                  <Phone className="w-3.5 h-3.5 text-[#09A9D4]" />
-                  <span>+971 4 234 5678</span>
-                </a>
-                <span className="text-[#09A9D4]">•</span>
-                <span className="font-medium text-[#071D45]">Dubai, UAE</span>
+              {/* Numbered Link Items */}
+              <div className="space-y-1">
+                {navLinks.map((link) => {
+                  const isActive = activeSection === link.id;
+                  return (
+                    <a
+                      key={link.name}
+                      href={link.href}
+                      onClick={(e) => handleNavClick(e, link.href)}
+                      className={`group flex items-center justify-between py-3 px-3.5 rounded-xl transition-all duration-200 ${
+                        isActive
+                          ? 'bg-[#123D88]/10 border border-[#09A9D4]/40 text-[#071D45]'
+                          : 'hover:bg-slate-50 text-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3.5">
+                        <span className={`font-mono text-xs font-extrabold ${isActive ? 'text-[#09A9D4]' : 'text-slate-400'}`}>
+                          {link.num}
+                        </span>
+                        <span className={`font-display font-extrabold text-lg sm:text-xl tracking-tight ${isActive ? 'text-[#071D45]' : 'text-slate-700'}`}>
+                          {link.name}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        {isActive && (
+                          <span className="w-2 h-2 rounded-full bg-[#09A9D4] animate-pulse" />
+                        )}
+                        <ChevronRight className={`w-4 h-4 transition-transform duration-200 ${isActive ? 'text-[#09A9D4] translate-x-1' : 'text-slate-400 group-hover:text-[#071D45]'}`} />
+                      </div>
+                    </a>
+                  );
+                })}
               </div>
+
             </div>
+
+            {/* Bottom Actions & Accreditation Footer */}
+            <div className="relative z-10 pt-6 mt-6 border-t border-slate-200 space-y-4">
+
+              {/* Primary CTA */}
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenAssistance();
+                }}
+                className="w-full flex items-center justify-center gap-2.5 py-4 rounded-xl text-xs font-extrabold tracking-widest uppercase text-white bg-[#123D88] hover:bg-[#071D45] shadow-xl transition-all"
+              >
+                <span>Get Immediate Assistance</span>
+                <ArrowRight className="w-4 h-4 text-[#09A9D4]" />
+              </button>
+
+              {/* Quick Contact Info */}
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                <a
+                  href="tel:+971525453323"
+                  className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-slate-100 border border-slate-200 text-[#071D45] hover:bg-slate-200 transition-colors"
+                >
+                  <Phone className="w-3.5 h-3.5 text-[#09A9D4]" />
+                  <span className="font-mono text-[11px] font-bold">+971 52 545 3323</span>
+                </a>
+
+                <a
+                  href="https://wa.me/971525453323"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-[#25D366]/15 border border-[#25D366]/30 text-emerald-700 hover:bg-[#25D366]/25 transition-colors"
+                >
+                  <MessageCircle className="w-3.5 h-3.5 text-[#25D366]" />
+                  <span className="font-mono text-[11px] font-bold">WhatsApp</span>
+                </a>
+              </div>
+
+              {/* Licensed Badge */}
+              <div className="flex items-center justify-center gap-2 text-[10px] font-mono text-slate-500">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#09A9D4]" />
+                <span>LICENSED UAE CORPORATE SERVICES PROVIDER</span>
+              </div>
+
+            </div>
+
           </motion.div>
         )}
       </AnimatePresence>

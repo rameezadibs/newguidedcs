@@ -160,7 +160,7 @@ export default function AssistanceModal({ isOpen, onClose, initialService = null
                     <input
                       type="tel"
                       required
-                      placeholder="+971 50 123 4567"
+                      placeholder="+971 52 545 3323"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       className="w-full px-3 py-2 text-xs sm:text-sm bg-[#F7F6F1] border border-gray-300 rounded-lg focus:bg-white focus:border-[#123D88] focus:outline-none transition-colors"
@@ -240,7 +240,7 @@ export default function AssistanceModal({ isOpen, onClose, initialService = null
               {/* Instant WhatsApp Action */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                 <a
-                  href={`https://wa.me/971501234567?text=Hello%20New%20Guide%20Team,%20my%20case%20reference%20is%20${referenceId}.%20I%20submitted%20a%20request%20for%20${encodeURIComponent(selectedService)}.`}
+                  href={`https://wa.me/971525453323?text=Hello%20New%20Guide%20Team,%20my%20case%20reference%20is%20${referenceId}.%20I%20submitted%20a%20request%20for%20${encodeURIComponent(selectedService)}.`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white text-xs font-bold tracking-wider uppercase transition-colors"
