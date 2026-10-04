@@ -1,18 +1,45 @@
 import { ArrowUp, Phone, Mail, MapPin, MessageCircle, Clock, ShieldCheck } from 'lucide-react';
 
-export default function Footer({ onOpenAssistance }) {
+export default function Footer({ onOpenAssistance, onNavigate }) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const navItems = [
-    { name: 'Home', href: '#home' },
-    { name: 'About New Guide', href: '#about' },
-    { name: 'Services Index', href: '#services' },
-    { name: 'Why New Guide', href: '#difference' },
-    { name: 'How It Works', href: '#process' },
-    { name: 'Contact Us', href: '#contact' },
+    { name: 'Home', href: '#home', id: 'home' },
+    { name: 'About New Guide', href: '/about', id: 'about' },
+    { name: 'Services Index', href: '#services', id: 'services' },
+    { name: 'Why New Guide', href: '#difference', id: 'difference' },
+    { name: 'How It Works', href: '#process', id: 'process' },
+    { name: 'Contact Us', href: '#contact', id: 'contact' },
   ];
+
+  const handleFooterNavClick = (e, item) => {
+    e.preventDefault();
+    if (onNavigate) {
+      if (item.id === 'about') {
+        onNavigate('about');
+        return;
+      }
+      if (item.id === 'home') {
+        onNavigate('home');
+        return;
+      }
+      if (item.id === 'contact') {
+        const contactSection = document.getElementById('contact');
+        if (contactSection) {
+          contactSection.scrollIntoView({ behavior: 'smooth' });
+        }
+        return;
+      }
+      onNavigate('home', item.id);
+      return;
+    }
+    const target = document.querySelector(item.href);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const serviceLinks = [
     'Document Clearing & MOFA Legalization',
@@ -42,14 +69,25 @@ export default function Footer({ onOpenAssistance }) {
           <div className="lg:col-span-5 space-y-5">
             
             {/* Official Logo on Elegant Crisp Light Plaque */}
-            <div className="inline-block bg-white rounded-lg p-3 shadow-md border border-white/20 max-w-[340px]">
+            <a
+              href="#home"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) {
+                  onNavigate('home');
+                } else {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+              }}
+              className="inline-block bg-white rounded-lg p-3 shadow-md border border-white/20 max-w-[340px] cursor-pointer"
+            >
               <img
                 src="/new-guide-logo.png"
                 alt="New Guide Documents Clearing Services Co."
                 className="h-10 sm:h-12 w-auto object-contain"
                 loading="lazy"
               />
-            </div>
+            </a>
 
             {/* Short Company Description */}
             <p className="text-sm text-white/70 leading-relaxed max-w-md">
@@ -119,7 +157,8 @@ export default function Footer({ onOpenAssistance }) {
                 <li key={item.name}>
                   <a
                     href={item.href}
-                    className="text-white/70 hover:text-white transition-colors flex items-center gap-1.5"
+                    onClick={(e) => handleFooterNavClick(e, item)}
+                    className="text-white/70 hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer"
                   >
                     <span>{item.name}</span>
                   </a>

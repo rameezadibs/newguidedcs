@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Menu, X, Phone, MessageCircle, ChevronRight, ShieldCheck } from 'lucide-react';
 
-export default function Navbar({ onOpenAssistance }) {
+export default function Navbar({ onOpenAssistance, currentPage = 'home', onNavigate }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
@@ -13,6 +13,10 @@ export default function Navbar({ onOpenAssistance }) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
+      }
+
+      if (currentPage === 'about') {
+        return;
       }
 
       // Update active nav based on scroll position
@@ -31,21 +35,43 @@ export default function Navbar({ onOpenAssistance }) {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [currentPage]);
 
   const navLinks = [
     { num: '01', name: 'Home', href: '#home', id: 'home' },
-    { num: '02', name: 'Who We Are', href: '#about', id: 'about' },
+    { num: '02', name: 'About', href: '#about', id: 'about' },
     { num: '03', name: 'Our Services', href: '#services', id: 'services' },
     { num: '04', name: 'Why Choose Us', href: '#difference', id: 'difference' },
     { num: '05', name: 'How It Works', href: '#process', id: 'process' },
     { num: '06', name: 'Contact', href: '#contact', id: 'contact' },
   ];
 
-  const handleNavClick = (e, href) => {
+  const handleNavClick = (e, link) => {
     e.preventDefault();
     setMobileMenuOpen(false);
-    const target = document.querySelector(href);
+
+    if (onNavigate) {
+      if (link.id === 'about') {
+        onNavigate('about');
+        return;
+      }
+      if (link.id === 'home') {
+        onNavigate('home');
+        return;
+      }
+      if (link.id === 'contact') {
+        const target = document.getElementById('contact');
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+        return;
+      }
+      // For services, difference, process
+      onNavigate('home', link.id);
+      return;
+    }
+
+    const target = document.querySelector(link.href);
     if (target) {
       target.scrollIntoView({ behavior: 'smooth' });
     }
@@ -54,15 +80,17 @@ export default function Navbar({ onOpenAssistance }) {
   return (
     <>
       {/* Crisp White Navbar Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm border-b border-[#123D88]/10 py-3.5 transition-all duration-300">
+      <header className={`fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#123D88]/10 transition-all duration-300 ${
+        isScrolled ? 'shadow-md py-2.5' : 'shadow-sm py-3.5'
+      }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between gap-4">
             
             {/* LEFT: Official New Guide Logo */}
             <a
               href="#home"
-              onClick={(e) => handleNavClick(e, '#home')}
-              className="flex items-center shrink-0 group focus:outline-none"
+              onClick={(e) => handleNavClick(e, { id: 'home', href: '#home' })}
+              className="flex items-center shrink-0 group focus:outline-none cursor-pointer"
               aria-label="New Guide Documents Clearing Services Co."
             >
               <div className="h-10 sm:h-12 md:h-14 flex items-center">
@@ -78,13 +106,13 @@ export default function Navbar({ onOpenAssistance }) {
             {/* CENTER / RIGHT Navigation (Desktop) */}
             <nav className="hidden lg:flex items-center space-x-1 xl:space-x-2">
               {navLinks.map((link) => {
-                const isActive = activeSection === link.id;
+                const isActive = currentPage === 'about' ? link.id === 'about' : activeSection === link.id;
                 return (
                   <a
                     key={link.name}
                     href={link.href}
-                    onClick={(e) => handleNavClick(e, link.href)}
-                    className={`relative px-4 py-2 text-sm transition-colors duration-200 ${
+                    onClick={(e) => handleNavClick(e, link)}
+                    className={`relative px-4 py-2 text-sm transition-colors duration-200 cursor-pointer ${
                       isActive
                         ? 'text-[#071D45] font-extrabold'
                         : 'text-[#667085] font-medium hover:text-[#123D88]'
@@ -156,13 +184,13 @@ export default function Navbar({ onOpenAssistance }) {
               {/* Numbered Link Items */}
               <div className="space-y-1">
                 {navLinks.map((link) => {
-                  const isActive = activeSection === link.id;
+                  const isActive = currentPage === 'about' ? link.id === 'about' : activeSection === link.id;
                   return (
                     <a
                       key={link.name}
                       href={link.href}
-                      onClick={(e) => handleNavClick(e, link.href)}
-                      className={`group flex items-center justify-between py-3 px-3.5 rounded-xl transition-all duration-200 ${
+                      onClick={(e) => handleNavClick(e, link)}
+                      className={`group flex items-center justify-between py-3 px-3.5 rounded-xl transition-all duration-200 cursor-pointer ${
                         isActive
                           ? 'bg-[#123D88]/10 border border-[#09A9D4]/40 text-[#071D45]'
                           : 'hover:bg-slate-50 text-slate-700'
