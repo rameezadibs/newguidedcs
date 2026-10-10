@@ -206,21 +206,45 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <div className="text-[11px] font-mono font-bold tracking-wider text-slate-400 uppercase mb-1">
-                    DIRECT PHONE
+                    DIRECT CALL LINES
                   </div>
-                  <h3 className="text-lg font-bold text-[#071D45]">+971 52 545 3323</h3>
-                  <p className="text-xs text-slate-600 mt-1">
-                    Central Dubai corporate direct line for urgent requests.
+                  <div className="space-y-1 mt-1">
+                    <a
+                      href="tel:+971525453323"
+                      className="block text-lg font-bold text-[#071D45] hover:text-[#00A9D6] transition-colors"
+                      title="Call Direct Mobile"
+                    >
+                      +971 52 545 3323
+                    </a>
+                    <a
+                      href="tel:+97142633268"
+                      className="block text-sm font-semibold text-slate-700 hover:text-[#00A9D6] transition-colors"
+                      title="Call Office Landline"
+                    >
+                      +971 4 2633 268
+                    </a>
+                  </div>
+                  <p className="text-xs text-slate-600 mt-2.5">
+                    Central Dubai mobile line & office landline for instant assistance.
                   </p>
                 </div>
               </div>
-              <a
-                href="tel:+971525453323"
-                className="group w-full inline-flex items-center justify-between px-4 py-3 rounded-xl bg-[#08244A] hover:bg-[#123D88] text-white font-bold text-xs tracking-wider uppercase transition-all duration-200 shadow-md cursor-pointer"
-              >
-                <span>CALL DIRECTLY</span>
-                <ArrowRight className="w-4 h-4 text-[#00A9D6] transition-transform group-hover:translate-x-1" />
-              </a>
+              <div className="flex flex-col gap-2">
+                <a
+                  href="tel:+971525453323"
+                  className="group w-full inline-flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-[#08244A] hover:bg-[#123D88] text-white font-bold text-xs tracking-wider uppercase transition-all duration-200 shadow-sm cursor-pointer"
+                >
+                  <span>CALL MOBILE</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-[#00A9D6] transition-transform group-hover:translate-x-1" />
+                </a>
+                <a
+                  href="tel:+97142633268"
+                  className="group w-full inline-flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#071D45] border border-slate-200 font-bold text-xs tracking-wider uppercase transition-all duration-200 shadow-sm cursor-pointer"
+                >
+                  <span>CALL OFFICE</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-[#00A9D6] transition-transform group-hover:translate-x-1" />
+                </a>
+              </div>
             </div>
 
             {/* EMAIL DOSSIER CARD */}
@@ -302,6 +326,15 @@ export default function ContactPage() {
                 <div className="font-semibold text-white">Office S20, Ground Floor, Arzoo Building</div>
                 <div className="text-white/60 text-xs mt-0.5">Sharjah Islamic Bank Bldg, Near Al Twar Center</div>
                 <div className="text-white/60 text-xs">Al Qusais Metro Exit 02, Al Nahda Rd, Dubai, UAE</div>
+                <div className="text-white/80 text-xs mt-1.5 flex items-center gap-2.5 font-mono">
+                  <a href="tel:+97142633268" className="hover:text-[#00A9D6] transition-colors">
+                    Tel: +971 4 2633 268
+                  </a>
+                  <span className="text-white/30">•</span>
+                  <a href="tel:+971525453323" className="hover:text-[#00A9D6] transition-colors">
+                    Mob: +971 52 545 3323
+                  </a>
+                </div>
               </div>
             </div>
 

@@ -135,7 +135,7 @@ function App() {
       <main>
         {currentPage === 'about' ? (
           <AboutPage
-            onOpenAssistance={() => handleOpenAssistance('About Page Consultation')}
+            onOpenAssistance={(service) => handleOpenAssistance(service || 'About Page Consultation')}
             onExploreServices={() => handleNavigate('services')}
           />
         ) : currentPage === 'services' ? (

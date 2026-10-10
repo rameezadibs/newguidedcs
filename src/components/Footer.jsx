@@ -200,8 +200,19 @@ export default function Footer({ onOpenAssistance, onNavigate }) {
               >
                 <Phone className="w-4 h-4 text-[#09A9D4] shrink-0 mt-0.5" />
                 <div>
-                  <div className="font-semibold text-white">+971 52 545 3323</div>
-                  <div className="text-[10px] text-white/50">Central Dubai Office</div>
+                  <div className="font-semibold text-white group-hover:text-[#09A9D4] transition-colors">+971 52 545 3323</div>
+                  <div className="text-[10px] text-white/50">Mobile & Direct PRO Liaison</div>
+                </div>
+              </a>
+
+              <a
+                href="tel:+97142633268"
+                className="flex items-start gap-3 hover:text-white transition-colors group"
+              >
+                <Phone className="w-4 h-4 text-[#09A9D4] shrink-0 mt-0.5" />
+                <div>
+                  <div className="font-semibold text-white group-hover:text-[#09A9D4] transition-colors">+971 4 2633 268</div>
+                  <div className="text-[10px] text-white/50">Central Dubai Office Landline</div>
                 </div>
               </a>
 
