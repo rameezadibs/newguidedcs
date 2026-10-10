@@ -95,12 +95,15 @@ export default function BrandStatement({ onOpenAssistance }) {
           </div>
         </div>
 
-        {/* Primary CTA (Electric Cyan - Zero Gold) */}
+        {/* Primary CTA */}
         <div>
           <button
             id="brand-statement-cta-btn"
-            onClick={onOpenAssistance}
-            className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-[#123D88] hover:bg-[#071D45] text-white text-xs sm:text-sm font-extrabold tracking-widest uppercase shadow-2xl transition-all duration-300 transform hover:-translate-y-0.5"
+            onClick={() => {
+              const text = encodeURIComponent('Hello New Guide, I would like to start my document clearing request.');
+              window.open(`https://wa.me/971525453323?text=${text}`, '_blank');
+            }}
+            className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-[#123D88] hover:bg-[#071D45] text-white text-xs sm:text-sm font-extrabold tracking-widest uppercase shadow-2xl transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer"
             aria-label="Start your document clearing request with New Guide Document Clearing Services"
           >
             <span>START YOUR REQUEST</span>

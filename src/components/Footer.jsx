@@ -11,7 +11,7 @@ export default function Footer({ onOpenAssistance, onNavigate }) {
     { name: 'Services Index', href: '#services', id: 'services' },
     { name: 'Why New Guide', href: '#difference', id: 'difference' },
     { name: 'How It Works', href: '#process', id: 'process' },
-    { name: 'Contact Us', href: '#contact', id: 'contact' },
+    { name: 'Contact Us', href: '/contact', id: 'contact' },
   ];
 
   const handleFooterNavClick = (e, item) => {
@@ -21,15 +21,16 @@ export default function Footer({ onOpenAssistance, onNavigate }) {
         onNavigate('about');
         return;
       }
+      if (item.id === 'services') {
+        onNavigate('services');
+        return;
+      }
       if (item.id === 'home') {
         onNavigate('home');
         return;
       }
       if (item.id === 'contact') {
-        const contactSection = document.getElementById('contact');
-        if (contactSection) {
-          contactSection.scrollIntoView({ behavior: 'smooth' });
-        }
+        onNavigate('contact');
         return;
       }
       onNavigate('home', item.id);
@@ -52,7 +53,7 @@ export default function Footer({ onOpenAssistance, onNavigate }) {
   ];
 
   return (
-    <footer id="contact" className="relative bg-[#071D45] text-white pt-16 pb-12 overflow-hidden border-t border-[#123D88]/30">
+    <footer id="site-footer" className="relative bg-[#071D45] text-white pt-16 pb-12 overflow-hidden border-t border-[#123D88]/30">
       
       {/* Subtle Cyan Guiding Line Near Footer Boundary */}
       <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#09A9D4] to-transparent pointer-events-none" />

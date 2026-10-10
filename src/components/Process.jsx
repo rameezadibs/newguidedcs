@@ -174,8 +174,11 @@ export default function Process({ onOpenAssistance }) {
 
           <button
             id="process-expedited-btn"
-            onClick={onOpenAssistance}
-            className="shrink-0 px-7 py-4 rounded-xl bg-[#123D88] hover:bg-[#071D45] text-white text-xs font-extrabold uppercase tracking-widest shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 flex items-center gap-2"
+            onClick={() => {
+              const text = encodeURIComponent('Hello New Guide, I would like to start an expedited document review and clearance.');
+              window.open(`https://wa.me/971525453323?text=${text}`, '_blank');
+            }}
+            className="shrink-0 px-7 py-4 rounded-xl bg-[#123D88] hover:bg-[#071D45] text-white text-xs font-extrabold uppercase tracking-widest shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 flex items-center gap-2 cursor-pointer"
             aria-label="Start Expedited Document Review and Clearance"
           >
             <span>Start Expedited Review</span>

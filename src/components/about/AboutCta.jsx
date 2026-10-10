@@ -118,9 +118,12 @@ export default function AboutCta({ onOpenAssistance, onExploreServices }) {
             {/* Primary Action Button 1: SPEAK TO NEW GUIDE → */}
             <button
               id="about-cta-primary"
-              onClick={onOpenAssistance}
+              onClick={() => {
+                const text = encodeURIComponent('Hello New Guide, I would like to speak with a corporate PRO and document clearing specialist.');
+                window.open(`https://wa.me/971525453323?text=${text}`, '_blank');
+              }}
               title="Speak to New Guide Corporate PRO & Document Clearing Specialist Dubai"
-              className="group w-full py-5 px-8 rounded-2xl bg-white hover:bg-[#DDF5FC] text-[#06162F] font-display font-extrabold text-sm sm:text-base tracking-wider uppercase shadow-2xl transition-all duration-300 flex items-center justify-between"
+              className="group w-full py-5 px-8 rounded-2xl bg-white hover:bg-[#DDF5FC] text-[#06162F] font-display font-extrabold text-sm sm:text-base tracking-wider uppercase shadow-2xl transition-all duration-300 flex items-center justify-between cursor-pointer"
             >
               <span>SPEAK TO NEW GUIDE</span>
               <span className="text-xl font-mono text-[#00A9D6] transition-transform duration-300 group-hover:translate-x-2">

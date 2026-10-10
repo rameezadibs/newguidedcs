@@ -1,7 +1,15 @@
 import React from 'react';
 import { ArrowRight, CheckCheck, ShieldCheck } from 'lucide-react';
 
-export default function WhoWeAre({ onOpenAssistance }) {
+export default function WhoWeAre({ onOpenAssistance, onNavigate }) {
+  const handleDiscoverServices = () => {
+    if (onNavigate) {
+      onNavigate('services');
+    } else {
+      window.location.href = '/services';
+    }
+  };
+
   return (
     <section id="about" aria-labelledby="about-heading" className="relative pt-12 sm:pt-16 pb-12 sm:pb-16 bg-[#071D45] overflow-hidden">
       {/* Background Architectural Watermark - Faded "NG" */}
@@ -83,7 +91,7 @@ export default function WhoWeAre({ onOpenAssistance }) {
             <div>
               <button
                 id="about-learn-more-btn"
-                onClick={onOpenAssistance}
+                onClick={handleDiscoverServices}
                 className="group inline-flex items-center gap-3 px-7 py-4 rounded-xl bg-[#123D88] hover:bg-[#071D45] text-white text-xs sm:text-sm font-extrabold tracking-widest uppercase shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
                 aria-label="Learn more about New Guide Document Clearing Services"
               >

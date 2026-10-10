@@ -10,40 +10,49 @@ import Footer from './components/Footer';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import AssistanceModal from './components/AssistanceModal';
 import AboutPage from './components/about/AboutPage';
+import ServicesPage from './components/services/ServicesPage';
+import ContactPage from './components/contact/ContactPage';
 
 function App() {
   const [assistanceModalOpen, setAssistanceModalOpen] = useState(false);
   const [selectedServiceForModal, setSelectedServiceForModal] = useState(null);
 
-  // Initialize page from pathname, hash or query params
-  const [currentPage, setCurrentPage] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const path = window.location.pathname.toLowerCase();
-      const hash = window.location.hash.toLowerCase();
-      const search = new URLSearchParams(window.location.search);
-      if (path.includes('/about') || hash === '#/about' || hash === '#about-page' || search.get('page') === 'about') {
-        return 'about';
-      }
-    }
-    return 'home';
-  });
+  // Helper to parse current route from URL, pathname, hash, or search params
+  const getInitialRoute = () => {
+    if (typeof window === 'undefined') return { page: 'home', serviceId: null };
+    const path = window.location.pathname.toLowerCase().replace(/\/+$/, '');
+    const hash = window.location.hash.toLowerCase();
+    const search = new URLSearchParams(window.location.search);
 
-  // Scroll to top whenever currentPage changes
+    if (path.includes('/about') || hash === '#/about' || search.get('page') === 'about') {
+      return { page: 'about', serviceId: null };
+    }
+
+    if (path.startsWith('/services') || hash.startsWith('#/services') || hash === '#services-page' || search.get('page') === 'services') {
+      return { page: 'services', serviceId: null };
+    }
+
+    if (path.startsWith('/contact') || hash.startsWith('#/contact') || hash === '#contact' || hash === '#contact-page' || search.get('page') === 'contact') {
+      return { page: 'contact', serviceId: null };
+    }
+
+    return { page: 'home', serviceId: null };
+  };
+
+  const [routeState, setRouteState] = useState(getInitialRoute);
+  const currentPage = routeState.page;
+  const currentServiceId = routeState.serviceId;
+
+  // Scroll to top whenever route changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [currentPage]);
+  }, [routeState]);
 
   // Handle browser back and forward navigation
   useEffect(() => {
     const handlePopState = () => {
-      const path = window.location.pathname.toLowerCase();
-      const hash = window.location.hash.toLowerCase();
-      const search = new URLSearchParams(window.location.search);
-      if (path.includes('/about') || hash === '#/about' || hash === '#about-page' || search.get('page') === 'about') {
-        setCurrentPage('about');
-      } else {
-        setCurrentPage('home');
-      }
+      const newRoute = getInitialRoute();
+      setRouteState(newRoute);
       window.scrollTo({ top: 0, behavior: 'instant' });
     };
 
@@ -55,23 +64,38 @@ function App() {
     };
   }, []);
 
-  const handleNavigate = (page, sectionId = null) => {
+  const handleNavigate = (page, target = null) => {
     if (page === 'about') {
-      setCurrentPage('about');
+      setRouteState({ page: 'about', serviceId: null });
       window.history.pushState({}, '', '/about');
       window.scrollTo({ top: 0, behavior: 'instant' });
-    } else {
-      const isPageSwitch = currentPage !== 'home';
-      setCurrentPage('home');
-      window.history.pushState({}, '', '/' + (sectionId ? `#${sectionId}` : ''));
+    } else if (page === 'services' || page === 'service-detail') {
+      setRouteState({ page: 'services', serviceId: null });
+      window.history.pushState({}, '', '/services' + (target ? `#${target}` : ''));
       window.scrollTo({ top: 0, behavior: 'instant' });
-      if (sectionId) {
+      if (target) {
         setTimeout(() => {
-          const el = document.getElementById(sectionId);
+          const el = document.getElementById(target);
           if (el) {
             el.scrollIntoView({ behavior: 'smooth' });
           }
-        }, isPageSwitch ? 150 : 50);
+        }, 150);
+      }
+    } else if (page === 'contact') {
+      setRouteState({ page: 'contact', serviceId: null });
+      window.history.pushState({}, '', '/contact');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    } else {
+      setRouteState({ page: 'home', serviceId: null });
+      window.history.pushState({}, '', '/' + (target ? `#${target}` : ''));
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      if (target) {
+        setTimeout(() => {
+          const el = document.getElementById(target);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 150);
       }
     }
   };
@@ -93,12 +117,7 @@ function App() {
   };
 
   const handleOpenContact = () => {
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      handleOpenAssistance('General Inquiry');
-    }
+    handleNavigate('contact');
   };
 
   return (
@@ -107,17 +126,24 @@ function App() {
       {/* Navigation Header - Preserved official header with full routing awareness */}
       <Navbar
         currentPage={currentPage}
+        currentServiceId={currentServiceId}
         onNavigate={handleNavigate}
         onOpenAssistance={() => handleOpenAssistance('General Inquiry')}
       />
 
-      {/* Main Page Rendering: Home vs About */}
+      {/* Main Page Rendering: Home vs About vs Services vs Contact */}
       <main>
         {currentPage === 'about' ? (
           <AboutPage
             onOpenAssistance={() => handleOpenAssistance('About Page Consultation')}
-            onExploreServices={() => handleNavigate('home', 'services')}
+            onExploreServices={() => handleNavigate('services')}
           />
+        ) : currentPage === 'services' ? (
+          <ServicesPage
+            onOpenAssistance={handleOpenAssistance}
+          />
+        ) : currentPage === 'contact' ? (
+          <ContactPage />
         ) : (
           <>
             {/* Section 01 — Hero */}
@@ -127,7 +153,10 @@ function App() {
             />
 
             {/* Section 02 — Who We Are */}
-            <WhoWeAre onOpenAssistance={() => handleOpenAssistance('General Inquiry')} />
+            <WhoWeAre
+              onOpenAssistance={() => handleOpenAssistance('General Inquiry')}
+              onNavigate={handleNavigate}
+            />
 
             {/* Section 03 — Services Index (Midnight Navy Transition) */}
             <ServicesIndex

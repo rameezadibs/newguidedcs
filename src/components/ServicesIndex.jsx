@@ -201,9 +201,10 @@ export default function ServicesIndex({ onOpenAssistance, onSelectService }) {
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    onOpenAssistance();
+                                    const text = encodeURIComponent(`Hello New Guide, I would like to inquire about: ${service.title}.`);
+                                    window.open(`https://wa.me/971525453323?text=${text}`, '_blank');
                                   }}
-                                  className="underline font-bold"
+                                  className="underline font-bold cursor-pointer"
                                   aria-label={`Inquire about ${service.title}`}
                                 >
                                   Inquire Now
@@ -295,8 +296,11 @@ export default function ServicesIndex({ onOpenAssistance, onSelectService }) {
                     <span>Official UAE Department Filing</span>
                   </div>
                   <button
-                    onClick={onOpenAssistance}
-                    className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-white bg-[#123D88] hover:bg-[#071D45] px-4 py-2 rounded-lg shadow transition-all duration-300"
+                    onClick={() => {
+                      const text = encodeURIComponent(`Hello New Guide, I would like to request official department filing for: ${activeService?.title || 'UAE Document Services'}.`);
+                      window.open(`https://wa.me/971525453323?text=${text}`, '_blank');
+                    }}
+                    className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-white bg-[#123D88] hover:bg-[#071D45] px-4 py-2 rounded-lg shadow transition-all duration-300 cursor-pointer"
                     aria-label={`Request filing for ${activeService.title}`}
                   >
                     <span>Request Filing</span>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckCircle2, ArrowRight, MessageCircle, ShieldCheck } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -12,6 +12,20 @@ export default function AssistanceModal({ isOpen, onClose, initialService = null
     phone: '',
     notes: '',
   });
+
+  useEffect(() => {
+    if (isOpen && initialService) {
+      if (initialService.startsWith('Requirement: ')) {
+        setSelectedService('Document Clearing');
+        setFormData((prev) => ({
+          ...prev,
+          notes: initialService.replace('Requirement: ', ''),
+        }));
+      } else {
+        setSelectedService(initialService);
+      }
+    }
+  }, [isOpen, initialService]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [referenceId, setReferenceId] = useState('');
 
