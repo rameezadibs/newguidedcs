@@ -1,9 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle2, MessageSquareText, ClipboardCheck, Cog, Award } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import { translations } from '../translations/translations';
 
 export default function Process({ onOpenAssistance }) {
-  const steps = [
+  const { lang, isRTL } = useLanguage();
+  const t = translations[lang] || translations.en;
+
+  const baseSteps = [
     {
       num: '01',
       title: 'REQUIREMENT AUDIT & CONSULTATION',
@@ -38,6 +43,19 @@ export default function Process({ onOpenAssistance }) {
     },
   ];
 
+  const steps = baseSteps.map((step, idx) => {
+    if (lang === 'ar' && t.process.steps[idx]) {
+      const arStep = t.process.steps[idx];
+      return {
+        ...step,
+        title: arStep.title,
+        desc: arStep.desc,
+        detail: arStep.detail,
+      };
+    }
+    return step;
+  });
+
   return (
     <section id="process" aria-labelledby="process-heading" className="relative pt-12 sm:pt-16 pb-12 sm:pb-16 bg-white overflow-hidden">
       {/* Background Subtle Blueprint Grid */}
@@ -45,21 +63,22 @@ export default function Process({ onOpenAssistance }) {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
         
-        {/* SEO Section Header */}
-        <div className="max-w-3xl mb-8 sm:mb-12">
+        {/* Section Header */}
+        <div className={`max-w-3xl mb-8 sm:mb-12 ${isRTL ? 'text-right' : 'text-left'}`}>
+          <div className={`flex items-center gap-3 mb-3 ${isRTL ? 'justify-start flex-row-reverse' : ''}`}>
+            <span className="w-7 h-[2px] bg-[#09A9D4]" />
+            <span className="text-xs sm:text-sm font-mono font-bold tracking-[0.22em] text-[#09A9D4] uppercase">
+              {t.process.tag}
+            </span>
+          </div>
+
           <h2 id="process-heading" className="text-3xl sm:text-5xl lg:text-6xl font-display font-extrabold text-[#071D45] tracking-tight leading-[1.08] mb-4">
-            <div className="flex items-center gap-3 mb-3">
-              <span className="w-7 h-[2px] bg-[#09A9D4]" />
-              <span className="text-xs sm:text-sm font-mono font-bold tracking-[0.22em] text-[#09A9D4] uppercase">
-                OUR PROCESS & HOW IT WORKS
-              </span>
-            </div>
-            DOCUMENT CLEARING & PRO PROCESS. <br />
-            <span className="text-[#123D88]">FROM REQUIREMENT TO RESOLUTION.</span>
+            {t.process.heading1} <br />
+            <span className="text-[#123D88]">{t.process.heading2}</span>
           </h2>
 
           <p className="text-base sm:text-lg text-[#667085] max-w-xl font-normal leading-relaxed">
-            Our 4-stage <strong>document clearing process</strong> and <strong>UAE government liaison workflow</strong> is engineered to eliminate bureaucracy, prevent rejections, and accelerate your business operations.
+            {t.process.subtitle}
           </p>
         </div>
 
@@ -159,30 +178,34 @@ export default function Process({ onOpenAssistance }) {
         </div>
 
         {/* Process Resolution Banner */}
-        <div className="mt-10 lg:mt-12 p-6 sm:p-8 bg-[#071D45] text-white flex flex-col sm:flex-row items-center justify-between gap-6 border-l-4 border-[#09A9D4] shadow-xl">
-          <div className="max-w-xl text-center sm:text-left">
+        <div className={`mt-10 lg:mt-12 p-6 sm:p-8 bg-[#071D45] text-white flex flex-col sm:flex-row items-center justify-between gap-6 ${isRTL ? 'border-r-4' : 'border-l-4'} border-[#09A9D4] shadow-xl`}>
+          <div className={`max-w-xl ${isRTL ? 'text-center sm:text-right' : 'text-center sm:text-left'}`}>
             <div className="text-xs font-mono font-bold text-[#09A9D4] tracking-widest uppercase mb-1">
-              ACCELERATED RESOLUTION
+              {lang === 'ar' ? 'إنجاز فوري ومعاملات عاجلة' : 'ACCELERATED RESOLUTION'}
             </div>
             <div className="text-lg sm:text-xl font-display font-bold">
-              Have an urgent ministry submission or pending license?
+              {lang === 'ar' ? 'هل لديك معاملة مستعجلة لدى إحدى الوزارات أو ترخيص متأخر؟' : 'Have an urgent ministry submission or pending license?'}
             </div>
             <p className="text-xs sm:text-sm text-white/70 mt-1">
-              Our emergency PRO team can review and file within the same business cycle.
+              {lang === 'ar' ? 'فريق الطوارئ الميداني لدينا جاهز للمراجعة والإيداع خلال نفس يوم العمل.' : 'Our emergency PRO team can review and file within the same business cycle.'}
             </p>
           </div>
 
           <button
             id="process-expedited-btn"
             onClick={() => {
-              const text = encodeURIComponent('Hello New Guide, I would like to start an expedited document review and clearance.');
+              const text = encodeURIComponent(
+                lang === 'ar'
+                  ? 'مرحباً نيو غايد، أود بدء مراجعة وتخليص عاجل لمعاملة ومستندات رسمية.'
+                  : 'Hello New Guide, I would like to start an expedited document review and clearance.'
+              );
               window.open(`https://wa.me/971525453323?text=${text}`, '_blank');
             }}
             className="shrink-0 px-7 py-4 rounded-xl bg-[#123D88] hover:bg-[#071D45] text-white text-xs font-extrabold uppercase tracking-widest shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 flex items-center gap-2 cursor-pointer"
             aria-label="Start Expedited Document Review and Clearance"
           >
-            <span>Start Expedited Review</span>
-            <ArrowRight className="w-4 h-4 text-[#09A9D4]" />
+            <span>{t.process.cta}</span>
+            <ArrowRight className={`w-4 h-4 text-[#09A9D4] ${isRTL ? 'rotate-180' : ''}`} />
           </button>
         </div>
 

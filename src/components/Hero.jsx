@@ -9,12 +9,69 @@ import {
   FileCheck, 
   Award
 } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import { translations } from '../translations/translations';
 
 export default function Hero({ onOpenAssistance, onOpenContact }) {
+  const { lang, isRTL } = useLanguage();
+  const t = translations[lang] || translations.en;
   // Interactive service showcase state right inside the hero
   const [activeTab, setActiveTab] = useState(0);
 
-  const quickTracks = [
+  const quickTracks = lang === 'ar' ? [
+    {
+      id: 'attestation',
+      label: 'تصديق المستندات',
+      authority: 'تصديق وزارة الخارجية والسفارات',
+      turnaround: 'إنجاز سريع خلال 24–48 ساعة',
+      badge: 'معتمد ومختوم رسمياً',
+      details: 'توثيق وتصديق قانوني كامل لقرارات الشركات، والوكالات، والشهادات، والعقود التجارية.',
+      features: [
+        'وزارة الخارجية (MOFA)',
+        'تصديق سفارات وقنصليات الإمارات',
+        'ترجمة قانونية عربية معتمدة'
+      ],
+    },
+    {
+      id: 'setup',
+      label: 'تأسيس الشركات',
+      authority: 'اقتصادية دبي والمناطق الحرة',
+      turnaround: '3–5 أيام عمل',
+      badge: 'جاهز لملكية 100%',
+      details: 'إصدار التراخيص التجارية الشاملة، وحجز الأسماء التجارية، وإنجاز الموافقات المبدئية.',
+      features: [
+        'تأسيس شركات البر الرئيسي والمناطق الحرة',
+        'صياغة عقود التأسيس واللوائح',
+        'تسهيل فتح الحسابات البنكية للشركات'
+      ],
+    },
+    {
+      id: 'visa',
+      label: 'الإقامة الذهبية والتأشيرات',
+      authority: 'الهيئة الاتحادية والإقامة (GDRFA)',
+      turnaround: 'مسار سريع لكبار الشخصيات',
+      badge: 'إجراءات مباشرة ومعتمدة',
+      details: 'إنجاز سلس للإقامات الذهبية لمدة 10 سنوات، وتأشيرات المستثمرين، وإقامات العمل التنفيذية.',
+      features: [
+        'الإقامة الذهبية في الإمارات (10 سنوات)',
+        'اللياقة الطبية وبطاقة الهوية الإماراتية',
+        'تأشيرات المستثمر والشريك'
+      ],
+    },
+    {
+      id: 'pro',
+      label: 'مكتب الـ PRO للشركات',
+      authority: 'وزارة الموارد البشرية والبلدية',
+      turnaround: 'إيداع الكوتا في نفس اليوم',
+      badge: 'مندوبون معتمدون ومخصصون',
+      details: 'تمثيل قانوني عند الطلب لإدارة بطاقات المنشأة، وملفات العمل، وتجديدات التراخيص.',
+      features: [
+        'تحديثات وتعديل بطاقة المنشأة',
+        'وزارة الموارد البشرية والتوطين (MOHRE)',
+        'تجديد شامل للتراخيص التجارية'
+      ],
+    },
+  ] : [
     {
       id: 'attestation',
       label: 'Document Attestation',
@@ -118,21 +175,35 @@ export default function Hero({ onOpenAssistance, onOpenContact }) {
           
           {/* LEFT SIDE: Bold Editorial Headline, Copy, Quick Interactive Selectors */}
           <motion.div
-            className="lg:col-span-7 flex flex-col justify-center text-left"
+            className={`lg:col-span-7 flex flex-col justify-center ${isRTL ? 'text-right' : 'text-left'}`}
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
+            {/* Top Eyebrow Badge */}
+            <motion.div
+              variants={itemVariants}
+              className="inline-flex items-center gap-2 mb-4 self-start bg-[#123D88]/10 border border-[#123D88]/20 px-3.5 py-1.5 rounded-full"
+            >
+              <span className="w-2 h-2 rounded-full bg-[#09A9D4] animate-pulse" />
+              <span className="text-[11px] font-mono font-bold tracking-wider text-[#123D88] uppercase">
+                {t.hero.badge}
+              </span>
+            </motion.div>
+
             {/* High-Impact SEO-Optimized H1 Headline */}
             <motion.h1
               variants={itemVariants}
-              className="text-4xl sm:text-6xl lg:text-7xl font-display font-black tracking-tight leading-[1.05] mb-6"
+              className="text-4xl sm:text-6xl lg:text-7xl font-display font-black tracking-tight leading-[1.08] mb-6"
             >
               <span className="block text-[#071D45]">
-                DOCUMENT CLEARING
+                {t.hero.title1}
               </span>
               <span className="block text-[#123D88] mt-1 text-3xl sm:text-5xl lg:text-6xl font-extrabold">
-                SERVICES IN DUBAI & UAE
+                {t.hero.title2}
+              </span>
+              <span className="block text-[#09A9D4] mt-1 text-2xl sm:text-4xl lg:text-5xl font-black">
+                {t.hero.title3}
               </span>
             </motion.h1>
 
@@ -141,14 +212,14 @@ export default function Hero({ onOpenAssistance, onOpenContact }) {
               variants={itemVariants}
               className="max-w-xl text-base sm:text-lg text-slate-800 font-medium leading-relaxed mb-6"
             >
-              Authorized liaison for <strong>document clearing in Dubai</strong>, <strong>MOFA attestations</strong>, <strong>UAE business setup</strong>, <strong>Golden Visas</strong>, and <strong>corporate PRO services</strong>—transforming complex government transactions into swift, zero-delay approvals.
+              {t.hero.description}
             </motion.p>
 
             {/* Interactive Quick Service Tabs: Click to update right-hand live clearance card */}
             <motion.div variants={itemVariants} className="mb-8" id="hero-pathway-tabs">
               <div className="text-xs font-mono font-extrabold uppercase tracking-wider text-slate-700 mb-3 flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-[#09A9D4]" />
-                <span>Select Your Direct Pathway:</span>
+                <span>{t.hero.tracksTitle}:</span>
               </div>
 
               <div className="flex flex-wrap gap-2.5" role="tablist" aria-label="UAE Document Clearing & Business Setup Pathways">
@@ -161,7 +232,7 @@ export default function Hero({ onOpenAssistance, onOpenContact }) {
                       role="tab"
                       aria-selected={isActive}
                       onClick={() => setActiveTab(idx)}
-                      className={`text-xs sm:text-sm px-4 py-2.5 rounded-lg font-bold transition-all duration-200 border ${
+                      className={`text-xs sm:text-sm px-4 py-2.5 rounded-lg font-bold transition-all duration-200 border cursor-pointer ${
                         isActive
                           ? 'bg-[#071D45] text-white border-[#071D45] shadow-md ring-2 ring-[#09A9D4]'
                           : 'bg-white text-slate-800 border-slate-300 hover:border-[#123D88] hover:text-[#071D45] shadow-2xs'
@@ -183,21 +254,21 @@ export default function Hero({ onOpenAssistance, onOpenContact }) {
               <button
                 id="hero-primary-cta"
                 onClick={() => onOpenAssistance(currentTrack.label)}
-                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-[#123D88] hover:bg-[#071D45] text-white text-sm font-extrabold tracking-wider uppercase shadow-xl transition-all duration-300"
+                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-[#123D88] hover:bg-[#071D45] text-white text-sm font-extrabold tracking-wider uppercase shadow-xl transition-all duration-300 cursor-pointer"
                 aria-label="Get Started with Document Clearing Services"
               >
-                <span>GET STARTED</span>
-                <ArrowRight className="w-4 h-4 text-[#09A9D4] transition-transform duration-300 group-hover:translate-x-1" />
+                <span>{t.hero.ctaPrimary}</span>
+                <ArrowRight className={`w-4 h-4 text-[#09A9D4] transition-transform duration-300 group-hover:translate-x-1 ${isRTL ? 'rotate-180 group-hover:-translate-x-1' : ''}`} />
               </button>
 
               {/* Secondary CTA */}
               <button
                 id="hero-secondary-cta"
                 onClick={onOpenContact}
-                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-[#123D88] hover:bg-[#071D45] text-white text-sm font-extrabold tracking-wider uppercase shadow-xl transition-all duration-300"
+                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-white hover:bg-slate-50 text-[#071D45] border-2 border-[#123D88]/20 text-sm font-extrabold tracking-wider uppercase shadow-md transition-all duration-300 cursor-pointer"
                 aria-label="Speak with UAE PRO & Document Clearing Specialist"
               >
-                <span>SPEAK WITH SPECIALIST</span>
+                <span>{t.hero.ctaSecondary}</span>
                 <PhoneCall className="w-4 h-4 text-[#09A9D4] transition-transform duration-300 group-hover:scale-110" />
               </button>
             </motion.div>
@@ -209,29 +280,29 @@ export default function Hero({ onOpenAssistance, onOpenContact }) {
             >
               <div className="text-xs font-mono font-bold tracking-widest text-slate-700 uppercase mb-3 flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-[#09A9D4]" />
-                <span>DIRECT LIAISON ACROSS OFFICIAL UAE AUTHORITIES</span>
+                <span>{lang === 'ar' ? 'تمثيل رسمي معتمد لدى كبرى الهيئات والوزارات في الإمارات' : 'DIRECT LIAISON ACROSS OFFICIAL UAE AUTHORITIES'}</span>
               </div>
 
               <div className="flex flex-wrap items-center gap-y-2 gap-x-6 text-xs sm:text-sm font-bold text-[#071D45]">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#09A9D4]" />
-                  <span>DET Dubai</span>
+                  <span>{lang === 'ar' ? 'اقتصادية دبي DET' : 'DET Dubai'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#09A9D4]" />
-                  <span>MOFA Attestation</span>
+                  <span>{lang === 'ar' ? 'تصديقات الخارجية MOFA' : 'MOFA Attestation'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#09A9D4]" />
-                  <span>ICP Immigration</span>
+                  <span>{lang === 'ar' ? 'الإقامة والجنسية ICP' : 'ICP Immigration'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#09A9D4]" />
-                  <span>MOHRE Labor</span>
+                  <span>{lang === 'ar' ? 'وزارة الموارد البشرية MOHRE' : 'MOHRE Labor'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#09A9D4]" />
-                  <span>Dubai Chambers</span>
+                  <span>{lang === 'ar' ? 'غرف دبي' : 'Dubai Chambers'}</span>
                 </div>
               </div>
             </motion.div>

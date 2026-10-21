@@ -2,9 +2,13 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckCircle2, ArrowRight, MessageCircle, ShieldCheck } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { useLanguage } from '../context/LanguageContext';
+import { translations } from '../translations/translations';
 
 export default function AssistanceModal({ isOpen, onClose, initialService = null }) {
-  const [selectedService, setSelectedService] = useState(initialService || 'Document Clearing');
+  const { lang, isRTL } = useLanguage();
+  const t = translations[lang] || translations.en;
+  const [selectedService, setSelectedService] = useState(initialService || (lang === 'ar' ? 'تخليص المستندات' : 'Document Clearing'));
   const [formData, setFormData] = useState({
     fullName: '',
     companyName: '',
@@ -16,7 +20,7 @@ export default function AssistanceModal({ isOpen, onClose, initialService = null
   useEffect(() => {
     if (isOpen && initialService) {
       if (initialService.startsWith('Requirement: ')) {
-        setSelectedService('Document Clearing');
+        setSelectedService(lang === 'ar' ? 'تخليص المستندات' : 'Document Clearing');
         setFormData((prev) => ({
           ...prev,
           notes: initialService.replace('Requirement: ', ''),
@@ -25,11 +29,19 @@ export default function AssistanceModal({ isOpen, onClose, initialService = null
         setSelectedService(initialService);
       }
     }
-  }, [isOpen, initialService]);
+  }, [isOpen, initialService, lang]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [referenceId, setReferenceId] = useState('');
 
-  const servicesList = [
+  const servicesList = lang === 'ar' ? [
+    'تخليص المستندات',
+    'تأسيس الشركات',
+    'المعاملات الحكومية',
+    'التأشيرات والإقامة',
+    'خدمات التعقيب PRO',
+    'الدعم المؤسسي',
+    'استفسار عام',
+  ] : [
     'Document Clearing',
     'Business Setup',
     'Government Transactions',
@@ -96,19 +108,19 @@ export default function AssistanceModal({ isOpen, onClose, initialService = null
           </button>
 
           {!isSubmitted ? (
-            <div className="overflow-y-auto p-5 sm:p-8">
+            <div className={`overflow-y-auto p-5 sm:p-8 ${isRTL ? 'text-right' : 'text-left'}`}>
               
               {/* Header */}
               <div className="mb-5 pr-6">
                 <div className="inline-flex items-center gap-2 text-[10px] font-mono tracking-widest text-[#09A9D4] font-bold uppercase mb-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#09A9D4]" />
-                  <span>NEW GUIDE DIRECT ASSISTANCE</span>
+                  <span>{lang === 'ar' ? 'مساعدة مباشرة من فريق نيو غايد' : 'NEW GUIDE DIRECT ASSISTANCE'}</span>
                 </div>
                 <h3 className="text-xl sm:text-2xl font-display font-extrabold text-[#071D45] tracking-tight">
-                  Request Guidance & Consultation
+                  {t.modal.title}
                 </h3>
                 <p className="text-xs sm:text-sm text-[#667085] mt-1">
-                  Tell us what requirements or documents you have, and our authorized UAE team will reach out promptly.
+                  {t.modal.subtitle}
                 </p>
               </div>
 
@@ -118,7 +130,7 @@ export default function AssistanceModal({ isOpen, onClose, initialService = null
                 {/* Service Selection Pills */}
                 <div>
                   <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-[#071D45] mb-2">
-                    Select Required Service
+                    {t.modal.selectService}
                   </label>
                   <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {servicesList.map((srv) => (
@@ -126,7 +138,7 @@ export default function AssistanceModal({ isOpen, onClose, initialService = null
                         key={srv}
                         type="button"
                         onClick={() => setSelectedService(srv)}
-                        className={`text-[11px] sm:text-xs px-3 py-1.5 rounded-lg transition-all font-semibold ${
+                        className={`text-[11px] sm:text-xs px-3 py-1.5 rounded-lg transition-all font-semibold cursor-pointer ${
                           selectedService === srv
                             ? 'bg-[#123D88] text-white shadow-sm border border-[#09A9D4]/40'
                             : 'bg-[#F7F6F1] text-[#667085] hover:bg-gray-200 border border-gray-200'
@@ -142,12 +154,12 @@ export default function AssistanceModal({ isOpen, onClose, initialService = null
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <label className="block text-xs font-bold text-[#071D45] mb-1">
-                      Full Name *
+                      {t.modal.fullName}
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Tariq Mansoor"
+                      placeholder={lang === 'ar' ? 'مثال: أحمد عبد الله' : 'e.g. Tariq Mansoor'}
                       value={formData.fullName}
                       onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                       className="w-full px-3 py-2 text-xs sm:text-sm bg-[#F7F6F1] border border-gray-300 rounded-lg focus:bg-white focus:border-[#123D88] focus:outline-none transition-colors"
@@ -156,11 +168,11 @@ export default function AssistanceModal({ isOpen, onClose, initialService = null
 
                   <div>
                     <label className="block text-xs font-bold text-[#071D45] mb-1">
-                      Company / Organization
+                      {t.modal.companyName}
                     </label>
                     <input
                       type="text"
-                      placeholder="e.g. Al Hilal Holdings LLC"
+                      placeholder={lang === 'ar' ? 'مثال: شركة الهلال القابضة ش.ذ.م.م' : 'e.g. Al Hilal Holdings LLC'}
                       value={formData.companyName}
                       onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                       className="w-full px-3 py-2 text-xs sm:text-sm bg-[#F7F6F1] border border-gray-300 rounded-lg focus:bg-white focus:border-[#123D88] focus:outline-none transition-colors"
@@ -169,7 +181,7 @@ export default function AssistanceModal({ isOpen, onClose, initialService = null
 
                   <div>
                     <label className="block text-xs font-bold text-[#071D45] mb-1">
-                      Phone / WhatsApp *
+                      {t.modal.phone}
                     </label>
                     <input
                       type="tel"
@@ -178,12 +190,13 @@ export default function AssistanceModal({ isOpen, onClose, initialService = null
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       className="w-full px-3 py-2 text-xs sm:text-sm bg-[#F7F6F1] border border-gray-300 rounded-lg focus:bg-white focus:border-[#123D88] focus:outline-none transition-colors"
+                      dir="ltr"
                     />
                   </div>
 
                   <div>
                     <label className="block text-xs font-bold text-[#071D45] mb-1">
-                      Work Email *
+                      {t.modal.email}
                     </label>
                     <input
                       type="email"
@@ -192,6 +205,7 @@ export default function AssistanceModal({ isOpen, onClose, initialService = null
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       className="w-full px-3 py-2 text-xs sm:text-sm bg-[#F7F6F1] border border-gray-300 rounded-lg focus:bg-white focus:border-[#123D88] focus:outline-none transition-colors"
+                      dir="ltr"
                     />
                   </div>
                 </div>
@@ -199,11 +213,11 @@ export default function AssistanceModal({ isOpen, onClose, initialService = null
                 {/* Additional Details */}
                 <div>
                   <label className="block text-xs font-bold text-[#071D45] mb-1">
-                    Specific Requirement or Document Details
+                    {t.modal.notes}
                   </label>
                   <textarea
                     rows={2.5}
-                    placeholder="Briefly describe what document needs attestation, licensing requirement, or target deadline..."
+                    placeholder={lang === 'ar' ? 'اكتب تفاصيل المعاملة، أو نوع المستند المطلوب تصديقه، أو موعد الإنجاز المستهدف...' : 'Briefly describe what document needs attestation, licensing requirement, or target deadline...'}
                     value={formData.notes}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                     className="w-full px-3 py-2 text-xs sm:text-sm bg-[#F7F6F1] border border-gray-300 rounded-lg focus:bg-white focus:border-[#123D88] focus:outline-none transition-colors"
@@ -214,15 +228,15 @@ export default function AssistanceModal({ isOpen, onClose, initialService = null
                 <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
                   <div className="text-[11px] text-[#667085] flex items-center gap-1.5">
                     <ShieldCheck className="w-3.5 h-3.5 text-[#09A9D4]" />
-                    <span>Confidential UAE regulatory handling</span>
+                    <span>{lang === 'ar' ? 'تعامل رسمي وسرية تامة للمعلومات' : 'Confidential UAE regulatory handling'}</span>
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl bg-[#123D88] hover:bg-[#071D45] text-white text-xs font-extrabold tracking-widest uppercase shadow-md transition-all duration-300"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl bg-[#123D88] hover:bg-[#071D45] text-white text-xs font-extrabold tracking-widest uppercase shadow-md transition-all duration-300 cursor-pointer"
                   >
-                    <span>SUBMIT REQUEST</span>
-                    <ArrowRight className="w-4 h-4 text-[#09A9D4]" />
+                    <span>{t.modal.submitBtn}</span>
+                    <ArrowRight className={`w-4 h-4 text-[#09A9D4] ${isRTL ? 'rotate-180' : ''}`} />
                   </button>
                 </div>
               </form>
@@ -236,38 +250,42 @@ export default function AssistanceModal({ isOpen, onClose, initialService = null
               </div>
 
               <div className="text-xs font-mono font-bold text-[#09A9D4] tracking-widest uppercase mb-1">
-                DISPATCH CONFIRMED
+                {lang === 'ar' ? 'تم تأكيد الإرسال' : 'DISPATCH CONFIRMED'}
               </div>
 
               <h3 className="text-xl sm:text-2xl font-display font-extrabold text-[#071D45] mb-2">
-                Your Request Has Been Received
+                {t.modal.successTitle}
               </h3>
 
               <div className="inline-block bg-[#F7F6F1] px-3.5 py-1.5 rounded-lg border border-gray-200 text-xs font-mono text-[#071D45] mb-5">
-                CASE REFERENCE: <span className="font-bold text-[#123D88]">{referenceId}</span>
+                {t.modal.refId}: <span className="font-bold text-[#123D88]">{referenceId}</span>
               </div>
 
               <p className="text-xs sm:text-sm text-[#667085] max-w-md mx-auto mb-6 leading-relaxed">
-                Thank you, <span className="font-semibold text-[#071D45]">{formData.fullName || 'Valued Client'}</span>. An assigned New Guide corporate specialist will review your requirement ({selectedService}) and contact you via phone or WhatsApp shortly.
+                {t.modal.successMessage}
               </p>
 
               {/* Instant WhatsApp Action */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                 <a
-                  href={`https://wa.me/971525453323?text=Hello%20New%20Guide%20Team,%20my%20case%20reference%20is%20${referenceId}.%20I%20submitted%20a%20request%20for%20${encodeURIComponent(selectedService)}.`}
+                  href={`https://wa.me/971525453323?text=${encodeURIComponent(
+                    lang === 'ar'
+                      ? `مرحباً فريق الدليل الجديد، رقم مرجع طلبي هو ${referenceId}. أرسلت طلباً بخصوص ${selectedService}.`
+                      : `Hello New Guide Team, my case reference is ${referenceId}. I submitted a request for ${selectedService}.`
+                  )}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white text-xs font-bold tracking-wider uppercase transition-colors"
                 >
                   <MessageCircle className="w-4 h-4" />
-                  <span>Connect Immediately on WhatsApp</span>
+                  <span>{t.modal.whatsAppDirect}</span>
                 </a>
 
                 <button
                   onClick={handleReset}
-                  className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-[#071D45] text-xs font-bold tracking-wider uppercase transition-colors"
+                  className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-[#071D45] text-xs font-bold tracking-wider uppercase transition-colors cursor-pointer"
                 >
-                  Close Window
+                  {t.modal.closeBtn}
                 </button>
               </div>
             </div>

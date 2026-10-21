@@ -1,7 +1,12 @@
 import React from 'react';
 import { ArrowRight, CheckCheck, ShieldCheck } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import { translations } from '../translations/translations';
 
 export default function WhoWeAre({ onOpenAssistance, onNavigate }) {
+  const { lang, isRTL } = useLanguage();
+  const t = translations[lang] || translations.en;
+
   const handleDiscoverServices = () => {
     if (onNavigate) {
       onNavigate('services');
@@ -13,7 +18,7 @@ export default function WhoWeAre({ onOpenAssistance, onNavigate }) {
   return (
     <section id="about" aria-labelledby="about-heading" className="relative pt-12 sm:pt-16 pb-12 sm:pb-16 bg-[#071D45] overflow-hidden">
       {/* Background Architectural Watermark - Faded "NG" */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/4 text-white/[0.03] font-display font-black text-[300px] sm:text-[420px] select-none pointer-events-none leading-none z-0">
+      <div className={`absolute ${isRTL ? 'left-0 -translate-x-1/4' : 'right-0 translate-x-1/4'} top-1/2 -translate-y-1/2 text-white/[0.03] font-display font-black text-[300px] sm:text-[420px] select-none pointer-events-none leading-none z-0`}>
         NG
       </div>
 
@@ -28,39 +33,39 @@ export default function WhoWeAre({ onOpenAssistance, onNavigate }) {
         {/* Editorial Layout: Two Columns centered with 1 Single Picture on Right */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
 
-          {/* Left Column: Editorial Typography & Copy */}
-          <div className="lg:col-span-6 relative">
+          {/* Column: Editorial Typography & Copy */}
+          <div className={`lg:col-span-6 relative ${isRTL ? 'text-right' : 'text-left'}`}>
 
             {/* Vertical Cyan Guide Line positioned beside text */}
-            <div className="absolute -left-5 sm:-left-8 top-2 bottom-4 w-[2px] bg-gradient-to-b from-[#09A9D4] via-[#09A9D4]/50 to-transparent hidden sm:block" />
+            <div className={`absolute ${isRTL ? '-right-5 sm:-right-8' : '-left-5 sm:-left-8'} top-2 bottom-4 w-[2px] bg-gradient-to-b from-[#09A9D4] via-[#09A9D4]/50 to-transparent hidden sm:block`} />
 
-            {/* Sleek, Human Editorial Section Tag (Non-AI) */}
-            <div className="flex items-center gap-3 mb-4">
+            {/* Sleek, Human Editorial Section Tag */}
+            <div className={`flex items-center gap-3 mb-4 ${isRTL ? 'justify-start flex-row-reverse' : ''}`}>
               <span className="w-7 h-[2px] bg-[#09A9D4]" />
               <span className="text-xs sm:text-sm font-mono font-bold tracking-[0.22em] text-[#09A9D4] uppercase">
-                WHO WE ARE
+                {t.whoWeAre.tag}
               </span>
             </div>
 
             {/* Human & Authentic Editorial Heading */}
-            <h2 id="about-heading" className="text-3xl sm:text-5xl lg:text-6xl font-display font-black tracking-tight leading-[1.08] mb-5">
-              <span className="text-white">DUBAI'S DEDICATED</span>
+            <h2 id="about-heading" className="text-3xl sm:text-5xl lg:text-6xl font-display font-black tracking-tight leading-[1.1] mb-5">
+              <span className="text-white">{t.whoWeAre.heading1}</span>
               <br />
-              <span className="text-[#09A9D4]">GOVERNMENT LIAISON.</span>
+              <span className="text-[#09A9D4]">{t.whoWeAre.heading2}</span>
             </h2>
 
             {/* Clear, Human Subheading */}
             <p className="text-lg sm:text-xl font-display font-semibold text-white/90 mb-5 leading-snug">
-              We make UAE business transactions and document clearing straightforward.
+              {t.whoWeAre.subheading}
             </p>
 
             {/* Natural, Authentic Professional Copy */}
             <div className="space-y-3.5 text-base sm:text-lg text-white/80 leading-relaxed mb-6 font-normal">
               <p>
-                <strong>New Guide Documents Clearing Services Co.</strong> is a licensed corporate PRO and government liaison agency based in Dubai. We work directly alongside UAE ministries, municipal authorities, and freezones to clear paperwork quickly and accurately.
+                {t.whoWeAre.p1}
               </p>
               <p>
-                Whether you need official <strong>MOFA attestations</strong>, commercial <strong>business setup</strong>, or <strong>Golden Visas</strong>, our team manages the entire process from initial filing to final approval.
+                {t.whoWeAre.p2}
               </p>
             </div>
 
@@ -71,8 +76,12 @@ export default function WhoWeAre({ onOpenAssistance, onNavigate }) {
                   <CheckCheck className="w-3.5 h-3.5" />
                 </div>
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-white block">Direct Government Liaison</span>
-                  <span className="text-xs text-white/60">Authorized filings with DET, MOFA, MOHRE & ICP</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-white block">
+                    {lang === 'ar' ? 'تنسيق حكومي مباشر' : 'Direct Government Liaison'}
+                  </span>
+                  <span className="text-xs text-white/60">
+                    {t.whoWeAre.bullet1}
+                  </span>
                 </div>
               </div>
 
@@ -81,8 +90,12 @@ export default function WhoWeAre({ onOpenAssistance, onNavigate }) {
                   <ShieldCheck className="w-3.5 h-3.5" />
                 </div>
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-white block">Zero-Error Filings</span>
-                  <span className="text-xs text-white/60">Pre-audited applications to prevent costly delays</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-white block">
+                    {lang === 'ar' ? 'معاملات خالية من الأخطاء' : 'Zero-Error Filings'}
+                  </span>
+                  <span className="text-xs text-white/60">
+                    {t.whoWeAre.bullet4}
+                  </span>
                 </div>
               </div>
             </div>
@@ -92,11 +105,11 @@ export default function WhoWeAre({ onOpenAssistance, onNavigate }) {
               <button
                 id="about-learn-more-btn"
                 onClick={handleDiscoverServices}
-                className="group inline-flex items-center gap-3 px-7 py-4 rounded-xl bg-[#123D88] hover:bg-[#071D45] text-white text-xs sm:text-sm font-extrabold tracking-widest uppercase shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+                className="group inline-flex items-center gap-3 px-7 py-4 rounded-xl bg-[#123D88] hover:bg-[#071D45] text-white text-xs sm:text-sm font-extrabold tracking-widest uppercase shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer"
                 aria-label="Learn more about New Guide Document Clearing Services"
               >
-                <span>DISCOVER NEW GUIDE SERVICES</span>
-                <ArrowRight className="w-4 h-4 text-[#09A9D4] transition-transform duration-300 group-hover:translate-x-1" />
+                <span>{t.whoWeAre.ctaServices}</span>
+                <ArrowRight className={`w-4 h-4 text-[#09A9D4] transition-transform duration-300 group-hover:translate-x-1 ${isRTL ? 'rotate-180 group-hover:-translate-x-1' : ''}`} />
               </button>
             </div>
           </div>

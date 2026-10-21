@@ -12,14 +12,34 @@
   }
 
   body {
-    font-family: 'Manrope', sans-serif;
+    font-family: 'Manrope', 'Cairo', sans-serif;
     color: #111827;
     background-color: #F7F6F1;
     overflow-x: hidden;
   }
 
+  [dir="rtl"] body,
+  html.rtl-mode body,
+  [dir="rtl"] {
+    font-family: 'Cairo', 'Tajawal', sans-serif;
+  }
+
   h1, h2, h3, h4, .font-display {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Cairo', sans-serif;
+  }
+
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3,
+  [dir="rtl"] h4,
+  [dir="rtl"] .font-display,
+  html.rtl-mode h1,
+  html.rtl-mode h2,
+  html.rtl-mode h3,
+  html.rtl-mode h4,
+  html.rtl-mode .font-display {
+    font-family: 'Cairo', 'Tajawal', sans-serif;
+    letter-spacing: normal;
   }
 }
 

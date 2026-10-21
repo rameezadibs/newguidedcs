@@ -1,17 +1,22 @@
 import { ArrowUp, Phone, Mail, MapPin, MessageCircle, Clock, ShieldCheck } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import { translations } from '../translations/translations';
 
 export default function Footer({ onOpenAssistance, onNavigate }) {
+  const { lang, isRTL } = useLanguage();
+  const t = translations[lang] || translations.en;
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const navItems = [
-    { name: 'Home', href: '#home', id: 'home' },
-    { name: 'About New Guide', href: '/about', id: 'about' },
-    { name: 'Services Index', href: '#services', id: 'services' },
-    { name: 'Why New Guide', href: '#difference', id: 'difference' },
-    { name: 'How It Works', href: '#process', id: 'process' },
-    { name: 'Contact Us', href: '/contact', id: 'contact' },
+    { name: t.nav.home, href: '#home', id: 'home' },
+    { name: t.nav.about, href: '/about', id: 'about' },
+    { name: t.nav.services, href: '#services', id: 'services' },
+    { name: lang === 'ar' ? 'لماذا نيو غايد' : 'Why New Guide', href: '#difference', id: 'difference' },
+    { name: lang === 'ar' ? 'آلية العمل' : 'How It Works', href: '#process', id: 'process' },
+    { name: t.nav.contact, href: '/contact', id: 'contact' },
   ];
 
   const handleFooterNavClick = (e, item) => {
@@ -42,7 +47,15 @@ export default function Footer({ onOpenAssistance, onNavigate }) {
     }
   };
 
-  const serviceLinks = [
+  const serviceLinks = lang === 'ar' ? [
+    'تصديق المستندات واعتماد وزارة الخارجية',
+    'تأسيس شركات البر الرئيسي والمناطق الحرة',
+    'معاملات دائرة الاقتصاد والسياحة (DET)',
+    'الإقامة الذهبية وتأشيرات الإقامة في الإمارات',
+    'خدمات التعقيب والعلاقات العامة (PRO)',
+    'شهادات واعتمادات غرف التجارة',
+    'المساعدة في فتح الحسابات البنكية للشركات',
+  ] : [
     'Document Clearing & MOFA Legalization',
     'Mainland LLC & Freezone Business Setup',
     'Dubai Economy & Tourism (DET) Filings',
@@ -92,13 +105,13 @@ export default function Footer({ onOpenAssistance, onNavigate }) {
 
             {/* Short Company Description */}
             <p className="text-sm text-white/70 leading-relaxed max-w-md">
-              New Guide Documents Clearing Services Co. is an authorized UAE corporate liaison and document clearance firm based in Dubai. We simplify complex bureaucratic requirements into transparent, expedited business milestones.
+              {t.footer.tagline}
             </p>
 
             {/* Quick Accreditation Badge */}
             <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs font-mono text-[#09A9D4]">
               <ShieldCheck className="w-4 h-4 text-[#09A9D4]" />
-              <span>LICENSED UAE CORPORATE SERVICES PROVIDER</span>
+              <span>{lang === 'ar' ? 'مزود معتمد لخدمات المعاملات والشركات في دولة الإمارات' : 'LICENSED UAE CORPORATE SERVICES PROVIDER'}</span>
             </div>
 
             {/* Social Links */}
@@ -149,9 +162,10 @@ export default function Footer({ onOpenAssistance, onNavigate }) {
           </div>
 
           {/* Col 2: Navigation Links (2 Cols) */}
+          {/* Col 2: Navigation Links (2 Cols) */}
           <div className="lg:col-span-2 space-y-4">
             <h4 className="text-xs font-mono font-bold text-[#09A9D4] tracking-widest uppercase">
-              NAVIGATION
+              {t.footer.quickLinks}
             </h4>
             <ul className="space-y-2.5 text-sm">
               {navItems.map((item) => (
@@ -171,14 +185,14 @@ export default function Footer({ onOpenAssistance, onNavigate }) {
           {/* Col 3: Services Links (2 Cols) */}
           <div className="lg:col-span-2 space-y-4">
             <h4 className="text-xs font-mono font-bold text-[#09A9D4] tracking-widest uppercase">
-              SERVICES
+              {t.footer.services}
             </h4>
             <ul className="space-y-2 text-xs text-white/70">
               {serviceLinks.slice(0, 5).map((service) => (
                 <li key={service}>
                   <button
                     onClick={onOpenAssistance}
-                    className="text-left hover:text-white transition-colors"
+                    className={`hover:text-white transition-colors cursor-pointer ${isRTL ? 'text-right' : 'text-left'}`}
                   >
                     {service}
                   </button>
@@ -190,7 +204,7 @@ export default function Footer({ onOpenAssistance, onNavigate }) {
           {/* Col 4: Contact Details (3 Cols) */}
           <div className="lg:col-span-3 space-y-4">
             <h4 className="text-xs font-mono font-bold text-[#09A9D4] tracking-widest uppercase">
-              CONTACT & LOCATION
+              {t.footer.contactInfo}
             </h4>
             
             <div className="space-y-3 text-xs text-white/80">
@@ -199,9 +213,9 @@ export default function Footer({ onOpenAssistance, onNavigate }) {
                 className="flex items-start gap-3 hover:text-white transition-colors group"
               >
                 <Phone className="w-4 h-4 text-[#09A9D4] shrink-0 mt-0.5" />
-                <div>
-                  <div className="font-semibold text-white group-hover:text-[#09A9D4] transition-colors">+971 52 545 3323</div>
-                  <div className="text-[10px] text-white/50">Mobile & Direct PRO Liaison</div>
+                <div className={isRTL ? 'text-right' : 'text-left'}>
+                  <div className="font-semibold text-white group-hover:text-[#09A9D4] transition-colors" dir="ltr">+971 52 545 3323</div>
+                  <div className="text-[10px] text-white/50">{lang === 'ar' ? 'متحرك ومندوب PRO مباشر' : 'Mobile & Direct PRO Liaison'}</div>
                 </div>
               </a>
 
@@ -210,9 +224,9 @@ export default function Footer({ onOpenAssistance, onNavigate }) {
                 className="flex items-start gap-3 hover:text-white transition-colors group"
               >
                 <Phone className="w-4 h-4 text-[#09A9D4] shrink-0 mt-0.5" />
-                <div>
-                  <div className="font-semibold text-white group-hover:text-[#09A9D4] transition-colors">+971 4 2633 268</div>
-                  <div className="text-[10px] text-white/50">Central Dubai Office Landline</div>
+                <div className={isRTL ? 'text-right' : 'text-left'}>
+                  <div className="font-semibold text-white group-hover:text-[#09A9D4] transition-colors" dir="ltr">+971 4 2633 268</div>
+                  <div className="text-[10px] text-white/50">{lang === 'ar' ? 'هاتف مكتب دبي المركزي' : 'Central Dubai Office Landline'}</div>
                 </div>
               </a>
 
@@ -223,9 +237,9 @@ export default function Footer({ onOpenAssistance, onNavigate }) {
                 className="flex items-start gap-3 hover:text-white transition-colors"
               >
                 <MessageCircle className="w-4 h-4 text-[#25D366] shrink-0 mt-0.5" />
-                <div>
-                  <div className="font-semibold text-white">+971 52 545 3323</div>
-                  <div className="text-[10px] text-white/50">Direct WhatsApp Dispatch</div>
+                <div className={isRTL ? 'text-right' : 'text-left'}>
+                  <div className="font-semibold text-white" dir="ltr">+971 52 545 3323</div>
+                  <div className="text-[10px] text-white/50">{lang === 'ar' ? 'محادثة فورية عبر واتساب' : 'Direct WhatsApp Dispatch'}</div>
                 </div>
               </a>
 
@@ -234,24 +248,22 @@ export default function Footer({ onOpenAssistance, onNavigate }) {
                 className="flex items-start gap-3 hover:text-white transition-colors"
               >
                 <Mail className="w-4 h-4 text-[#09A9D4] shrink-0 mt-0.5" />
-                <div>
+                <div className={isRTL ? 'text-right' : 'text-left'}>
                   <div className="font-semibold text-white">info@newguidedcs.ae</div>
-                  <div className="text-[10px] text-white/50">Inquiries & Document Submission</div>
+                  <div className="text-[10px] text-white/50">{lang === 'ar' ? 'الاستفسارات وإرسال المستندات' : 'Inquiries & Document Submission'}</div>
                 </div>
               </a>
 
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-[#09A9D4] shrink-0 mt-0.5" />
-                <div>
-                  <div className="font-semibold text-white">Office S20, Ground Floor, Arzoo Building</div>
-                  <div className="text-[11px] text-white/70">Sharjah Islamic Bank Bldg, Near Al Twar Center</div>
-                  <div className="text-[10px] text-white/50">Al Qusais Metro Exit 02, Al Nahda Rd, Dubai, UAE</div>
+                <div className={isRTL ? 'text-right' : 'text-left'}>
+                  <div className="font-semibold text-white">{t.footer.address}</div>
                 </div>
               </div>
 
               <div className="flex items-start gap-3 pt-1 text-[11px] text-white/60">
                 <Clock className="w-4 h-4 text-[#09A9D4] shrink-0 mt-0.5" />
-                <div>Sun – Thu: 8:00 AM – 6:00 PM</div>
+                <div>{t.footer.hours}</div>
               </div>
             </div>
 
@@ -262,24 +274,24 @@ export default function Footer({ onOpenAssistance, onNavigate }) {
         {/* Bottom Bar: Copyright & Terms */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50 font-mono">
           <div>
-            © 2026 New Guide Documents Clearing Services Co. All Rights Reserved.
+            {t.footer.rights}
           </div>
 
           <div className="flex items-center gap-6">
-            <button onClick={onOpenAssistance} className="hover:text-white transition-colors">
-              Privacy Policy
+            <button onClick={onOpenAssistance} className="hover:text-white transition-colors cursor-pointer">
+              {lang === 'ar' ? 'سياسة الخصوصية' : 'Privacy Policy'}
             </button>
             <span>•</span>
-            <button onClick={onOpenAssistance} className="hover:text-white transition-colors">
-              Terms of Service
+            <button onClick={onOpenAssistance} className="hover:text-white transition-colors cursor-pointer">
+              {lang === 'ar' ? 'شروط الخدمة' : 'Terms of Service'}
             </button>
             <span>•</span>
             <button
               onClick={scrollToTop}
-              className="flex items-center gap-1.5 text-[#09A9D4] hover:text-white transition-colors ml-2 font-bold"
+              className="flex items-center gap-1.5 text-[#09A9D4] hover:text-white transition-colors ml-2 font-bold cursor-pointer"
               aria-label="Scroll to top"
             >
-              <span>Back to Top</span>
+              <span>{t.footer.backToTop}</span>
               <ArrowUp className="w-3.5 h-3.5 text-[#09A9D4]" />
             </button>
           </div>

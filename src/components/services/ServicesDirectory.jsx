@@ -8,18 +8,16 @@ import {
   Clock, 
   Search, 
   SlidersHorizontal, 
-  Compass, 
-  Landmark, 
-  Building2, 
-  FileCheck2, 
-  Sparkles,
-  Layers
 } from 'lucide-react';
 import { DIRECTORY_SERVICES } from './servicesData';
+import { useLanguage } from '../../context/LanguageContext';
+import { translations, ARABIC_SERVICES } from '../../translations/translations';
 
 export default function ServicesDirectory({ onOpenAssistance, onNavigateService, activeCategoryFromParent }) {
   const [activeTab, setActiveTab] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const { lang, isRTL } = useLanguage();
+  const t = translations[lang] || translations.en;
 
   const categoriesMap = {
     gov: ['government-transactions', 'dubai-municipality', 'documents-clearing', 'amer-tasheel-tadbeer', 'government-approval'],
@@ -44,8 +42,31 @@ export default function ServicesDirectory({ onOpenAssistance, onNavigateService,
     }
   }, [activeCategoryFromParent]);
 
+  // Merge English services with Arabic overrides when lang === 'ar'
+  const localizedServices = useMemo(() => {
+    return DIRECTORY_SERVICES.map(srv => {
+      if (lang === 'ar' && ARABIC_SERVICES[srv.id]) {
+        const ar = ARABIC_SERVICES[srv.id];
+        return {
+          ...srv,
+          title: ar.title || srv.title,
+          description: ar.description || srv.description,
+          context: ar.context || srv.context,
+          authority: ar.authority || srv.authority,
+          authorityFull: ar.authorityFull || srv.authorityFull,
+          jurisdiction: ar.jurisdiction || srv.jurisdiction,
+          categoryType: ar.categoryType || srv.categoryType,
+          turnaround: ar.turnaround || srv.turnaround,
+          procedures: ar.procedures && ar.procedures.length > 0 ? ar.procedures : srv.procedures,
+          requiredDocuments: ar.requiredDocuments && ar.requiredDocuments.length > 0 ? ar.requiredDocuments : srv.requiredDocuments,
+        };
+      }
+      return srv;
+    });
+  }, [lang]);
+
   const filteredServices = useMemo(() => {
-    return DIRECTORY_SERVICES.filter((srv) => {
+    return localizedServices.filter((srv) => {
       // Category Tab Filter
       if (activeTab !== 'all' && !categoriesMap[activeTab]?.includes(srv.id)) {
         return false;
@@ -61,18 +82,18 @@ export default function ServicesDirectory({ onOpenAssistance, onNavigateService,
       }
       return true;
     });
-  }, [activeTab, searchQuery]);
+  }, [localizedServices, activeTab, searchQuery]);
 
   const tabOptions = [
-    { id: 'all', label: 'ALL DIVISIONS', count: 17 },
-    { id: 'gov', label: 'GOVERNMENT & LIAISON', count: 5 },
-    { id: 'biz', label: 'BUSINESS & LICENSING', count: 5 },
-    { id: 'visa', label: 'VISAS & IMMIGRATION', count: 2 },
-    { id: 'legal', label: 'LEGAL & ATTESTATION', count: 5 },
+    { id: 'all', label: lang === 'ar' ? 'كافة الخدمات (17)' : 'ALL DIVISIONS', count: 17 },
+    { id: 'gov', label: lang === 'ar' ? 'الوزارات والجهات الحكومية' : 'GOVERNMENT & LIAISON', count: 5 },
+    { id: 'biz', label: lang === 'ar' ? 'تأسيس الشركات والتراخيص' : 'BUSINESS & LICENSING', count: 5 },
+    { id: 'visa', label: lang === 'ar' ? 'التأشيرات والإقامة' : 'VISAS & IMMIGRATION', count: 2 },
+    { id: 'legal', label: lang === 'ar' ? 'التوثيق والطباعة والوكالات' : 'LEGAL & ATTESTATION', count: 5 },
   ];
 
   return (
-    <section id="services-directory" className="relative py-20 sm:py-28 bg-[#06162F] text-white overflow-hidden border-t border-[#00A9D6]/20">
+    <section id="services-directory" className={`relative py-20 sm:py-28 bg-[#06162F] text-white overflow-hidden border-t border-[#00A9D6]/20 ${isRTL ? 'text-right' : 'text-left'}`}>
       
       {/* Precision Blueprint Coordinate Grid Overlay */}
       <div 
@@ -99,15 +120,28 @@ export default function ServicesDirectory({ onOpenAssistance, onNavigateService,
           
           <div className="max-w-3xl space-y-4">
             {/* Creative Typographic Headline */}
-            <h2 className="text-4xl sm:text-6xl lg:text-7xl font-display font-extrabold tracking-tight leading-[0.95] text-white">
-              EXPLORE OUR <br />
-              <span className="bg-gradient-to-r from-[#00A9D6] via-[#087ED1] to-[#DDF5FC] bg-clip-text text-transparent">
-                17 SERVICE DIVISIONS
-              </span>
+            <h2 className="text-4xl sm:text-6xl lg:text-7xl font-display font-extrabold tracking-tight leading-[0.95] text-white uppercase">
+              {lang === 'ar' ? (
+                <>
+                  استكشف خدماتنا <br />
+                  <span className="bg-gradient-to-r from-[#00A9D6] via-[#087ED1] to-[#DDF5FC] bg-clip-text text-transparent">
+                    الـ 17 المعتمدة
+                  </span>
+                </>
+              ) : (
+                <>
+                  EXPLORE OUR <br />
+                  <span className="bg-gradient-to-r from-[#00A9D6] via-[#087ED1] to-[#DDF5FC] bg-clip-text text-transparent">
+                    17 SERVICE DIVISIONS
+                  </span>
+                </>
+              )}
             </h2>
 
             <p className="text-base sm:text-lg text-[#F3F8FC]/80 max-w-2xl font-normal leading-relaxed">
-              Select any specialized government or corporate clearance division below to inspect dedicated procedural specifications, required documents, and official ministerial filing routes.
+              {lang === 'ar'
+                ? 'اختر أي قطاع لتخليص المعاملات الحكومية أدناه للاطلاع على التفاصيل الإجرائية الدقيقة، والمستندات المطلوبة، ومسارات التقديم المعتمدة.'
+                : 'Select any specialized government or corporate clearance division below to inspect dedicated procedural specifications, required documents, and official ministerial filing routes.'}
             </p>
           </div>
 
@@ -117,8 +151,17 @@ export default function ServicesDirectory({ onOpenAssistance, onNavigateService,
               17
             </div>
             <div className="text-xs font-mono tracking-wider text-white/80 uppercase font-bold leading-snug">
-              AUTHORISED <br />
-              <span className="text-[#00A9D6]">UAE DIVISIONS</span>
+              {lang === 'ar' ? (
+                <>
+                  خدمات حكومية <br />
+                  <span className="text-[#00A9D6]">معتمدة في الإمارات</span>
+                </>
+              ) : (
+                <>
+                  AUTHORISED <br />
+                  <span className="text-[#00A9D6]">UAE DIVISIONS</span>
+                </>
+              )}
             </div>
           </div>
 
@@ -134,20 +177,20 @@ export default function ServicesDirectory({ onOpenAssistance, onNavigateService,
             
             {/* Real-time Search Input */}
             <div className="relative w-full md:w-96">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#00A9D6]">
+              <div className={`absolute inset-y-0 ${isRTL ? 'right-0 pr-3.5' : 'left-0 pl-3.5'} flex items-center pointer-events-none text-[#00A9D6]`}>
                 <Search className="w-4 h-4" />
               </div>
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Filter services by keyword (e.g. Visa, MOFA, Trade License)..."
-                className="w-full pl-10 pr-10 py-3 rounded-xl bg-[#08244A]/70 border border-white/15 text-xs text-white placeholder-white/40 focus:outline-none focus:border-[#00A9D6] focus:ring-1 focus:ring-[#00A9D6] transition-all font-mono"
+                placeholder={t.servicesPage.searchPlaceholder}
+                className={`w-full ${isRTL ? 'pr-10 pl-10' : 'pl-10 pr-10'} py-3 rounded-xl bg-[#08244A]/70 border border-white/15 text-xs text-white placeholder-white/40 focus:outline-none focus:border-[#00A9D6] focus:ring-1 focus:ring-[#00A9D6] transition-all font-mono`}
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-xs text-white/40 hover:text-white"
+                  className={`absolute inset-y-0 ${isRTL ? 'left-0 pl-3' : 'right-0 pr-3'} flex items-center text-xs text-white/40 hover:text-white`}
                 >
                   ✕
                 </button>
@@ -157,7 +200,11 @@ export default function ServicesDirectory({ onOpenAssistance, onNavigateService,
             {/* Results Count Tag */}
             <div className="text-xs font-mono text-white/60 tracking-wider flex items-center gap-2">
               <SlidersHorizontal className="w-3.5 h-3.5 text-[#00A9D6]" />
-              <span>SHOWING {filteredServices.length} OF 17 STATUTORY DIVISIONS</span>
+              <span>
+                {lang === 'ar'
+                  ? `عرض ${filteredServices.length} من أصل 17 خدمة حكومية`
+                  : `SHOWING ${filteredServices.length} OF 17 STATUTORY DIVISIONS`}
+              </span>
             </div>
           </div>
 
@@ -191,7 +238,7 @@ export default function ServicesDirectory({ onOpenAssistance, onNavigateService,
         </div>
 
         {/* ====================================================
-            17 SERVICE CARDS GRID — ULTRA-PREMIUM ARCHITECTURAL DESIGN
+            17 SERVICE CARDS GRID
             ==================================================== */}
         {filteredServices.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 lg:gap-8 items-stretch">
@@ -206,7 +253,11 @@ export default function ServicesDirectory({ onOpenAssistance, onNavigateService,
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                   onClick={() => {
-                    const text = encodeURIComponent(`Hello New Guide, I would like to inquire about: ${service.title} (Ref: NG-SVC-${service.num}).`);
+                    const text = encodeURIComponent(
+                      lang === 'ar'
+                        ? `مرحباً نيو غايد، أود الاستفسار حول: ${service.title} (مرجع: NG-SVC-${service.num}).`
+                        : `Hello New Guide, I would like to inquire about: ${service.title} (Ref: NG-SVC-${service.num}).`
+                    );
                     window.open(`https://wa.me/971525453323?text=${text}`, '_blank');
                   }}
                   className="group relative rounded-3xl overflow-hidden bg-gradient-to-b from-[#0B254E]/90 via-[#071D45]/80 to-[#041228]/95 border border-white/10 hover:border-[#00A9D6]/90 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_30px_70px_rgba(0,169,214,0.25)] cursor-pointer flex flex-col justify-between backdrop-blur-2xl"
@@ -215,14 +266,10 @@ export default function ServicesDirectory({ onOpenAssistance, onNavigateService,
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#00A9D6]/40 to-transparent group-hover:via-[#00A9D6] transition-all duration-500 z-20" />
 
                   {/* Corner Glow Accent */}
-                  <div className="absolute -top-16 -right-16 w-44 h-44 bg-[#00A9D6]/10 rounded-full blur-3xl group-hover:bg-[#00A9D6]/25 transition-all duration-500 pointer-events-none" />
+                  <div className={`absolute -top-16 ${isRTL ? '-left-16' : '-right-16'} w-44 h-44 bg-[#00A9D6]/10 rounded-full blur-3xl group-hover:bg-[#00A9D6]/25 transition-all duration-500 pointer-events-none`} />
 
-                  {/* -------------------------------------------
-                      CARD UPPER HALF: CINEMATIC VISUAL PRESENTATION
-                      ------------------------------------------- */}
+                  {/* Visual Media Window */}
                   <div className="relative">
-                    
-                    {/* Visual Media Window */}
                     <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#06162F]">
                       <img
                         src={service.image}
@@ -263,19 +310,16 @@ export default function ServicesDirectory({ onOpenAssistance, onNavigateService,
                         </div>
                       </div>
                     </div>
-
                   </div>
 
-                  {/* -------------------------------------------
-                      CARD MIDDLE: TYPOGRAPHIC IDENTITY & CAPABILITIES
-                      ------------------------------------------- */}
+                  {/* CARD MIDDLE: TYPOGRAPHIC IDENTITY & CAPABILITIES */}
                   <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-5">
                     
                     <div>
-                      {/* Category Type & Statutory Scope Tag */}
+                      {/* Category Type */}
                       <div className="flex items-center gap-2 mb-2.5">
                         <span className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-[#00A9D6]">
-                          {service.categoryType || 'STATUTORY CLEARANCE'}
+                          {service.categoryType || (lang === 'ar' ? 'تخليص واعتماد رسمي' : 'STATUTORY CLEARANCE')}
                         </span>
                       </div>
 
@@ -291,7 +335,7 @@ export default function ServicesDirectory({ onOpenAssistance, onNavigateService,
                         </div>
                       )}
 
-                      {/* Full Description — Complete text without dots/truncation */}
+                      {/* Full Description */}
                       <p className="text-xs sm:text-sm text-[#F3F8FC]/90 leading-relaxed font-normal">
                         {service.description}
                       </p>
@@ -300,7 +344,7 @@ export default function ServicesDirectory({ onOpenAssistance, onNavigateService,
                     {/* Featured Capabilities Tag Chips */}
                     <div className="pt-3 border-t border-white/10 space-y-2">
                       <div className="text-[10px] font-mono font-bold tracking-widest text-white/50 uppercase">
-                        RELEVANT PROCEDURES:
+                        {lang === 'ar' ? 'أبرز الإجراءات المشمولة:' : 'RELEVANT PROCEDURES:'}
                       </div>
 
                       <div className="flex flex-col gap-1.5">
@@ -318,16 +362,14 @@ export default function ServicesDirectory({ onOpenAssistance, onNavigateService,
 
                   </div>
 
-                  {/* -------------------------------------------
-                      CARD FOOTER: INTERACTIVE ACTION TRIGGER
-                      ------------------------------------------- */}
+                  {/* CARD FOOTER */}
                   <div className="px-6 pb-6 sm:px-7 sm:pb-7 pt-2">
                     <div className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-[#06162F]/80 group-hover:bg-[#00A9D6] border border-white/10 group-hover:border-[#00A9D6] text-white group-hover:text-[#06162F] transition-all duration-300 shadow-md">
                       <span className="text-xs font-display font-black tracking-wider uppercase">
-                        INQUIRE ABOUT {service.title}
+                        {lang === 'ar' ? `استفسر عن ${service.title}` : `INQUIRE ABOUT ${service.title}`}
                       </span>
                       <div className="w-6 h-6 rounded-lg bg-white/10 group-hover:bg-[#06162F]/20 flex items-center justify-center transition-colors">
-                        <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                        <ArrowRight className={`w-3.5 h-3.5 transition-transform duration-300 ${isRTL ? 'rotate-180 group-hover:-translate-x-1' : 'group-hover:translate-x-1'}`} />
                       </div>
                     </div>
                   </div>
@@ -340,7 +382,9 @@ export default function ServicesDirectory({ onOpenAssistance, onNavigateService,
           /* Empty Search State */
           <div className="py-16 text-center space-y-4 rounded-3xl bg-[#08244A]/40 border border-white/10">
             <div className="text-slate-400 font-mono text-sm">
-              No matching service division found for &ldquo;{searchQuery}&rdquo;.
+              {lang === 'ar'
+                ? `لم يتم العثور على أي خدمة تطابق «${searchQuery}».`
+                : `No matching service division found for “${searchQuery}”.`}
             </div>
             <button
               onClick={() => {
@@ -349,7 +393,7 @@ export default function ServicesDirectory({ onOpenAssistance, onNavigateService,
               }}
               className="px-5 py-2.5 rounded-xl bg-[#00A9D6] text-[#06162F] font-mono text-xs font-bold uppercase tracking-wider hover:bg-[#087ED1] hover:text-white transition-colors"
             >
-              Reset Filters
+              {lang === 'ar' ? 'إعادة ضبط البحث' : 'Reset Filters'}
             </button>
           </div>
         )}
@@ -358,17 +402,25 @@ export default function ServicesDirectory({ onOpenAssistance, onNavigateService,
         <div className="mt-16 p-6 sm:p-7 rounded-3xl bg-[#08244A]/60 border border-[#00A9D6]/30 flex flex-col sm:flex-row items-center justify-between gap-5 text-xs font-mono text-white/80 shadow-2xl backdrop-blur-md">
           <div className="flex items-center gap-3">
             <ShieldCheck className="w-5 h-5 text-[#00A9D6] shrink-0" />
-            <span className="text-xs sm:text-sm">100% Authorized Liaison Representation Across All UAE Federal Ministries &amp; Local Authorities</span>
+            <span className="text-xs sm:text-sm">
+              {lang === 'ar'
+                ? 'تمثيل ومتابعة معتمدة 100% لدى كافة الوزارات الاتحادية والدوائر المحلية في دولة الإمارات'
+                : '100% Authorized Liaison Representation Across All UAE Federal Ministries & Local Authorities'}
+            </span>
           </div>
 
           <button
             onClick={() => {
-              const text = encodeURIComponent('Hello New Guide, I would like to dispatch a PRO inquiry for UAE document clearing and corporate services.');
+              const text = encodeURIComponent(
+                lang === 'ar'
+                  ? 'مرحباً نيو غايد، أود إرسال استفسار حول خدمات التخليص الحكومي والـ PRO.'
+                  : 'Hello New Guide, I would like to dispatch a PRO inquiry for UAE document clearing and corporate services.'
+              );
               window.open(`https://wa.me/971525453323?text=${text}`, '_blank');
             }}
             className="px-6 py-3 rounded-xl bg-[#00A9D6]/15 hover:bg-[#00A9D6] border border-[#00A9D6]/40 text-[#00A9D6] hover:text-[#06162F] font-display font-extrabold text-xs tracking-wider uppercase transition-all duration-300 cursor-pointer shrink-0"
           >
-            <span>DISPATCH PRO INQUIRY →</span>
+            <span>{lang === 'ar' ? 'إرسال استفسار PRO ←' : 'DISPATCH PRO INQUIRY →'}</span>
           </button>
         </div>
 

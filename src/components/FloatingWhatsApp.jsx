@@ -1,22 +1,26 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function FloatingWhatsApp() {
   const [showTooltip, setShowTooltip] = useState(false);
+  const { lang, isRTL } = useLanguage();
 
   return (
-    <div className="fixed bottom-6 right-6 z-40 flex items-center">
+    <div className={`fixed bottom-6 ${isRTL ? 'left-6 flex-row-reverse' : 'right-6'} z-40 flex items-center`}>
       {/* Tooltip on hover */}
       <AnimatePresence>
         {showTooltip && (
           <motion.div
-            initial={{ opacity: 0, x: 10, scale: 0.95 }}
+            initial={{ opacity: 0, x: isRTL ? -10 : 10, scale: 0.95 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 10, scale: 0.95 }}
-            className="hidden sm:flex items-center gap-2 mr-3 px-3.5 py-2 rounded-xl bg-[#071D45] text-white text-xs shadow-2xl border border-[#09A9D4]/40 pointer-events-none"
+            exit={{ opacity: 0, x: isRTL ? -10 : 10, scale: 0.95 }}
+            className={`hidden sm:flex items-center gap-2 ${isRTL ? 'ml-3' : 'mr-3'} px-3.5 py-2 rounded-xl bg-[#071D45] text-white text-xs shadow-2xl border border-[#09A9D4]/40 pointer-events-none`}
           >
             <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse" />
-            <span className="font-medium font-mono text-[11px] tracking-wide">Direct WhatsApp Support • Available Now</span>
+            <span className="font-medium font-mono text-[11px] tracking-wide">
+              {lang === 'ar' ? 'دعم مباشر عبر واتساب • متاح الآن' : 'Direct WhatsApp Support • Available Now'}
+            </span>
           </motion.div>
         )}
       </AnimatePresence>

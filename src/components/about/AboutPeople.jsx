@@ -1,49 +1,61 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function AboutPeople() {
+  const { lang, isRTL } = useLanguage();
+
   return (
     <section
       id="people"
       aria-label="The People Behind the Process"
-      className="relative w-full bg-[#F2F8FC] text-[#06162F] pt-10 sm:pt-14 lg:pt-18 pb-10 sm:pb-14 lg:pb-18 px-4 sm:px-8 lg:px-14 overflow-hidden border-b border-[#08244A]/10"
+      className={`relative w-full bg-[#F2F8FC] text-[#06162F] pt-10 sm:pt-14 lg:pt-18 pb-10 sm:pb-14 lg:pb-18 px-4 sm:px-8 lg:px-14 overflow-hidden border-b border-[#08244A]/10 ${isRTL ? 'text-right' : 'text-left'}`}
     >
       {/* Precision Grid Coordinates Background */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(8,36,74,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(8,36,74,0.03)_1px,transparent_1px)] bg-[size:64px_64px] pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto z-10">
         
-        {/* Section Header: Tight Top Spacing */}
+        {/* Section Header */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-end mb-6 sm:mb-8 pb-4 border-b border-[#08244A]/10">
           <div className="lg:col-span-8">
             <div className="flex items-center gap-3 mb-1.5">
               <span className="w-8 h-[2px] bg-[#123D88]" />
-              <span className="font-mono text-xs sm:text-sm font-bold tracking-[0.3em] uppercase text-[#123D88]">
-                OPERATIONAL HUMANITY
+              <span className="font-mono text-xs sm:text-sm font-bold tracking-[0.2em] uppercase text-[#123D88]">
+                {lang === 'ar' ? 'الخبرة الميدانية البشرية' : 'OPERATIONAL HUMANITY'}
               </span>
             </div>
 
-            <h2 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[0.98] text-[#06162F]">
-              PEOPLE MAKE
-              <br />
-              <span className="text-[#123D88]">THE PROCESS WORK.</span>
+            <h2 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[0.98] text-[#06162F] uppercase">
+              {lang === 'ar' ? (
+                <>
+                  فريق العمل
+                  <br />
+                  <span className="text-[#123D88]">هو سر دقة وسرعة الإنجاز.</span>
+                </>
+              ) : (
+                <>
+                  PEOPLE MAKE
+                  <br />
+                  <span className="text-[#123D88]">THE PROCESS WORK.</span>
+                </>
+              )}
             </h2>
           </div>
 
           <div className="lg:col-span-4 lg:pb-1">
-            <p className="text-base sm:text-lg text-[#08244A]/80 font-display font-medium leading-relaxed border-l-2 border-[#00A9D6] pl-4">
-              Behind every submission is coordination, communication and attention to detail.
+            <p className={`text-base sm:text-lg text-[#08244A]/80 font-display font-medium leading-relaxed ${isRTL ? 'border-r-2 pr-4' : 'border-l-2 pl-4'} border-[#00A9D6]`}>
+              {lang === 'ar'
+                ? 'خلف كل معاملة ناجحة فريق يحرص على التنسيق والتواصل المباشر والاهتمام بأدق التفاصيل.'
+                : 'Behind every submission is coordination, communication and attention to detail.'}
             </p>
           </div>
         </div>
 
-        {/* ======================================================== */}
         {/* EDITORIAL MOSAIC OF OBSERVATIONAL DOCUMENTARY PHOTOGRAPHY */}
-        {/* Varied Dimensions: Large Vertical, Small Landscape, Square, Wide */}
-        {/* ======================================================== */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6 items-stretch">
           
-          {/* Photo 1: Large Vertical (Col 1-5, Row span 2) - Professional in Corridor */}
+          {/* Photo 1: Large Vertical */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -57,27 +69,27 @@ export default function AboutPeople() {
               className="w-full h-full object-cover object-center filter contrast-[1.05] transition-transform duration-700 group-hover:scale-[1.02]"
               loading="lazy"
             />
-            {/* Subtle Gradient Shadow */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#06162F]/80 via-transparent to-transparent pointer-events-none" />
 
-            {/* Editorial Caption Tag */}
             <div className="absolute bottom-5 left-5 right-5">
               <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#00A9D6] block mb-1 font-bold">
-                DOCUMENTARY 01 // LIAISON IN MOTION
+                {lang === 'ar' ? 'توثيق ميداني 01 // متابعة حية مستمرة' : 'DOCUMENTARY 01 // LIAISON IN MOTION'}
               </span>
               <p className="text-white font-display font-semibold text-sm sm:text-base">
-                Direct ministerial coordination requires constant, on-the-ground presence.
+                {lang === 'ar'
+                  ? 'التنسيق المباشر مع الوزارات يتطلب تواجداً ميدانياً مستمراً على أرض الواقع.'
+                  : 'Direct ministerial coordination requires constant, on-the-ground presence.'}
               </p>
             </div>
           </motion.div>
 
-          {/* Right Column Grid: Photos 2, 3, 4 (Col 6-12) */}
+          {/* Right Column Grid: Photos 2, 3, 4 */}
           <div className="md:col-span-7 flex flex-col gap-5 sm:gap-6">
             
-            {/* Top Row: Square Crop (Photo 3) + Landscape Desk (Photo 2) */}
+            {/* Top Row: Square Crop + Landscape Desk */}
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-5 sm:gap-6 items-stretch">
               
-              {/* Photo 3: Specialist at Workstation (5 cols on sm+, 100% width on mobile) */}
+              {/* Photo 3: Specialist at Workstation */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -95,15 +107,15 @@ export default function AboutPeople() {
 
                 <div className="absolute bottom-4 left-4 right-4 z-10">
                   <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-[#00A9D6] block font-bold">
-                    VERIFICATION PROTOCOL
+                    {lang === 'ar' ? 'بروتوكول التحقق' : 'VERIFICATION PROTOCOL'}
                   </span>
                   <p className="text-white text-xs font-semibold">
-                    Multi-tier pre-filing auditing
+                    {lang === 'ar' ? 'تدقيق دقيق قبل التقديم' : 'Multi-tier pre-filing auditing'}
                   </p>
                 </div>
               </motion.div>
 
-              {/* Photo 2: Landscape Desk / Phone Coordination (7 cols on sm+, 100% width on mobile) */}
+              {/* Photo 2: Landscape Desk */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -121,17 +133,17 @@ export default function AboutPeople() {
 
                 <div className="absolute bottom-4 left-4 right-4 z-10">
                   <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-[#00A9D6] block font-bold">
-                    COMMUNICATION SPEED
+                    {lang === 'ar' ? 'سرعة الاستجابة' : 'COMMUNICATION SPEED'}
                   </span>
                   <p className="text-white text-xs font-semibold">
-                    Live updates at every ministerial milestone
+                    {lang === 'ar' ? 'تحديثات مباشرة لكل مرحلة' : 'Live updates at every ministerial milestone'}
                   </p>
                 </div>
               </motion.div>
 
             </div>
 
-            {/* Bottom Row: Wide 16:9 Landscape - Boardroom Discussion from Behind (Photo 4) */}
+            {/* Bottom Row: Wide 16:9 Landscape */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -150,15 +162,15 @@ export default function AboutPeople() {
               <div className="absolute bottom-4 left-5 right-5 flex items-end justify-between">
                 <div>
                   <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#00A9D6] block font-bold">
-                    CONSULTATIVE ALIGNMENT
+                    {lang === 'ar' ? 'التوافق الاستشاري' : 'CONSULTATIVE ALIGNMENT'}
                   </span>
                   <p className="text-white font-display font-semibold text-xs sm:text-sm">
-                    Thoughtful case routing before government lodgment
+                    {lang === 'ar' ? 'دراسة متأنية للملف قبل الإيداع الرسمي' : 'Thoughtful case routing before government lodgment'}
                   </p>
                 </div>
 
                 <div className="hidden sm:block font-mono text-[10px] text-white/50 tracking-wider">
-                  DUBAI CORPORATE HEADQUARTERS
+                  {lang === 'ar' ? 'مقر دبي الرئيسي' : 'DUBAI CORPORATE HEADQUARTERS'}
                 </div>
               </div>
             </motion.div>

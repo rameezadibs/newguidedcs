@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Compass, Eye, ShieldCheck, Zap, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import { translations } from '../translations/translations';
 
 export default function Difference() {
+  const { lang, isRTL } = useLanguage();
+  const t = translations[lang] || translations.en;
   const [activeTab, setActiveTab] = useState(0);
 
-  const pillars = [
+  const basePillars = [
     {
       id: 'p1',
       num: '01',
@@ -80,11 +84,28 @@ export default function Difference() {
     },
   ];
 
+  const pillars = basePillars.map((p, idx) => {
+    if (lang === 'ar' && t.difference.pillars[idx]) {
+      const arP = t.difference.pillars[idx];
+      return {
+        ...p,
+        title: arP.title,
+        headline: arP.headline,
+        subtitle: arP.subtitle,
+        desc: arP.desc,
+        stat: arP.stat,
+        statLabel: arP.statLabel,
+        highlights: arP.highlights,
+      };
+    }
+    return p;
+  });
+
   return (
     <section id="difference" aria-labelledby="difference-heading" className="relative pt-12 sm:pt-16 pb-12 sm:pb-16 bg-[#071D45] text-white overflow-hidden">
       {/* Background Architectural Blueprint Grid & Subtle Large Watermark */}
       <div className="absolute inset-0 bg-grid-blueprint-dark opacity-25 pointer-events-none" />
-      <div className="absolute -left-10 top-1/2 -translate-y-1/2 text-white/[0.02] font-display font-black text-[22vw] select-none pointer-events-none leading-none z-0">
+      <div className={`absolute ${isRTL ? '-right-10' : '-left-10'} top-1/2 -translate-y-1/2 text-white/[0.02] font-display font-black text-[22vw] select-none pointer-events-none leading-none z-0`}>
         NEW GUIDE
       </div>
 
@@ -95,24 +116,24 @@ export default function Difference() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
         
         {/* Section Header: Bold Editorial Manifesto */}
-        <div className="mb-8 sm:mb-10">
+        <div className={`mb-8 sm:mb-10 ${isRTL ? 'text-right' : 'text-left'}`}>
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 pb-6 border-b border-white/10">
             <div className="max-w-3xl">
-              <h2 id="difference-heading" className="text-3xl sm:text-5xl lg:text-6xl font-display font-black tracking-tight leading-[1.06] text-white">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="w-7 h-[2px] bg-[#09A9D4]" />
-                  <span className="text-xs sm:text-sm font-mono font-bold tracking-[0.22em] text-[#09A9D4] uppercase">
-                    WHY CHOOSE US
-                  </span>
-                </div>
-                UAE DOCUMENT CLEARING DISCIPLINE. <br />
-                <span className="text-[#09A9D4]">PRECISION LIAISON ACROSS DUBAI & ALL EMIRATES.</span>
+              <div className={`flex items-center gap-3 mb-3 ${isRTL ? 'justify-start flex-row-reverse' : ''}`}>
+                <span className="w-7 h-[2px] bg-[#09A9D4]" />
+                <span className="text-xs sm:text-sm font-mono font-bold tracking-[0.22em] text-[#09A9D4] uppercase">
+                  {t.difference.tag}
+                </span>
+              </div>
+              <h2 id="difference-heading" className="text-3xl sm:text-5xl lg:text-6xl font-display font-black tracking-tight leading-[1.08] text-white">
+                {t.difference.heading1} <br />
+                <span className="text-[#09A9D4]">{t.difference.heading2}</span>
               </h2>
             </div>
 
             <div className="max-w-md">
               <p className="text-base sm:text-lg text-slate-300 font-normal leading-relaxed">
-                Why multinational enterprises, foreign investors, and corporate leaders partner with New Guide for <strong>document clearing in Dubai</strong>, <strong>MOFA attestations</strong>, and <strong>government liaison</strong>.
+                {t.difference.subtitle}
               </p>
             </div>
           </div>

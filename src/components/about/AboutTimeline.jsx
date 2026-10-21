@@ -1,8 +1,10 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function AboutTimeline() {
   const containerRef = useRef(null);
+  const { lang, isRTL } = useLanguage();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -14,44 +16,56 @@ export default function AboutTimeline() {
   const stages = [
     {
       num: '01',
-      title: 'UNDERSTAND',
-      desc: 'We identify the exact requirement.',
-      details: 'Audit of client objectives, entity structures, and required document legalizations before any filing begins.',
+      title: lang === 'ar' ? 'الفهم والتشخيص' : 'UNDERSTAND',
+      desc: lang === 'ar' ? 'تحديد المتطلب القانوني بدقة.' : 'We identify the exact requirement.',
+      details: lang === 'ar'
+        ? 'تدقيق أهداف العميل وهيكل المنشأة والتصديقات المطلوبة قبل بدء أي قيد.'
+        : 'Audit of client objectives, entity structures, and required document legalizations before any filing begins.',
       side: 'left',
     },
     {
       num: '02',
-      title: 'MAP',
-      desc: 'We determine the relevant authority and process.',
-      details: 'Routing transactions through MOFA, DET, MOHRE, ICP, or relevant Free Zone authorities with zero ambiguity.',
+      title: lang === 'ar' ? 'رسم المسار الحكومي' : 'MAP',
+      desc: lang === 'ar' ? 'تحديد الدائرة المعنية والإجراء المعتمد.' : 'We determine the relevant authority and process.',
+      details: lang === 'ar'
+        ? 'توجيه المعاملات عبر الخارجية، الاقتصاد، الموارد البشرية، الهيئة الاتحادية، أو سلطات المناطق الحرة دون أي غموض.'
+        : 'Routing transactions through MOFA, DET, MOHRE, ICP, or relevant Free Zone authorities with zero ambiguity.',
       side: 'right',
     },
     {
       num: '03',
-      title: 'PREPARE',
-      desc: 'Documentation is reviewed and prepared.',
-      details: 'Strict pre-submission verification of Arabic translations, consular stamps, shareholder resolutions, and compliance checks.',
+      title: lang === 'ar' ? 'الإعداد والتدقيق' : 'PREPARE',
+      desc: lang === 'ar' ? 'مراجعة وتجهيز الوثائق بنسبة 100%.' : 'Documentation is reviewed and prepared.',
+      details: lang === 'ar'
+        ? 'فحص شامل للترجمات القانونية، والأختام القنصلية، وقرارات الجمعية العمومية واشتراطات الامتثال.'
+        : 'Strict pre-submission verification of Arabic translations, consular stamps, shareholder resolutions, and compliance checks.',
       side: 'left',
     },
     {
       num: '04',
-      title: 'SUBMIT',
-      desc: 'The application enters the appropriate channel.',
-      details: 'Direct lodgment through official government portals and physical ministerial counters with authorized PRO credentials.',
+      title: lang === 'ar' ? 'الإيداع الرسمي' : 'SUBMIT',
+      desc: lang === 'ar' ? 'تقديم الطلب في القناة الحكومية الصحيحة.' : 'The application enters the appropriate channel.',
+      details: lang === 'ar'
+        ? 'قيد المعاملات مباشرة عبر البوابات الإلكترونية المعتمدة والكاونترات الوزارية باعتماد رسمي.'
+        : 'Direct lodgment through official government portals and physical ministerial counters with authorized PRO credentials.',
       side: 'right',
     },
     {
       num: '05',
-      title: 'FOLLOW',
-      desc: 'Our team coordinates progress and requirements.',
-      details: 'Continuous monitoring of approvals, department security clearances, and immediate resolution of any administrative queries.',
+      title: lang === 'ar' ? 'المتابعة الميدانية' : 'FOLLOW',
+      desc: lang === 'ar' ? 'متابعة حية لمسار المعاملة واستيفاء أي متطلبات.' : 'Our team coordinates progress and requirements.',
+      details: lang === 'ar'
+        ? 'مراقبة فورية للموافقات الأمنية والإدارية، والرد اللحظي على أي استفسارات أو استثناءات.'
+        : 'Continuous monitoring of approvals, department security clearances, and immediate resolution of any administrative queries.',
       side: 'left',
     },
     {
       num: '06',
-      title: 'COMPLETE',
-      desc: 'Final approval or cleared documentation is delivered.',
-      details: 'Delivery of official trade licenses, stamped visas, attested certificates, and compliance archives directly to the client.',
+      title: lang === 'ar' ? 'الإنجاز والتسليم' : 'COMPLETE',
+      desc: lang === 'ar' ? 'استلام الموافقة النهائية والمستندات المعتمدة.' : 'Final approval or cleared documentation is delivered.',
+      details: lang === 'ar'
+        ? 'تسليم الرخص التجارية الصادرة، والتأشيرات المثبتة، والشهادات المصدقة للعميل مباشرة.'
+        : 'Delivery of official trade licenses, stamped visas, attested certificates, and compliance archives directly to the client.',
       side: 'right',
     },
   ];
@@ -61,7 +75,7 @@ export default function AboutTimeline() {
       id="journey"
       ref={containerRef}
       aria-label="The Journey from Request to Resolution"
-      className="relative w-full bg-[#08244A] text-white pt-10 sm:pt-14 lg:pt-18 pb-6 sm:pb-8 lg:pb-10 px-4 sm:px-8 lg:px-14 overflow-hidden border-b border-white/10"
+      className={`relative w-full bg-[#08244A] text-white pt-10 sm:pt-14 lg:pt-18 pb-10 sm:pb-14 lg:pb-16 px-4 sm:px-8 lg:px-14 overflow-hidden border-b border-white/10 ${isRTL ? 'text-right' : 'text-left'}`}
     >
       {/* Background Architectural Grid Lines */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,169,214,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,169,214,0.035)_1px,transparent_1px)] bg-[size:72px_72px] pointer-events-none" />
@@ -71,36 +85,46 @@ export default function AboutTimeline() {
 
       <div className="relative max-w-7xl mx-auto z-10">
         
-        {/* Section Header: Tight Top Spacing */}
+        {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
           <div className="inline-flex items-center gap-3 mb-3">
             <span className="w-6 h-[2px] bg-[#00A9D6]" />
-            <span className="font-mono text-xs sm:text-sm font-bold tracking-[0.3em] uppercase text-[#00A9D6]">
-              PROCEDURAL LIFECYCLE
+            <span className="font-mono text-xs sm:text-sm font-bold tracking-[0.2em] uppercase text-[#00A9D6]">
+              {lang === 'ar' ? 'دورة حياة المعاملة الحكومية' : 'PROCEDURAL LIFECYCLE'}
             </span>
             <span className="w-6 h-[2px] bg-[#00A9D6]" />
           </div>
 
-          <h2 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[0.98] text-white mb-4">
-            FROM REQUEST
-            <br />
-            <span className="text-[#00A9D6]">TO RESOLUTION.</span>
+          <h2 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[0.98] text-white mb-4 uppercase">
+            {lang === 'ar' ? (
+              <>
+                من المتطلب الأولي
+                <br />
+                <span className="text-[#00A9D6]">حتى الإنجاز التام.</span>
+              </>
+            ) : (
+              <>
+                FROM REQUEST
+                <br />
+                <span className="text-[#00A9D6]">TO RESOLUTION.</span>
+              </>
+            )}
           </h2>
 
           <p className="text-base sm:text-lg text-white/75 font-normal max-w-xl mx-auto">
-            A linear, accountable process designed to eliminate uncertainty at every government milestone.
+            {lang === 'ar'
+              ? 'مسار عمل واضح ومنضبط ومسؤول صُمم لإزالة أي غموض في كل مرحلة حكومية.'
+              : 'A linear, accountable process designed to eliminate uncertainty at every government milestone.'}
           </p>
         </div>
 
-        {/* ======================================================== */}
-        {/* VERTICAL SCROLL STORY: Alternating Stages with Center Cyan Spine */}
-        {/* ======================================================== */}
+        {/* VERTICAL SCROLL STORY */}
         <div className="relative max-w-5xl mx-auto">
           
-          {/* Central Vertical Spine (Static background guide track) */}
+          {/* Central Vertical Spine */}
           <div className="absolute left-6 md:left-1/2 top-4 bottom-4 w-[2px] -translate-x-1/2 bg-white/10 pointer-events-none" />
 
-          {/* Active Progressively Illuminating Cyan Line */}
+          {/* Active Illuminating Line */}
           <motion.div
             style={{ height: lineHeight }}
             className="absolute left-6 md:left-1/2 top-4 w-[2px] -translate-x-1/2 bg-gradient-to-b from-[#00A9D6] via-[#00A9D6] to-[#00A9D6] shadow-[0_0_15px_#00A9D6] pointer-events-none origin-top"
@@ -126,18 +150,20 @@ export default function AboutTimeline() {
                     </div>
                   </div>
 
-                  {/* Stage Content: Placed Left or Right (NO boxes, pure editorial layout) */}
+                  {/* Stage Content */}
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-80px" }}
                     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                     className={`pl-14 md:pl-0 w-full md:w-1/2 ${
-                      isEven ? 'md:pl-16 text-left' : 'md:pr-16 md:text-right'
+                      isEven
+                        ? (isRTL ? 'md:pr-16 text-right' : 'md:pl-16 text-left')
+                        : (isRTL ? 'md:pl-16 md:text-left' : 'md:pr-16 md:text-right')
                     } relative`}
                   >
                     
-                    {/* Enormous Translucent Background Number Behind Stage */}
+                    {/* Background Number */}
                     <div
                       className={`absolute -top-10 font-display font-black text-7xl sm:text-9xl text-white/[0.04] select-none pointer-events-none leading-none z-0 ${
                         isEven ? 'left-10 md:left-12' : 'left-10 md:right-12'
@@ -148,8 +174,8 @@ export default function AboutTimeline() {
 
                     {/* Stage Header */}
                     <div className="relative z-10">
-                      <div className="font-mono text-xs sm:text-sm font-extrabold text-[#00A9D6] tracking-[0.25em] mb-1.5 uppercase">
-                        STAGE {stage.num}
+                      <div className="font-mono text-xs sm:text-sm font-extrabold text-[#00A9D6] tracking-[0.2em] mb-1.5 uppercase">
+                        {lang === 'ar' ? `المرحلة ${stage.num}` : `STAGE ${stage.num}`}
                       </div>
 
                       <h3 className="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-white tracking-tight mb-2">
@@ -167,7 +193,7 @@ export default function AboutTimeline() {
 
                   </motion.div>
 
-                  {/* Empty Spacer Column for Asymmetric Alignment on Desktop */}
+                  {/* Spacer Column */}
                   <div className="hidden md:block w-1/2" />
 
                 </div>

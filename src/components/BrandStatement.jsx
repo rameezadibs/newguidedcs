@@ -1,8 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Compass, ShieldCheck } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import { translations } from '../translations/translations';
 
 export default function BrandStatement({ onOpenAssistance }) {
+  const { lang, isRTL } = useLanguage();
+  const t = translations[lang] || translations.en;
+
   return (
     <section 
       id="brand-commitment" 
@@ -40,23 +45,23 @@ export default function BrandStatement({ onOpenAssistance }) {
         <div className="flex items-center justify-center gap-3 mb-6">
           <span className="w-7 h-[2px] bg-[#09A9D4]" />
           <span className="text-xs sm:text-sm font-mono font-bold tracking-[0.22em] text-[#09A9D4] uppercase">
-            NEW GUIDE COMMITMENT
+            {t.brandStatement.tag}
           </span>
         </div>
 
         {/* Huge Typography with Electric Cyan Highlight (Zero Gold) */}
         <h2 id="brand-commitment-heading" className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-black tracking-tight leading-[1.04] mb-8">
           <span className="block text-white/95">
-            YOU FOCUS
+            {t.brandStatement.line1}
           </span>
           <span className="block text-white">
-            ON THE BUSINESS.
+            {t.brandStatement.line2}
           </span>
           <span className="block text-white/80 mt-2">
-            WE’LL HELP
+            {t.brandStatement.line3}
           </span>
           <span className="relative inline-block text-[#09A9D4] mt-1">
-            CLEAR THE WAY.
+            {t.brandStatement.line4}
             {/* Subtle Electric Cyan Path Accent Underline */}
             <svg
               className="absolute -bottom-2 sm:-bottom-4 left-0 w-full h-3 sm:h-5 overflow-visible pointer-events-none"
@@ -76,22 +81,22 @@ export default function BrandStatement({ onOpenAssistance }) {
 
         {/* High-SEO Keyword-Rich Supporting Copy */}
         <p className="max-w-2xl mx-auto text-base sm:text-lg text-slate-300 font-normal mb-10 leading-relaxed">
-          Free your enterprise from administrative friction. Partner with dedicated <strong>Dubai document clearing specialists</strong> and <strong>UAE corporate PRO consultants</strong> who guarantee complete compliance across DET, MOFA, MOHRE, and Dubai Municipality.
+          {t.brandStatement.desc}
         </p>
 
         {/* Key Guarantee Badges */}
         <div className="flex flex-wrap items-center justify-center gap-6 mb-10 text-xs sm:text-sm font-mono text-cyan-200/90">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-[#09A9D4]" />
-            <span>100% Ministerial Compliance</span>
+            <span>{lang === 'ar' ? 'امتثال وزاري بنسبة 100%' : '100% Ministerial Compliance'}</span>
           </div>
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-[#09A9D4]" />
-            <span>Zero Rejection Guarantee</span>
+            <span>{lang === 'ar' ? 'ضمان تفادي الرفض والغرامات' : 'Zero Rejection Guarantee'}</span>
           </div>
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-[#09A9D4]" />
-            <span>Accelerated Processing</span>
+            <span>{lang === 'ar' ? 'معاملات سريعة وفورية' : 'Accelerated Processing'}</span>
           </div>
         </div>
 
@@ -100,14 +105,18 @@ export default function BrandStatement({ onOpenAssistance }) {
           <button
             id="brand-statement-cta-btn"
             onClick={() => {
-              const text = encodeURIComponent('Hello New Guide, I would like to start my document clearing request.');
+              const text = encodeURIComponent(
+                lang === 'ar'
+                  ? 'مرحباً شركة الدليل الجديد، أود البدء في تخليص معاملاتي الرسمية في الإمارات.'
+                  : 'Hello New Guide, I would like to start my document clearing request.'
+              );
               window.open(`https://wa.me/971525453323?text=${text}`, '_blank');
             }}
             className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-[#123D88] hover:bg-[#071D45] text-white text-xs sm:text-sm font-extrabold tracking-widest uppercase shadow-2xl transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer"
             aria-label="Start your document clearing request with New Guide Document Clearing Services"
           >
-            <span>START YOUR REQUEST</span>
-            <ArrowRight className="w-4 h-4 text-[#09A9D4] transition-transform duration-300 group-hover:translate-x-1" />
+            <span>{t.brandStatement.cta}</span>
+            <ArrowRight className={`w-4 h-4 text-[#09A9D4] transition-transform duration-300 group-hover:translate-x-1 ${isRTL ? 'rotate-180 group-hover:-translate-x-1' : ''}`} />
           </button>
         </div>
 

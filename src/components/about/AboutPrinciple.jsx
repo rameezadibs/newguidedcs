@@ -1,70 +1,54 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function AboutPrinciple() {
   const [activePrinciple, setActivePrinciple] = useState(0);
+  const { lang, isRTL } = useLanguage();
 
-  // Schema.org Structured Data (JSON-LD) for Search Engine Ranking & Entity Knowledge Graph
-  const principleJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    'name': 'The New Guide Principle — 3 Pillars of UAE Document Clearing & PRO Accuracy',
-    'description': 'Our core operational framework for executing document clearing, MOFA attestations, DET business setup, and corporate PRO liaison across Dubai and all 7 Emirates.',
-    'itemListElement': [
-      {
-        '@type': 'ListItem',
-        'position': 1,
-        'name': 'Understand First — Pre-Submission Audit',
-        'description': 'Comprehensive diagnostic of entity structures, authority requirements, and document legalization pathways before lodgment.'
-      },
-      {
-        '@type': 'ListItem',
-        'position': 2,
-        'name': 'Prepare Correctly — Accuracy & Attestation Protocol',
-        'description': 'Multi-tier verification of Arabic legal translations, power of attorney notarizations, corporate resolutions, and consular attestations.'
-      },
-      {
-        '@type': 'ListItem',
-        'position': 3,
-        'name': 'Follow Through — Active Ministerial Liaison',
-        'description': 'Direct on-the-ground physical counter attendance and continuous tracking across Dubai government authorities until final approval.'
-      }
-    ]
-  };
-
+  // Principles bilingual data
   const principles = [
     {
       num: '01',
-      title: 'UNDERSTAND FIRST.',
-      tag: 'PRE-SUBMISSION AUDIT',
-      seoTopic: 'Requirement & Authority Diagnostic',
-      desc: 'We establish the exact requirement, relevant authority and documentation pathway before submission.',
-      operationalDetail:
-        'A thorough diagnostic of corporate structures, jurisdictional regulations, MOFA attestation pathways, and DET activity requirements before any application is lodged.',
-      outcome: 'Eliminates wrong-channel submissions and costly administrative rejections.',
-      keywords: 'MOFA, DET, Free Zones, GDRFA, MOHRE',
+      title: lang === 'ar' ? 'افهم أولاً.' : 'UNDERSTAND FIRST.',
+      tag: lang === 'ar' ? 'تدقيق ما قبل التقديم' : 'PRE-SUBMISSION AUDIT',
+      seoTopic: lang === 'ar' ? 'تشخيص المتطلبات والجهات المعنية' : 'Requirement & Authority Diagnostic',
+      desc: lang === 'ar'
+        ? 'نحدد المتطلب الدقيق والجهة الحكومية المختصة ومسار التوثيق قبل التقديم.'
+        : 'We establish the exact requirement, relevant authority and documentation pathway before submission.',
+      operationalDetail: lang === 'ar'
+        ? 'تشخيص شامل للهياكل المؤسسية، واللوائح التنظيمية، ومسارات تصديق الخارجية، واشتراطات أنشطة دائرة الاقتصاد قبل قيد أي طلب.'
+        : 'A thorough diagnostic of corporate structures, jurisdictional regulations, MOFA attestation pathways, and DET activity requirements before any application is lodged.',
+      outcome: lang === 'ar' ? 'يقضي على أخطاء التقديم وحالات الرفض الإداري المكلفة.' : 'Eliminates wrong-channel submissions and costly administrative rejections.',
+      keywords: lang === 'ar' ? 'الخارجية، الاقتصاد، المناطق الحرة، الإقامة، الموارد البشرية' : 'MOFA, DET, Free Zones, GDRFA, MOHRE',
     },
     {
       num: '02',
-      title: 'PREPARE CORRECTLY.',
-      tag: 'ACCURACY PROTOCOL',
-      seoTopic: 'Legal Attestation & Arabic Verification',
-      desc: 'Applications are pre-reviewed before filing to eliminate avoidable errors and administrative delays.',
-      operationalDetail:
-        'Multi-tier verification of Arabic legal translations, Dubai Courts Power of Attorney notarizations, commercial resolutions, and embassy attestations for 100% first-pass compliance.',
-      outcome: 'Replaces repeated amendments with expedited first-pass government approvals.',
-      keywords: 'Legal Translations, Notary Public, Consular Stamps',
+      title: lang === 'ar' ? 'جهّز بدقة.' : 'PREPARE CORRECTLY.',
+      tag: lang === 'ar' ? 'بروتوكول الدقة' : 'ACCURACY PROTOCOL',
+      seoTopic: lang === 'ar' ? 'التصديق القانوني والتدقيق اللغوي' : 'Legal Attestation & Arabic Verification',
+      desc: lang === 'ar'
+        ? 'تتم مراجعة الطلبات والوثائق بدقة قبل إيداعها لتلافي أي أخطاء أو تأخيرات.'
+        : 'Applications are pre-reviewed before filing to eliminate avoidable errors and administrative delays.',
+      operationalDetail: lang === 'ar'
+        ? 'تدقيق متعدد المراحل للترجمة القانونية، وتوثيقات الكاتب العدل، والقرارات التجارية، وتصديقات السفارات لضمان قبول المعاملة بنسبة 100% من أول محاولة.'
+        : 'Multi-tier verification of Arabic legal translations, Dubai Courts Power of Attorney notarizations, commercial resolutions, and embassy attestations for 100% first-pass compliance.',
+      outcome: lang === 'ar' ? 'يستبدل التعديلات المتكررة بموافقات حكومية سريعة ومباشرة.' : 'Replaces repeated amendments with expedited first-pass government approvals.',
+      keywords: lang === 'ar' ? 'ترجمة قانونية، الكاتب العدل، الأختام القنصلية' : 'Legal Translations, Notary Public, Consular Stamps',
     },
     {
       num: '03',
-      title: 'FOLLOW THROUGH.',
-      tag: 'ACTIVE LIAISON',
-      seoTopic: 'Direct Ministerial Representation',
-      desc: 'Our involvement continues from submission through physical counter liaison to final approval.',
-      operationalDetail:
-        'Direct physical ministerial attendance across Dubai authorities, continuous status tracking, and immediate resolution of security or administrative queries until certified documents and visas are delivered.',
-      outcome: 'Guarantees uninterrupted momentum from initial filing to final clearance.',
-      keywords: 'On-the-Ground PRO, Direct Attendance, Live Tracking',
+      title: lang === 'ar' ? 'تابع حتى الإنجاز.' : 'FOLLOW THROUGH.',
+      tag: lang === 'ar' ? 'المتابعة النشطة' : 'ACTIVE LIAISON',
+      seoTopic: lang === 'ar' ? 'التمثيل الوزاري المباشر' : 'Direct Ministerial Representation',
+      desc: lang === 'ar'
+        ? 'متابعتنا مستمرة من لحظة الإيداع وحتى الحضور الميداني أمام الكاونترات الحكومية والاعتماد النهائي.'
+        : 'Our involvement continues from submission through physical counter liaison to final approval.',
+      operationalDetail: lang === 'ar'
+        ? 'حضور ميداني مباشر لدى الدوائر الحكومية في دبي، وتتبع مستمر لحالة المعاملة، والحل الفوري لأي استفسارات حتى استلام المستندات المعتمدة والتأشيرات.'
+        : 'Direct physical ministerial attendance across Dubai authorities, continuous status tracking, and immediate resolution of security or administrative queries until certified documents and visas are delivered.',
+      outcome: lang === 'ar' ? 'يضمن وتيرة عمل سريعة ومستمرة من التقديم حتى الاستلام.' : 'Guarantees uninterrupted momentum from initial filing to final clearance.',
+      keywords: lang === 'ar' ? 'مندوب علاقات عامة ميداني، متابعة حضورية، تتبع لحظي' : 'On-the-Ground PRO, Direct Attendance, Live Tracking',
     },
   ];
 
@@ -73,14 +57,8 @@ export default function AboutPrinciple() {
       id="principle"
       role="region"
       aria-labelledby="principle-section-heading"
-      className="relative w-full bg-[#FFFFFF] text-[#06162F] pt-12 sm:pt-16 lg:pt-20 pb-3 sm:pb-4 lg:pb-6 px-4 sm:px-8 lg:px-14 overflow-hidden border-b border-[#08244A]/10"
+      className={`relative w-full bg-[#FFFFFF] text-[#06162F] pt-12 sm:pt-16 lg:pt-20 pb-8 sm:pb-12 px-4 sm:px-8 lg:px-14 overflow-hidden border-b border-[#08244A]/10 ${isRTL ? 'text-right' : 'text-left'}`}
     >
-      {/* Schema.org Structured Data Injection for Search Engine Crawlers */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(principleJsonLd) }}
-      />
-
       {/* Precision Blueprint Architectural Background Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(8,36,74,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(8,36,74,0.035)_1px,transparent_1px)] bg-[size:72px_72px] pointer-events-none" />
 
@@ -91,29 +69,29 @@ export default function AboutPrinciple() {
       <div className="relative max-w-7xl mx-auto z-10">
         
         {/* ======================================================== */}
-        {/* TOP EDITORIAL BAR: Tight Top Spacing */}
+        {/* TOP EDITORIAL BAR */}
         {/* ======================================================== */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 mb-8 sm:mb-10 border-b border-[#08244A]/10">
           <div className="flex items-center gap-3">
             <span className="w-8 h-[2px] bg-[#123D88]" />
-            <span className="font-mono text-xs sm:text-sm font-bold tracking-[0.3em] uppercase text-[#123D88]">
-              THE NEW GUIDE PRINCIPLE // OPERATIONAL ACCURACY
+            <span className="font-mono text-xs sm:text-sm font-bold tracking-[0.2em] uppercase text-[#123D88]">
+              {lang === 'ar' ? 'مبدأ نيو غايد // دقة الإنجاز التنظيمي' : 'THE NEW GUIDE PRINCIPLE // OPERATIONAL ACCURACY'}
             </span>
           </div>
 
           <div className="flex items-center gap-4 font-mono text-[11px] text-[#667085] tracking-widest uppercase">
-            <span>UAE CORPORATE PRO DOCTRINE</span>
+            <span>{lang === 'ar' ? 'منهجية العلاقات العامة في الإمارات' : 'UAE CORPORATE PRO DOCTRINE'}</span>
             <span>•</span>
-            <span className="text-[#06162F] font-bold">DUBAI, UAE</span>
+            <span className="text-[#06162F] font-bold">{lang === 'ar' ? 'دبي، الإمارات' : 'DUBAI, UAE'}</span>
           </div>
         </div>
 
         {/* ======================================================== */}
-        {/* HERO MANIFESTO: Reduced Space Above Eyebrow & Below PROCESS */}
+        {/* HERO MANIFESTO */}
         {/* ======================================================== */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start mb-10 sm:mb-12">
           
-          {/* Left Column: Semantic H2 for Search Engine Ranking */}
+          {/* Left Column: Headline */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -121,28 +99,26 @@ export default function AboutPrinciple() {
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-7"
           >
-            {/* Keyword Micro-Eyebrow for SERP Authority - Tight Top Spacing */}
             <span className="font-mono text-xs font-bold text-[#123D88] tracking-widest uppercase block mb-1.5">
-              DOCUMENT CLEARING & PRO SERVICES METHODOLOGY
+              {lang === 'ar' ? 'منهجية تخليص المعاملات والـ PRO المعتمدة' : 'DOCUMENT CLEARING & PRO SERVICES METHODOLOGY'}
             </span>
 
             <h2
               id="principle-section-heading"
               className="font-display font-black text-5xl sm:text-7xl md:text-8xl lg:text-[5.5rem] tracking-tight leading-[0.92] text-[#06162F] uppercase"
             >
-              <span>GUIDANCE</span>
+              <span>{lang === 'ar' ? 'التوجيه' : 'GUIDANCE'}</span>
               <br />
               <span className="text-[#123D88] relative inline-block">
-                BEFORE
-                {/* Thin Precision Horizontal Underline */}
-                <span className="absolute -bottom-2 sm:-bottom-3 left-0 right-0 h-[3px] bg-gradient-to-r from-[#123D88] via-[#123D88]/80 to-transparent" />
+                {lang === 'ar' ? 'قبل' : 'BEFORE'}
+                <span className={`absolute -bottom-2 sm:-bottom-3 left-0 right-0 h-[3px] bg-gradient-to-r from-[#123D88] via-[#123D88]/80 to-transparent ${isRTL ? 'origin-right' : 'origin-left'}`} />
               </span>
               <br />
-              <span className="text-[#08244A]">PROCESS.</span>
+              <span className="text-[#08244A]">{lang === 'ar' ? 'الإجراء.' : 'PROCESS.'}</span>
             </h2>
           </motion.div>
 
-          {/* Right Column: Thesis Paragraph & SEO Keyword Feature Badge */}
+          {/* Right Column: Thesis Paragraph & Metric */}
           <motion.div
             initial={{ opacity: 0, y: 35 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -150,30 +126,36 @@ export default function AboutPrinciple() {
             transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-5 space-y-5 lg:pt-2"
           >
-            <div className="border-l-2 border-[#123D88] pl-5">
+            <div className={`${isRTL ? 'border-r-2 pr-5' : 'border-l-2 pl-5'} border-[#123D88]`}>
               <p className="font-display text-xl sm:text-2xl lg:text-[1.65rem] font-semibold text-[#06162F] leading-snug mb-2">
-                “We believe the fastest transaction is the one correctly prepared before it reaches the authority.”
+                {lang === 'ar'
+                  ? '«نؤمن بأن أسرع معاملة هي تلك التي تم إعدادها وتدقيقها بدقة قبل وصولها إلى الجهة الحكومية.»'
+                  : '“We believe the fastest transaction is the one correctly prepared before it reaches the authority.”'}
               </p>
               <p className="text-base text-[#667085] font-normal leading-relaxed">
-                Most document clearing and PRO delays in Dubai occur before lodgment—through missing MOFA attestations, unverified translations, or mismatched DET activity codes. Our 3-stage protocol guarantees zero-error submissions.
+                {lang === 'ar'
+                  ? 'معظم تأخيرات تخليص المعاملات تحدث قبل التقديم بسبب نقص تصديقات الخارجية أو أخطاء الترجمة أو عدم تطابق الأنشطة. بروتوكولنا الثلاثي يضمن معاملات خالية من الأخطاء.'
+                  : 'Most document clearing and PRO delays in Dubai occur before lodgment—through missing MOFA attestations, unverified translations, or mismatched DET activity codes. Our 3-stage protocol guarantees zero-error submissions.'}
               </p>
             </div>
 
-            {/* Strategic Metric & Keyword Badge */}
+            {/* Strategic Metric Badge */}
             <div className="bg-[#F2F8FC] rounded-2xl p-4 border border-[#123D88]/20 flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-mono tracking-widest uppercase text-[#667085] block font-bold">
-                  THE NEW GUIDE STANDARD
+                  {lang === 'ar' ? 'معيار نيو غايد' : 'THE NEW GUIDE STANDARD'}
                 </span>
                 <span className="text-xs sm:text-sm font-display font-extrabold text-[#06162F]">
-                  100% Pre-Audited Submissions
+                  {lang === 'ar' ? 'تدقيق شامل مسبق 100%' : '100% Pre-Audited Submissions'}
                 </span>
               </div>
-              <div className="text-right">
+              <div className={isRTL ? 'text-left' : 'text-right'}>
                 <span className="text-xs font-mono font-bold text-[#123D88] block">
-                  ZERO DELAYS
+                  {lang === 'ar' ? 'صفر تأخير' : 'ZERO DELAYS'}
                 </span>
-                <span className="text-[10px] text-[#667085]">First-Pass Approval</span>
+                <span className="text-[10px] text-[#667085]">
+                  {lang === 'ar' ? 'موافقة من أول تقديم' : 'First-Pass Approval'}
+                </span>
               </div>
             </div>
           </motion.div>

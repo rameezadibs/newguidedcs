@@ -1,10 +1,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Phone, Mail, MapPin, MessageCircle, ArrowRight, Navigation } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
+import { translations } from '../../translations/translations';
 
 export default function ContactPage() {
+  const { lang, isRTL } = useLanguage();
+  const t = translations[lang] || translations.en;
+
   return (
-    <div className="bg-white text-[#071D45] pt-[72px]">
+    <div className={`bg-white text-[#071D45] pt-[72px] ${isRTL ? 'text-right' : 'text-left'}`}>
       {/* ====================================================
           01 — CONTACT HERO (Abstract Routes & Connections)
           ==================================================== */}
@@ -25,83 +30,6 @@ export default function ContactPage() {
         {/* Subtle Background Circuit Grid */}
         <div className="absolute inset-0 bg-[radial-gradient(#00A9D6_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.07] pointer-events-none" />
 
-        {/* Abstract Converging Route Lines (SVG) */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <svg
-            className="w-full h-full opacity-35"
-            viewBox="0 0 1440 600"
-            fill="none"
-            preserveAspectRatio="none"
-          >
-            <defs>
-              <linearGradient id="routeCyanGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#00A9D6" stopOpacity="0" />
-                <stop offset="60%" stopColor="#00A9D6" stopOpacity="0.8" />
-                <stop offset="100%" stopColor="#DDF5FC" stopOpacity="1" />
-              </linearGradient>
-              <linearGradient id="routeCyanGrad2" x1="0%" y1="100%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#123D88" stopOpacity="0.1" />
-                <stop offset="70%" stopColor="#00A9D6" stopOpacity="0.7" />
-                <stop offset="100%" stopColor="#00A9D6" stopOpacity="0.9" />
-              </linearGradient>
-              <radialGradient id="hubGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#00A9D6" stopOpacity="0.6" />
-                <stop offset="100%" stopColor="#00A9D6" stopOpacity="0" />
-              </radialGradient>
-            </defs>
-
-            {/* Converging route paths arriving at focal hub (x: 1180, y: 300) */}
-            <path
-              d="M-40 80 C 400 80, 850 180, 1180 300"
-              stroke="url(#routeCyanGrad1)"
-              strokeWidth="1.5"
-              strokeDasharray="6 6"
-            />
-            <path
-              d="M-40 220 C 500 220, 900 250, 1180 300"
-              stroke="url(#routeCyanGrad1)"
-              strokeWidth="2"
-            />
-            <path
-              d="M-40 380 C 450 360, 880 330, 1180 300"
-              stroke="url(#routeCyanGrad2)"
-              strokeWidth="1.5"
-            />
-            <path
-              d="M-40 520 C 520 520, 920 400, 1180 300"
-              stroke="url(#routeCyanGrad2)"
-              strokeWidth="1.5"
-              strokeDasharray="8 6"
-            />
-
-            {/* Cross-connecting lateral procedural links */}
-            <path
-              d="M360 80 L 480 220"
-              stroke="#00A9D6"
-              strokeWidth="1"
-              strokeOpacity="0.25"
-            />
-            <path
-              d="M620 220 L 740 360"
-              stroke="#00A9D6"
-              strokeWidth="1"
-              strokeOpacity="0.3"
-            />
-            <path
-              d="M720 500 L 920 370"
-              stroke="#00A9D6"
-              strokeWidth="1"
-              strokeOpacity="0.2"
-            />
-
-            {/* Convergence Hub Node */}
-            <circle cx="1180" cy="300" r="140" fill="url(#hubGlow)" />
-            <circle cx="1180" cy="300" r="18" fill="#08244A" stroke="#00A9D6" strokeWidth="2.5" />
-            <circle cx="1180" cy="300" r="6" fill="#DDF5FC" />
-            <circle cx="1180" cy="300" r="38" stroke="#00A9D6" strokeWidth="1" strokeDasharray="4 4" opacity="0.6" />
-          </svg>
-        </div>
-
         {/* Ambient Top Glow */}
         <div className="absolute -top-32 right-1/4 w-96 h-96 bg-[#00A9D6]/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -116,7 +44,7 @@ export default function ContactPage() {
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[#00A9D6]" />
               <span className="font-mono text-xs font-bold tracking-widest text-[#DDF5FC] uppercase">
-                NEW GUIDE / CONTACT
+                {t.contactPage.badge}
               </span>
             </motion.div>
 
@@ -127,13 +55,9 @@ export default function ContactPage() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-display font-extrabold tracking-tight leading-[1.08] text-white uppercase"
             >
-              TELL US WHAT<br />
-              YOU NEED DONE.<br />
-              <span className="text-white/80 block mt-1">
-                WE'LL GUIDE{' '}
-                <span className="text-[#00A9D6] drop-shadow-[0_0_18px_rgba(0,169,214,0.4)]">
-                  THE NEXT STEP.
-                </span>
+              {t.contactPage.title1}<br />
+              <span className="text-[#00A9D6] drop-shadow-[0_0_18px_rgba(0,169,214,0.4)]">
+                {t.contactPage.title2}
               </span>
             </motion.h1>
 
@@ -144,7 +68,7 @@ export default function ContactPage() {
               transition={{ duration: 0.45, delay: 0.2 }}
               className="mt-6 text-base sm:text-lg text-white/75 leading-relaxed max-w-2xl font-light"
             >
-              You don't need to know the department, procedure or paperwork. Tell us what you're trying to complete and our team will guide you from there.
+              {t.contactPage.subtitle}
             </motion.p>
           </div>
         </div>
@@ -158,13 +82,15 @@ export default function ContactPage() {
           {/* Header */}
           <div className="max-w-3xl mb-12 sm:mb-16">
             <span className="font-mono text-xs font-bold tracking-widest text-[#087ED1] uppercase block mb-2">
-              START A CONVERSATION
+              {lang === 'ar' ? 'ابدأ محادثة مباشرة' : 'START A CONVERSATION'}
             </span>
             <h2 className="text-3xl sm:text-4xl font-display font-extrabold text-[#071D45] tracking-tight leading-tight uppercase">
-              LET'S GET IT MOVING.
+              {lang === 'ar' ? 'دعنا ننجز معاملاتك بسرعة.' : "LET'S GET IT MOVING."}
             </h2>
             <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
-              Whether it's a visa, trade licence renewal, government approval, document clearance or complex corporate liaison, reach out to our team directly.
+              {lang === 'ar'
+                ? 'سواء كانت المعاملة تأشيرة إقامة، أو تجديد رخصة تجارية، أو موافقة حكومية خاصة، أو تصديق محررات، تواصل مع فريقنا مباشرة.'
+                : "Whether it's a visa, trade licence renewal, government approval, document clearance or complex corporate liaison, reach out to our team directly."}
             </p>
           </div>
 
@@ -179,22 +105,26 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <div className="text-[11px] font-mono font-bold tracking-wider text-slate-400 uppercase mb-1">
-                    WHATSAPP DISPATCH
+                    {lang === 'ar' ? 'محادثة واتساب سريعة' : 'WHATSAPP DISPATCH'}
                   </div>
-                  <h3 className="text-lg font-bold text-[#071D45]">Instant Guidance</h3>
+                  <h3 className="text-lg font-bold text-[#071D45]">
+                    {lang === 'ar' ? 'استشارة فورية' : 'Instant Guidance'}
+                  </h3>
                   <p className="text-xs text-slate-600 mt-1">
-                    Speak directly with clearance directors for immediate assessment.
+                    {lang === 'ar'
+                      ? 'تواصل مباشرة مع مسؤولي التخليص للحصول على تقييم فوري للمعاملة.'
+                      : 'Speak directly with clearance directors for immediate assessment.'}
                   </p>
                 </div>
               </div>
               <a
-                href="https://wa.me/971525453323?text=Hello%20New%20Guide,%20I%20have%20a%20requirement%20I%20would%20like%20guidance%20on."
+                href={lang === 'ar' ? "https://wa.me/971525453323?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D9%86%D9%8A%D9%88%20%D8%BA%D8%A7%D9%8A%D8%AF%D8%8C%20%D9%84%D8%AF%D9%8A%20%D9%85%D8%B9%D8%A7%D9%85%D9%84%D8%A9%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%D9%87%D8%A7." : "https://wa.me/971525453323?text=Hello%20New%20Guide,%20I%20have%20a%20requirement%20I%20would%20like%20guidance%20on."}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group w-full inline-flex items-center justify-between px-4 py-3 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs tracking-wider uppercase transition-all duration-200 shadow-md cursor-pointer"
               >
-                <span>CHAT ON WHATSAPP</span>
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                <span>{lang === 'ar' ? 'محادثة عبر واتساب' : 'CHAT ON WHATSAPP'}</span>
+                <ArrowRight className={`w-4 h-4 transition-transform ${isRTL ? 'rotate-180 group-hover:-translate-x-1' : 'group-hover:translate-x-1'}`} />
               </a>
             </div>
 
@@ -206,9 +136,9 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <div className="text-[11px] font-mono font-bold tracking-wider text-slate-400 uppercase mb-1">
-                    DIRECT CALL LINES
+                    {lang === 'ar' ? 'خطوط الاتصال المباشرة' : 'DIRECT CALL LINES'}
                   </div>
-                  <div className="space-y-1 mt-1">
+                  <div className="space-y-1 mt-1" dir="ltr">
                     <a
                       href="tel:+971525453323"
                       className="block text-lg font-bold text-[#071D45] hover:text-[#00A9D6] transition-colors"
@@ -225,7 +155,9 @@ export default function ContactPage() {
                     </a>
                   </div>
                   <p className="text-xs text-slate-600 mt-2.5">
-                    Central Dubai mobile line & office landline for instant assistance.
+                    {lang === 'ar'
+                      ? 'خط متحرك مباشر وهاتف أرضي في دبي لخدمتك طوال ساعات العمل.'
+                      : 'Central Dubai mobile line & office landline for instant assistance.'}
                   </p>
                 </div>
               </div>
@@ -234,15 +166,15 @@ export default function ContactPage() {
                   href="tel:+971525453323"
                   className="group w-full inline-flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-[#08244A] hover:bg-[#123D88] text-white font-bold text-xs tracking-wider uppercase transition-all duration-200 shadow-sm cursor-pointer"
                 >
-                  <span>CALL MOBILE</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-[#00A9D6] transition-transform group-hover:translate-x-1" />
+                  <span>{lang === 'ar' ? 'اتصال بالمتحرك' : 'CALL MOBILE'}</span>
+                  <ArrowRight className={`w-3.5 h-3.5 text-[#00A9D6] transition-transform ${isRTL ? 'rotate-180 group-hover:-translate-x-1' : 'group-hover:translate-x-1'}`} />
                 </a>
                 <a
                   href="tel:+97142633268"
                   className="group w-full inline-flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#071D45] border border-slate-200 font-bold text-xs tracking-wider uppercase transition-all duration-200 shadow-sm cursor-pointer"
                 >
-                  <span>CALL OFFICE</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-[#00A9D6] transition-transform group-hover:translate-x-1" />
+                  <span>{lang === 'ar' ? 'اتصال بالمكتب' : 'CALL OFFICE'}</span>
+                  <ArrowRight className={`w-3.5 h-3.5 text-[#00A9D6] transition-transform ${isRTL ? 'rotate-180 group-hover:-translate-x-1' : 'group-hover:translate-x-1'}`} />
                 </a>
               </div>
             </div>
@@ -255,11 +187,13 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <div className="text-[11px] font-mono font-bold tracking-wider text-slate-400 uppercase mb-1">
-                    EMAIL TRANSFER
+                    {lang === 'ar' ? 'المراسلات الرسمية' : 'EMAIL TRANSFER'}
                   </div>
-                  <h3 className="text-lg font-bold text-[#071D45]">info@newguidedcs.ae</h3>
+                  <h3 className="text-lg font-bold text-[#071D45]" dir="ltr">info@newguidedcs.ae</h3>
                   <p className="text-xs text-slate-600 mt-1">
-                    Send official dossiers, corporate files, and attestation documents.
+                    {lang === 'ar'
+                      ? 'إرسال الملفات والوثائق وعقود الشركات للتصديق والتدقيق.'
+                      : 'Send official dossiers, corporate files, and attestation documents.'}
                   </p>
                 </div>
               </div>
@@ -267,8 +201,8 @@ export default function ContactPage() {
                 href="mailto:info@newguidedcs.ae"
                 className="group w-full inline-flex items-center justify-between px-4 py-3 rounded-xl bg-[#123D88] hover:bg-[#071D45] text-white font-bold text-xs tracking-wider uppercase transition-all duration-200 shadow-md cursor-pointer"
               >
-                <span>SEND EMAIL</span>
-                <ArrowRight className="w-4 h-4 text-[#00A9D6] transition-transform group-hover:translate-x-1" />
+                <span>{lang === 'ar' ? 'إرسال بريد إلكتروني' : 'SEND EMAIL'}</span>
+                <ArrowRight className={`w-4 h-4 text-[#00A9D6] transition-transform ${isRTL ? 'rotate-180 group-hover:-translate-x-1' : 'group-hover:translate-x-1'}`} />
               </a>
             </div>
 
@@ -280,11 +214,15 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <div className="text-[11px] font-mono font-bold tracking-wider text-slate-400 uppercase mb-1">
-                    DUBAI HEADQUARTERS
+                    {lang === 'ar' ? 'المقر الرئيسي في دبي' : 'DUBAI HEADQUARTERS'}
                   </div>
-                  <h3 className="text-sm font-bold text-[#071D45]">Arzoo Bldg, Al Qusais</h3>
+                  <h3 className="text-sm font-bold text-[#071D45]">
+                    {lang === 'ar' ? 'بناية آرزو، القصيص' : 'Arzoo Bldg, Al Qusais'}
+                  </h3>
                   <p className="text-xs text-slate-600 mt-1">
-                    Office S20, Near Al Twar Center & Al Qusais Metro Exit 02.
+                    {lang === 'ar'
+                      ? 'مكتب S20، بالقرب من مركز الطوار ومخرج 02 لمترو القصيص.'
+                      : 'Office S20, Near Al Twar Center & Al Qusais Metro Exit 02.'}
                   </p>
                 </div>
               </div>
@@ -294,7 +232,7 @@ export default function ContactPage() {
                 rel="noopener noreferrer"
                 className="group w-full inline-flex items-center justify-between px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#071D45] font-bold text-xs tracking-wider uppercase transition-all duration-200 border border-slate-300 cursor-pointer"
               >
-                <span>GET DIRECTIONS</span>
+                <span>{lang === 'ar' ? 'الاتجاهات على الخريطة' : 'GET DIRECTIONS'}</span>
                 <Navigation className="w-4 h-4 text-[#00A9D6]" />
               </a>
             </div>
@@ -312,10 +250,18 @@ export default function ContactPage() {
             {/* Left */}
             <div className="space-y-1">
               <span className="font-mono text-[11px] font-bold tracking-widest text-[#00A9D6] uppercase block">
-                PHYSICAL HEADQUARTERS
+                {lang === 'ar' ? 'المقر الميداني' : 'PHYSICAL HEADQUARTERS'}
               </span>
               <h3 className="text-xl sm:text-2xl font-display font-extrabold tracking-tight uppercase text-white leading-tight">
-                BASED IN DUBAI.<br className="hidden sm:inline" /> WORKING ACROSS THE UAE.
+                {lang === 'ar' ? (
+                  <>
+                    مقرنا في دبي.<br className="hidden sm:inline" /> ونخدم كافة إمارات الدولة.
+                  </>
+                ) : (
+                  <>
+                    BASED IN DUBAI.<br className="hidden sm:inline" /> WORKING ACROSS THE UAE.
+                  </>
+                )}
               </h3>
             </div>
 
@@ -323,10 +269,22 @@ export default function ContactPage() {
             <div className="flex items-start gap-3 max-w-md text-xs sm:text-sm text-white/80">
               <MapPin className="w-5 h-5 text-[#00A9D6] shrink-0 mt-0.5" />
               <div>
-                <div className="font-semibold text-white">Office S20, Ground Floor, Arzoo Building</div>
-                <div className="text-white/60 text-xs mt-0.5">Sharjah Islamic Bank Bldg, Near Al Twar Center</div>
-                <div className="text-white/60 text-xs">Al Qusais Metro Exit 02, Al Nahda Rd, Dubai, UAE</div>
-                <div className="text-white/80 text-xs mt-1.5 flex items-center gap-2.5 font-mono">
+                <div className="font-semibold text-white">
+                  {lang === 'ar'
+                    ? 'مكتب S20، الطابق الأرضي، بناية آرزو'
+                    : 'Office S20, Ground Floor, Arzoo Building'}
+                </div>
+                <div className="text-white/60 text-xs mt-0.5">
+                  {lang === 'ar'
+                    ? 'بناية بنك الشارقة الإسلامي، بالقرب من مركز الطوار'
+                    : 'Sharjah Islamic Bank Bldg, Near Al Twar Center'}
+                </div>
+                <div className="text-white/60 text-xs">
+                  {lang === 'ar'
+                    ? 'مخرج 02 لمترو القصيص، شارع النهضة، دبي، الإمارات'
+                    : 'Al Qusais Metro Exit 02, Al Nahda Rd, Dubai, UAE'}
+                </div>
+                <div className="text-white/80 text-xs mt-1.5 flex items-center gap-2.5 font-mono" dir="ltr">
                   <a href="tel:+97142633268" className="hover:text-[#00A9D6] transition-colors">
                     Tel: +971 4 2633 268
                   </a>
@@ -347,8 +305,8 @@ export default function ContactPage() {
                 className="group inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#08244A] hover:bg-[#123D88] text-white border border-[#00A9D6]/30 text-xs font-extrabold tracking-wider uppercase transition-all duration-200 cursor-pointer w-full sm:w-auto"
               >
                 <Navigation className="w-3.5 h-3.5 text-[#00A9D6]" />
-                <span>GET DIRECTIONS</span>
-                <ArrowRight className="w-4 h-4 text-[#00A9D6] transition-transform group-hover:translate-x-1" />
+                <span>{lang === 'ar' ? 'الاتجاهات على الخريطة' : 'GET DIRECTIONS'}</span>
+                <ArrowRight className={`w-4 h-4 text-[#00A9D6] transition-transform ${isRTL ? 'rotate-180 group-hover:-translate-x-1' : 'group-hover:translate-x-1'}`} />
               </a>
             </div>
           </div>

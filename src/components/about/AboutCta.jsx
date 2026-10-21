@@ -13,83 +13,118 @@ import {
   MapPin, 
   ExternalLink 
 } from 'lucide-react';
-
-const EVALUATION_TRACKS = [
-  {
-    id: 'corporate',
-    code: 'TRACK 01 // CORPORATE',
-    shortTitle: 'Business Setup & DET',
-    title: 'Company Formation & Commercial Licensing',
-    icon: Building2,
-    badge: 'Mainland & 40+ UAE Free Zones',
-    description: 'Direct ministerial clearance for new LLC registrations, foreign branch setup, trade license renewals, and corporate MOA restructuring across Dubai and all 7 Emirates.',
-    authorities: ['DET Dubai', 'Dubai Municipality', 'Civil Defence', 'MOHRE'],
-    turnaround: '24–48 Hours Fast-Track',
-    serviceQuery: 'Business Setup',
-    prefilledMsg: 'Hello New Guide, I am on your About page and would like direct consultation regarding Corporate Business Setup & Trade Licensing in Dubai.',
-    highlights: [
-      'Instant license & Mainland LLC structuring with 100% foreign ownership',
-      'Free Zone jurisdiction selection & commercial activity alignment',
-      'Statutory renewals, trade name reservations & initial approvals'
-    ]
-  },
-  {
-    id: 'attestation',
-    code: 'TRACK 02 // ATTESTATION',
-    shortTitle: 'MOFA Legalization',
-    title: 'MOFA Attestation & Document Legalization',
-    icon: FileCheck2,
-    badge: 'Global Embassies & Dubai Courts',
-    description: 'Statutory authentication for educational diplomas, commercial contracts, board resolutions, marriage certificates, police clearances, and international apostille verifications.',
-    authorities: ['MOFA UAE', 'Dubai Courts', 'Foreign Consulates', 'Ministry of Justice'],
-    turnaround: 'Same-Day / 24 Hours',
-    serviceQuery: 'Document Clearing',
-    prefilledMsg: 'Hello New Guide, I am on your About page and would like direct consultation regarding MOFA Certificate Attestation & Document Legalization in Dubai.',
-    highlights: [
-      'Ministry of Foreign Affairs (MOFA) electronic stamp & validation',
-      'Embassy legalization for commercial invoices & corporate resolutions',
-      'Sworn legal translation into Arabic for all official UAE filings'
-    ]
-  },
-  {
-    id: 'residency',
-    code: 'TRACK 03 // RESIDENCY',
-    shortTitle: 'Golden Visa & VIP Visas',
-    title: '10-Year Golden Visa & Corporate Residency',
-    icon: Award,
-    badge: 'GDRFA Dubai & Federal ICP',
-    description: 'VIP liaison for real estate investor Golden Visas, executive talent visas, family sponsorships, express medical fitness appointments, and Emirates ID biometric clearance.',
-    authorities: ['GDRFA Dubai', 'ICP Federal', 'Dubai Health Authority', 'Amer Centers'],
-    turnaround: '2–3 Working Days',
-    serviceQuery: 'Visa & Immigration',
-    prefilledMsg: 'Hello New Guide, I am on your About page and would like direct consultation regarding UAE 10-Year Golden Visas & Residency Sponsorship in Dubai.',
-    highlights: [
-      'Property investor & specialized executive Golden Visa nomination',
-      'Amer & GDRFA direct processing with priority VIP medical typing',
-      'Complete family sponsorship, maid visas & status adjustment'
-    ]
-  },
-  {
-    id: 'notary',
-    code: 'TRACK 04 // LEGAL NOTARY',
-    shortTitle: 'Court Notary & POA',
-    title: 'Dubai Courts Online POA & MOA Drafting',
-    icon: ShieldCheck,
-    badge: 'Dubai Courts Digital Notary',
-    description: 'Bilingual legal drafting and electronic judicial notarization for General & Special Powers of Attorney, Memorandum of Association (MOA) amendments, and statutory declarations.',
-    authorities: ['Dubai Courts Notary', 'Ministry of Justice', 'Certified Legal Translators'],
-    turnaround: 'Same-Day Digital Processing',
-    serviceQuery: 'Government Transactions',
-    prefilledMsg: 'Hello New Guide, I am on your About page and would like direct consultation regarding Dubai Courts Online POA & Judicial Legal Drafting.',
-    highlights: [
-      'Special & General Power of Attorney for property, banking & management',
-      'MOA addendums, share sale agreements & corporate resolution drafting',
-      'Full electronic notary video session coordination with Dubai Courts'
-    ]
-  }
-];
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function AboutCta({ onOpenAssistance, onExploreServices }) {
+  const { lang, isRTL } = useLanguage();
+
+  const EVALUATION_TRACKS = [
+    {
+      id: 'corporate',
+      code: lang === 'ar' ? 'المسار 01 // الشركات' : 'TRACK 01 // CORPORATE',
+      shortTitle: lang === 'ar' ? 'تأسيس الشركات واقتصادية دبي' : 'Business Setup & DET',
+      title: lang === 'ar' ? 'تأسيس الشركات والتراخيص التجارية' : 'Company Formation & Commercial Licensing',
+      icon: Building2,
+      badge: lang === 'ar' ? 'الشركات الداخلية وأكثر من 40 منطقة حرة' : 'Mainland & 40+ UAE Free Zones',
+      description: lang === 'ar'
+        ? 'تخليص ومتابعة وزارية فورية لتأسيس شركات ذات مسؤولية محدودة، وفروع الشركات الأجنبية، وتجديد الرخص وتعديل عقود التأسيس في دبي والإمارات.'
+        : 'Direct ministerial clearance for new LLC registrations, foreign branch setup, trade license renewals, and corporate MOA restructuring across Dubai and all 7 Emirates.',
+      authorities: lang === 'ar' ? ['اقتصادية دبي', 'بلدية دبي', 'الدفاع المدني', 'وزارة الموارد البشرية'] : ['DET Dubai', 'Dubai Municipality', 'Civil Defence', 'MOHRE'],
+      turnaround: lang === 'ar' ? '24–48 ساعة مسار سريع' : '24–48 Hours Fast-Track',
+      serviceQuery: 'Business Setup',
+      prefilledMsg: lang === 'ar'
+        ? 'مرحباً نيو غايد، أود الحصول على استشارة مباشرة حول تأسيس الشركات والتراخيص التجارية في دبي.'
+        : 'Hello New Guide, I am on your About page and would like direct consultation regarding Corporate Business Setup & Trade Licensing in Dubai.',
+      highlights: lang === 'ar' ? [
+        'إصدار الرخص الفورية وتأسيس الشركات بنسبة تملك أجنبي 100%',
+        'اختيار الولاية القضائية والمناطق الحرة وتحديد الأنشطة بدقة',
+        'التجديدات الدورية، حجز الأسماء التجارية، والموافقات المبدئية'
+      ] : [
+        'Instant license & Mainland LLC structuring with 100% foreign ownership',
+        'Free Zone jurisdiction selection & commercial activity alignment',
+        'Statutory renewals, trade name reservations & initial approvals'
+      ]
+    },
+    {
+      id: 'attestation',
+      code: lang === 'ar' ? 'المسار 02 // التصديقات' : 'TRACK 02 // ATTESTATION',
+      shortTitle: lang === 'ar' ? 'تصديقات وزارة الخارجية' : 'MOFA Legalization',
+      title: lang === 'ar' ? 'تصديق الخارجية والمحررات القانونية' : 'MOFA Attestation & Document Legalization',
+      icon: FileCheck2,
+      badge: lang === 'ar' ? 'السفارات الدولية ومحاكم دبي' : 'Global Embassies & Dubai Courts',
+      description: lang === 'ar'
+        ? 'تصديق قانوني معتمد للشهادات الدراسية، والعقود التجارية، وقرارات مجالس الإدارة، وعقود الزواج، وشهادات بحث الحالة الجنائية، وأبوستيل.'
+        : 'Statutory authentication for educational diplomas, commercial contracts, board resolutions, marriage certificates, police clearances, and international apostille verifications.',
+      authorities: lang === 'ar' ? ['وزارة الخارجية', 'محاكم دبي', 'القنصليات والسفارات', 'وزارة العدل'] : ['MOFA UAE', 'Dubai Courts', 'Foreign Consulates', 'Ministry of Justice'],
+      turnaround: lang === 'ar' ? 'نفس اليوم / 24 ساعة' : 'Same-Day / 24 Hours',
+      serviceQuery: 'Document Clearing',
+      prefilledMsg: lang === 'ar'
+        ? 'مرحباً نيو غايد، أود استشارة مباشرة بخصوص تصديق الشهادات من وزارة الخارجية والمحررات القانونية.'
+        : 'Hello New Guide, I am on your About page and would like direct consultation regarding MOFA Certificate Attestation & Document Legalization in Dubai.',
+      highlights: lang === 'ar' ? [
+        'الختم والتصديق الإلكتروني الرسمي من وزارة الخارجية (MOFA)',
+        'تصديقات السفارات والقنصليات للفواتير والقرارات المؤسسية',
+        'ترجمة قانونية معتمدة إلى اللغة العربية لكافة المعاملات'
+      ] : [
+        'Ministry of Foreign Affairs (MOFA) electronic stamp & validation',
+        'Embassy legalization for commercial invoices & corporate resolutions',
+        'Sworn legal translation into Arabic for all official UAE filings'
+      ]
+    },
+    {
+      id: 'residency',
+      code: lang === 'ar' ? 'المسار 03 // الإقامة' : 'TRACK 03 // RESIDENCY',
+      shortTitle: lang === 'ar' ? 'الإقامة الذهبية وVIP' : 'Golden Visa & VIP Visas',
+      title: lang === 'ar' ? 'الإقامة الذهبية 10 سنوات وإقامات العمل' : '10-Year Golden Visa & Corporate Residency',
+      icon: Award,
+      badge: lang === 'ar' ? 'إقامة دبي والهيئة الاتحادية' : 'GDRFA Dubai & Federal ICP',
+      description: lang === 'ar'
+        ? 'خدمات VIP لكبار الشخصيات لتأشيرات المستثمر العقاري، والمدراء التنفيذيين، وإقامات العائلة، ومواعيد الفحص الطبي السريع والبصمة البيومترية.'
+        : 'VIP liaison for real estate investor Golden Visas, executive talent visas, family sponsorships, express medical fitness appointments, and Emirates ID biometric clearance.',
+      authorities: lang === 'ar' ? ['إقامة دبي GDRFA', 'الهيئة الاتحادية ICP', 'هيئة الصحة بدبي', 'مراكز آمر'] : ['GDRFA Dubai', 'ICP Federal', 'Dubai Health Authority', 'Amer Centers'],
+      turnaround: lang === 'ar' ? '2–3 أيام عمل' : '2–3 Working Days',
+      serviceQuery: 'Visa & Immigration',
+      prefilledMsg: lang === 'ar'
+        ? 'مرحباً نيو غايد، أود الاستفسار مباشرة حول الإقامة الذهبية 10 سنوات وتأشيرات الإقامة في دبي.'
+        : 'Hello New Guide, I am on your About page and would like direct consultation regarding UAE 10-Year Golden Visas & Residency Sponsorship in Dubai.',
+      highlights: lang === 'ar' ? [
+        'ترشيح الإقامة الذهبية للمستثمرين العقاريين والكفاءات التخصصية',
+        'معاملات مباشرة عبر مراكز آمر وإقامة دبي مع فحص طبي VIP سريع',
+        'كفالة الأسرة، وتأشيرات المساعدين، وتعديل الوضع القانوني'
+      ] : [
+        'Property investor & specialized executive Golden Visa nomination',
+        'Amer & GDRFA direct processing with priority VIP medical typing',
+        'Complete family sponsorship, maid visas & status adjustment'
+      ]
+    },
+    {
+      id: 'notary',
+      code: lang === 'ar' ? 'المسار 04 // الكاتب العدل' : 'TRACK 04 // LEGAL NOTARY',
+      shortTitle: lang === 'ar' ? 'الكاتب العدل والوكالات' : 'Court Notary & POA',
+      title: lang === 'ar' ? 'وكالات محاكم دبي الإلكترونية وتعديل العقود' : 'Dubai Courts Online POA & MOA Drafting',
+      icon: ShieldCheck,
+      badge: lang === 'ar' ? 'كاتب عدل محاكم دبي الرقمي' : 'Dubai Courts Digital Notary',
+      description: lang === 'ar'
+        ? 'صياغة قانونية باللغتين وتوثيق قضائي إلكتروني للوكالات العامة والخاصة، وتعديلات عقود تأسيس الشركات والملحقات القانونية.'
+        : 'Bilingual legal drafting and electronic judicial notarization for General & Special Powers of Attorney, Memorandum of Association (MOA) amendments, and statutory declarations.',
+      authorities: lang === 'ar' ? ['كاتب عدل محاكم دبي', 'وزارة العدل', 'المترجمون القانونيون المعتمدون'] : ['Dubai Courts Notary', 'Ministry of Justice', 'Certified Legal Translators'],
+      turnaround: lang === 'ar' ? 'توثيق رقمي في نفس اليوم' : 'Same-Day Digital Processing',
+      serviceQuery: 'Government Transactions',
+      prefilledMsg: lang === 'ar'
+        ? 'مرحباً نيو غايد، أود استشارة مباشرة حول الوكالات الإلكترونية عبر محاكم دبي والصياغة القانونية.'
+        : 'Hello New Guide, I am on your About page and would like direct consultation regarding Dubai Courts Online POA & Judicial Legal Drafting.',
+      highlights: lang === 'ar' ? [
+        'وكالات عامة وخاصة للعقارات، والبنوك، وإدارة الشركات',
+        'صياغة ملاحق عقود التأسيس، وتنازل وتعديل حصص الشركاء',
+        'تنسيق جلسات الاتصال المرئي مع كاتب العدل بمحاكم دبي'
+      ] : [
+        'Special & General Power of Attorney for property, banking & management',
+        'MOA addendums, share sale agreements & corporate resolution drafting',
+        'Full electronic notary video session coordination with Dubai Courts'
+      ]
+    }
+  ];
+
   const [activeTrackId, setActiveTrackId] = useState('corporate');
   const activeTrack = EVALUATION_TRACKS.find(t => t.id === activeTrackId) || EVALUATION_TRACKS[0];
 
@@ -216,14 +251,8 @@ export default function AboutCta({ onOpenAssistance, onExploreServices }) {
       aria-labelledby="about-cta-heading"
       itemScope
       itemType="https://schema.org/ProfessionalService"
-      className="relative w-full overflow-hidden bg-[#06162F] text-white border-t border-white/10 selection:bg-[#00A9D6]/30 selection:text-white"
+      className={`relative w-full overflow-hidden bg-[#06162F] text-white border-t border-white/10 selection:bg-[#00A9D6]/30 selection:text-white ${isRTL ? 'text-right' : 'text-left'}`}
     >
-      {/* Schema.org Microdata Script Injection */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(ctaJsonLd) }}
-      />
-
       {/* Blueprint Grid Atmosphere - Strictly No Gold */}
       <div 
         className="absolute inset-0 pointer-events-none opacity-20"
@@ -248,17 +277,17 @@ export default function AboutCta({ onOpenAssistance, onExploreServices }) {
           <div className="flex items-center gap-2.5 text-[#DDF5FC]">
             <span className="w-2 h-2 rounded-full bg-[#00A9D6] animate-pulse" />
             <span className="font-bold tracking-widest uppercase text-[11px] sm:text-xs">
-              OFFICIAL MINISTERIAL LIAISON DESK // HOR AL ANZ, DEIRA HQ
+              {lang === 'ar' ? 'مكتب التنسيق الحكومي الرسمي // المقر الرئيسي، هور العنز، ديرة' : 'OFFICIAL MINISTERIAL LIAISON DESK // HOR AL ANZ, DEIRA HQ'}
             </span>
           </div>
           <div className="hidden md:flex items-center gap-4 text-white/60 text-[11px]">
-            <span>DET LICENSED #649210</span>
+            <span>{lang === 'ar' ? 'ترخيص دبي #649210' : 'DET LICENSED #649210'}</span>
             <span className="text-white/20">•</span>
-            <span>MOHRE REGISTERED</span>
+            <span>{lang === 'ar' ? 'مسجل في وزارة الموارد البشرية' : 'MOHRE REGISTERED'}</span>
             <span className="text-white/20">•</span>
-            <span>GDRFA AUTHORIZED</span>
+            <span>{lang === 'ar' ? 'معتمد لدى إقامة دبي' : 'GDRFA AUTHORIZED'}</span>
             <span className="text-white/20">•</span>
-            <span className="text-[#00A9D6] font-semibold">10+ YEARS IN DUBAI</span>
+            <span className="text-[#00A9D6] font-semibold">{lang === 'ar' ? 'أكثر من 10 سنوات في دبي' : '10+ YEARS IN DUBAI'}</span>
           </div>
         </div>
       </div>
@@ -268,12 +297,12 @@ export default function AboutCta({ onOpenAssistance, onExploreServices }) {
           ───────────────────────────────────────────────────────────── */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 lg:px-14 py-16 sm:py-20 lg:py-24">
         
-        {/* Section Header with High-Rank SEO Metadata */}
+        {/* Section Header */}
         <div className="max-w-3xl mb-12 lg:mb-16">
           <div className="inline-flex items-center gap-2.5 px-3 py-1 rounded-md bg-[#08244A] border border-[#00A9D6]/30 mb-5">
             <span className="w-1.5 h-1.5 rounded-full bg-[#00A9D6]" />
-            <span className="font-mono text-[11px] font-bold tracking-[0.25em] text-[#DDF5FC] uppercase">
-              NEW GUIDE ADVISORY // CASE EVALUATION
+            <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[#DDF5FC] uppercase">
+              {lang === 'ar' ? 'استشارات نيو غايد // دراسة وتقييم المعاملة' : 'NEW GUIDE ADVISORY // CASE EVALUATION'}
             </span>
           </div>
 
@@ -281,33 +310,45 @@ export default function AboutCta({ onOpenAssistance, onExploreServices }) {
             id="about-cta-heading"
             className="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[52px] tracking-tight leading-[1.06] text-white uppercase"
           >
-            Direct Liaison with Authorized{' '}
-            <span className="text-[#00A9D6] drop-shadow-[0_0_24px_rgba(0,169,214,0.35)]">
-              UAE PRO Specialists
-            </span>{' '}
-            in Dubai.
+            {lang === 'ar' ? (
+              <>
+                تواصل مباشر مع مسؤولي ومستشاري{' '}
+                <span className="text-[#00A9D6] drop-shadow-[0_0_24px_rgba(0,169,214,0.35)]">
+                  الـ PRO المعتمدين
+                </span>{' '}
+                في دبي.
+              </>
+            ) : (
+              <>
+                Direct Liaison with Authorized{' '}
+                <span className="text-[#00A9D6] drop-shadow-[0_0_24px_rgba(0,169,214,0.35)]">
+                  UAE PRO Specialists
+                </span>{' '}
+                in Dubai.
+              </>
+            )}
           </h2>
 
           <p className="mt-5 text-sm sm:text-base lg:text-lg text-white/80 leading-relaxed font-normal">
-            Avoid procedural uncertainty, unverified intermediaries, and rejected paperwork. Speak directly with senior Dubai PRO officers who manage daily submissions across <strong>DET</strong>, <strong>MOFA</strong>, <strong>GDRFA</strong>, <strong>MOHRE</strong>, and <strong>Dubai Courts</strong>.
+            {lang === 'ar'
+              ? 'تجنب العوائق الإجرائية، والوسطاء غير المعتمدين، ورفض المعاملات. تحدث مباشرة مع كبار مسؤولي العلاقات العامة الذين يديرون المعاملات اليومية لدى اقتصادية دبي، وزارة الخارجية، الإدارة العامة للإقامة، وزارة الموارد البشرية، ومحاكم دبي.'
+              : 'Avoid procedural uncertainty, unverified intermediaries, and rejected paperwork. Speak directly with senior Dubai PRO officers who manage daily submissions across DET, MOFA, GDRFA, MOHRE, and Dubai Courts.'}
           </p>
         </div>
 
         {/* ─────────────────────────────────────────────────────────────
-            TWO-COLUMN COMPOSITION:
-            Left: Interactive Procedural Track Selector
-            Right: Active Case Liaison & Dispatch Console
+            TWO-COLUMN COMPOSITION
             ───────────────────────────────────────────────────────────── */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           
-          {/* ────────── LEFT COLUMN: 4 EVALUATION TRACKS (7 Cols) ────────── */}
+          {/* LEFT COLUMN: 4 EVALUATION TRACKS */}
           <div className="lg:col-span-7 space-y-4">
             <div className="flex items-center justify-between mb-3 px-1">
               <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#00A9D6]">
-                SELECT YOUR PROCEDURE TO BEGIN:
+                {lang === 'ar' ? 'اختر نوع المعاملة للبدء:' : 'SELECT YOUR PROCEDURE TO BEGIN:'}
               </span>
               <span className="font-mono text-[11px] text-white/50">
-                04 DEDICATED TRACKS
+                {lang === 'ar' ? '04 مسارات تخصصية' : '04 DEDICATED TRACKS'}
               </span>
             </div>
 
@@ -324,15 +365,15 @@ export default function AboutCta({ onOpenAssistance, onExploreServices }) {
                     aria-selected={isSelected}
                     aria-controls="about-cta-console"
                     onClick={() => setActiveTrackId(track.id)}
-                    className={`group w-full text-left p-5 sm:p-6 rounded-2xl transition-all duration-300 border cursor-pointer ${
+                    className={`group w-full ${isRTL ? 'text-right' : 'text-left'} p-5 sm:p-6 rounded-2xl transition-all duration-300 border cursor-pointer ${
                       isSelected
-                        ? 'bg-gradient-to-r from-[#08244A] to-[#0D3270] border-[#00A9D6] shadow-[0_10px_30px_rgba(0,169,214,0.18)] translate-x-1 sm:translate-x-2'
+                        ? `bg-gradient-to-r from-[#08244A] to-[#0D3270] border-[#00A9D6] shadow-[0_10px_30px_rgba(0,169,214,0.18)] ${isRTL ? '-translate-x-1 sm:-translate-x-2' : 'translate-x-1 sm:translate-x-2'}`
                         : 'bg-[#06162F]/90 hover:bg-[#08244A]/50 border-white/10 hover:border-white/20'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex items-center gap-3.5">
-                        <div className={`p-2.5 rounded-xl transition-colors ${
+                        <div className={`p-2.5 rounded-xl transition-colors shrink-0 ${
                           isSelected ? 'bg-[#00A9D6] text-[#06162F]' : 'bg-white/5 text-[#00A9D6] group-hover:bg-white/10'
                         }`}>
                           <Icon size={22} strokeWidth={1.8} />
@@ -359,7 +400,7 @@ export default function AboutCta({ onOpenAssistance, onExploreServices }) {
                       </div>
                     </div>
 
-                    <p className="mt-3 text-xs sm:text-sm text-white/70 leading-relaxed font-normal pl-[52px]">
+                    <p className={`mt-3 text-xs sm:text-sm text-white/70 leading-relaxed font-normal ${isRTL ? 'pr-[52px]' : 'pl-[52px]'}`}>
                       {track.description}
                     </p>
 
@@ -368,10 +409,10 @@ export default function AboutCta({ onOpenAssistance, onExploreServices }) {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         transition={{ duration: 0.25 }}
-                        className="mt-4 pt-4 border-t border-white/10 pl-[52px] space-y-2"
+                        className={`mt-4 pt-4 border-t border-white/10 ${isRTL ? 'pr-[52px]' : 'pl-[52px]'} space-y-2`}
                       >
                         <div className="text-[11px] font-mono text-[#DDF5FC] font-semibold uppercase tracking-wider">
-                          CORE STATUTORY DELIVERABLES:
+                          {lang === 'ar' ? 'المخرجات والخدمات الأساسية:' : 'CORE STATUTORY DELIVERABLES:'}
                         </div>
                         <ul className="space-y-1.5 text-xs text-white/80">
                           {track.highlights.map((item, idx) => (
@@ -389,7 +430,7 @@ export default function AboutCta({ onOpenAssistance, onExploreServices }) {
             </div>
           </div>
 
-          {/* ────────── RIGHT COLUMN: EXECUTIVE LIAISON CONSOLE (5 Cols) ────────── */}
+          {/* RIGHT COLUMN: EXECUTIVE LIAISON CONSOLE */}
           <div 
             id="about-cta-console"
             role="tabpanel"
@@ -400,7 +441,7 @@ export default function AboutCta({ onOpenAssistance, onExploreServices }) {
             <div className="flex items-center justify-between pb-5 border-b border-white/10 mb-6">
               <div>
                 <span className="font-mono text-[10px] font-bold tracking-widest text-[#00A9D6] uppercase block">
-                  ACTIVE CASE DOSSIER
+                  {lang === 'ar' ? 'ملف المعاملة النشط' : 'ACTIVE CASE DOSSIER'}
                 </span>
                 <span className="text-xs font-display font-extrabold text-white uppercase">
                   {activeTrack.shortTitle}
@@ -415,7 +456,7 @@ export default function AboutCta({ onOpenAssistance, onExploreServices }) {
             {/* Ministerial Authority Mapping */}
             <div className="space-y-2 mb-6">
               <span className="font-mono text-[10px] uppercase tracking-wider text-white/50 block">
-                MINISTERIAL BODIES INVOLVED:
+                {lang === 'ar' ? 'الجهات والدوائر المعنية:' : 'MINISTERIAL BODIES INVOLVED:'}
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {activeTrack.authorities.map(auth => (
@@ -429,7 +470,7 @@ export default function AboutCta({ onOpenAssistance, onExploreServices }) {
               </div>
             </div>
 
-            {/* ACTION CENTER - Differentiated, High-Conversion Triggers */}
+            {/* ACTION CENTER */}
             <div className="space-y-3.5 mb-6">
               {/* PRIMARY ACTION 1: Instant WhatsApp Case Review */}
               <button
@@ -442,10 +483,10 @@ export default function AboutCta({ onOpenAssistance, onExploreServices }) {
                 <div className="flex items-center gap-2.5">
                   <MessageCircle size={18} className="fill-[#06162F] stroke-none shrink-0" />
                   <span className="text-left font-bold text-xs sm:text-sm">
-                    START WHATSAPP CASE REVIEW
+                    {lang === 'ar' ? 'محادثة فورية عبر واتساب' : 'START WHATSAPP CASE REVIEW'}
                   </span>
                 </div>
-                <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1.5 shrink-0" />
+                <ArrowRight size={18} className={`transition-transform duration-300 shrink-0 ${isRTL ? 'rotate-180 group-hover:-translate-x-1.5' : 'group-hover:translate-x-1.5'}`} />
               </button>
 
               {/* PRIMARY ACTION 2: Book Official Consultation Inquiry */}
@@ -459,10 +500,10 @@ export default function AboutCta({ onOpenAssistance, onExploreServices }) {
                 <div className="flex items-center gap-2.5">
                   <FileCheck2 size={18} className="text-[#00A9D6] shrink-0" />
                   <span className="text-left font-bold text-xs sm:text-sm">
-                    SUBMIT DIRECT CASE INQUIRY
+                    {lang === 'ar' ? 'طلب مساعدة واستشارة رسمية' : 'SUBMIT DIRECT CASE INQUIRY'}
                   </span>
                 </div>
-                <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1.5 shrink-0 text-[#00A9D6]" />
+                <ArrowRight size={18} className={`transition-transform duration-300 shrink-0 text-[#00A9D6] ${isRTL ? 'rotate-180 group-hover:-translate-x-1.5' : 'group-hover:translate-x-1.5'}`} />
               </button>
             </div>
 
@@ -472,24 +513,27 @@ export default function AboutCta({ onOpenAssistance, onExploreServices }) {
                 <div className="flex items-center gap-2.5">
                   <Phone size={16} className="text-[#00A9D6] shrink-0" />
                   <div>
-                    <span className="font-mono text-[10px] text-white/50 block">DIRECT PRO HOTLINE</span>
+                    <span className="font-mono text-[10px] text-white/50 block">
+                      {lang === 'ar' ? 'خط الـ PRO المباشر' : 'DIRECT PRO HOTLINE'}
+                    </span>
                     <a 
                       id="about-cta-phone-btn"
                       href="tel:+971525453323" 
                       className="text-sm font-mono font-bold text-white hover:text-[#00A9D6] transition-colors"
                       title="Call New Guide PRO Hotline in Dubai"
+                      dir="ltr"
                     >
                       +971 52 545 3323
                     </a>
                   </div>
                 </div>
-                <span className="text-[10px] font-mono text-[#00A9D6] font-semibold bg-[#00A9D6]/10 px-2 py-0.5 rounded">
+                <span className="text-[10px] font-mono text-[#00A9D6] font-semibold bg-[#00A9D6]/10 px-2 py-0.5 rounded" dir="ltr">
                   08:00 – 20:00 GST
                 </span>
               </div>
             </div>
 
-            {/* Link to Full Services Directory (Distinct Architectural Text Link) */}
+            {/* Link to Full Services Directory */}
             <div className="pb-5 border-b border-white/10 mb-5 flex items-center justify-between">
               <button
                 id="about-cta-services-btn"
@@ -498,8 +542,8 @@ export default function AboutCta({ onOpenAssistance, onExploreServices }) {
                 className="group inline-flex items-center gap-2 text-xs font-mono text-white/70 hover:text-white transition-colors cursor-pointer"
                 title="Explore the complete 17-service procedural directory"
               >
-                <span>BROWSE ALL 17 CLEARANCE PROCEDURES</span>
-                <ExternalLink size={13} className="text-[#00A9D6] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <span>{lang === 'ar' ? 'استعراض دليل الخدمات الكامل (17 خدمة)' : 'BROWSE ALL 17 CLEARANCE PROCEDURES'}</span>
+                <ExternalLink size={13} className={`text-[#00A9D6] transition-transform ${isRTL ? 'group-hover:-translate-x-0.5' : 'group-hover:translate-x-0.5'} group-hover:-translate-y-0.5`} />
               </button>
             </div>
 
@@ -507,19 +551,19 @@ export default function AboutCta({ onOpenAssistance, onExploreServices }) {
             <div className="grid grid-cols-2 gap-3 text-[10px] font-mono text-white/60">
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 size={12} className="text-[#00A9D6] shrink-0" />
-                <span>RESPONSE: &lt; 2 HOURS</span>
+                <span>{lang === 'ar' ? 'الرد: أقل من ساعتين' : 'RESPONSE: < 2 HOURS'}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 size={12} className="text-[#00A9D6] shrink-0" />
-                <span>ZERO CASE EVALUATION FEE</span>
+                <span>{lang === 'ar' ? 'تقييم مجاني للمتطلبات' : 'ZERO CASE EVALUATION FEE'}</span>
               </div>
             </div>
 
-            {/* Address Location Footnote for Local SEO */}
+            {/* Address Location Footnote */}
             <div className="mt-4 pt-3 border-t border-white/10 flex items-center gap-2 text-[10px] text-white/40 font-mono">
               <MapPin size={11} className="text-[#00A9D6] shrink-0" />
               <address className="not-italic">
-                Hor Al Anz, Deira, Dubai, United Arab Emirates
+                {lang === 'ar' ? 'شارع النهضة، القصيص، دبي، الإمارات العربية المتحدة' : 'Al Nahda Rd, Al Qusais, Dubai, United Arab Emirates'}
               </address>
             </div>
 

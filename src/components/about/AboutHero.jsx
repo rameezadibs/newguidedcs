@@ -1,7 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../../context/LanguageContext';
+import { translations } from '../../translations/translations';
 
 export default function AboutHero() {
+  const { lang, isRTL } = useLanguage();
+  const t = translations[lang] || translations.en;
+
   const handleScrollDown = () => {
     const nextSection = document.getElementById('principle');
     if (nextSection) {
@@ -15,51 +20,8 @@ export default function AboutHero() {
     '@type': 'AboutPage',
     '@id': 'https://newguidedcs.ae/about#webpage',
     'url': 'https://newguidedcs.ae/about',
-    'name': 'About New Guide Documents Clearing Services Co. Dubai',
-    'description': 'Licensed corporate PRO and government liaison agency in Dubai, UAE. We specialize in MOFA document attestations, DET business setup, Golden Visas, GDRFA immigration clearances, and MOHRE labor quotas.',
-    'isPartOf': {
-      '@type': 'WebSite',
-      '@id': 'https://newguidedcs.ae/#website',
-      'url': 'https://newguidedcs.ae/',
-      'name': 'New Guide Documents Clearing Services Co.'
-    },
-    'mainEntity': {
-      '@type': 'ProfessionalService',
-      '@id': 'https://newguidedcs.ae/#organization',
-      'name': 'New Guide Documents Clearing Services Co.',
-      'telephone': '+971525453323',
-      'email': 'info@newguidedcs.ae',
-      'priceRange': '$$',
-      'address': {
-        '@type': 'PostalAddress',
-        'streetAddress': 'Office S20, Ground Floor, Arzoo Building, Near Al Twar Center, Al Nahda Rd',
-        'addressLocality': 'Dubai',
-        'addressRegion': 'Dubai',
-        'addressCountry': 'AE'
-      },
-      'geo': {
-        '@type': 'GeoCoordinates',
-        'latitude': 25.2048,
-        'longitude': 55.2708
-      },
-      'areaServed': [
-        'Dubai',
-        'Abu Dhabi',
-        'Sharjah',
-        'Ajman',
-        'Ras Al Khaimah',
-        'Fujairah',
-        'Umm Al Quwain'
-      ],
-      'knowsAbout': [
-        'Document Clearing Services Dubai',
-        'MOFA Attestation & Legalization',
-        'Dubai Economy & Tourism DET Business Setup',
-        'UAE 10-Year Golden Visa Clearance',
-        'MOHRE Labor Quota Management',
-        'GDRFA Residency Visa Processing'
-      ]
-    }
+    'name': lang === 'ar' ? 'من نحن | شركة الدليل الجديد لخدمات تخليص المعاملات دبي' : 'About New Guide Documents Clearing Services Co. Dubai',
+    'description': lang === 'ar' ? 'وكالة معتمدة للتعقيب والعلاقات العامة وتخليص المعاملات في دبي والإمارات.' : 'Licensed corporate PRO and government liaison agency in Dubai, UAE.',
   };
 
   return (
@@ -67,7 +29,7 @@ export default function AboutHero() {
       id="about-hero" 
       role="region"
       aria-labelledby="about-hero-heading"
-      className="relative min-h-[100svh] w-full bg-[#06162F] text-white flex flex-col justify-between overflow-hidden pt-24 sm:pt-28 pb-10 sm:pb-12 px-4 sm:px-8 lg:px-14 select-none"
+      className={`relative min-h-[100svh] w-full bg-[#06162F] text-white flex flex-col justify-between overflow-hidden pt-24 sm:pt-28 pb-10 sm:pb-12 px-4 sm:px-8 lg:px-14 select-none ${isRTL ? 'text-right' : 'text-left'}`}
     >
       {/* Schema.org Microdata Injection for Search Engines */}
       <script
@@ -114,22 +76,22 @@ export default function AboutHero() {
           className="flex items-center gap-3"
         >
           <span className="w-8 h-[2px] bg-[#00A9D6]" />
-          <span className="font-mono text-xs sm:text-sm font-bold tracking-[0.3em] uppercase text-[#00A9D6]">
-            ABOUT NEW GUIDE // LICENSED UAE PRO & DOCUMENT CLEARING
+          <span className="font-mono text-xs sm:text-sm font-bold tracking-[0.2em] uppercase text-[#00A9D6]">
+            {t.aboutPage.heroTag}
           </span>
         </motion.div>
 
         {/* Vertical Information Block - Editorial Typographic Marker */}
         <motion.div
-          initial={{ opacity: 0, x: 20 }}
+          initial={{ opacity: 0, x: isRTL ? -20 : 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.9, delay: 0.35 }}
-          className="flex flex-wrap sm:flex-col items-start sm:items-end text-left sm:text-right gap-y-1 gap-x-4 font-mono text-[11px] sm:text-xs tracking-[0.2em] text-white/60"
+          className={`flex flex-wrap sm:flex-col items-start ${isRTL ? 'sm:items-start text-right' : 'sm:items-end text-right'} gap-y-1 gap-x-4 font-mono text-[11px] sm:text-xs tracking-[0.2em] text-white/60`}
         >
-          <span className="text-[#00A9D6] font-bold">DUBAI, UAE</span>
-          <span>CORPORATE PRO</span>
-          <span>GOVERNMENT LIAISON</span>
-          <span className="text-white/80">DOCUMENT CLEARING</span>
+          <span className="text-[#00A9D6] font-bold">{t.aboutPage.heroSub1}</span>
+          <span>{t.aboutPage.heroSub2}</span>
+          <span>{t.aboutPage.heroSub3}</span>
+          <span className="text-white/80">{t.aboutPage.heroSub4}</span>
         </motion.div>
 
       </div>
@@ -145,7 +107,7 @@ export default function AboutHero() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="mb-4 inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#00A9D6]/15 border border-[#00A9D6]/30 font-mono text-[11px] sm:text-xs tracking-wider text-[#00A9D6] uppercase font-bold"
           >
-            <span>DOCUMENT CLEARING & CORPORATE PRO SERVICES DUBAI</span>
+            <span>{t.aboutPage.heroKeyword}</span>
           </motion.div>
 
           {/* Masked Headline Reveal Line 1 & 2 - Semantic H1 for Top Ranking */}
@@ -155,11 +117,11 @@ export default function AboutHero() {
               initial={{ y: '100%', opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-              className="font-display font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] tracking-tight leading-[0.98] text-white drop-shadow-md"
+              className="font-display font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] tracking-tight leading-[0.98] text-white drop-shadow-md uppercase"
             >
-              WE DON'T JUST
+              {t.aboutPage.heroH1_1}
               <br />
-              <span className="text-white/95">CLEAR DOCUMENTS.</span>
+              <span className="text-white/95">{t.aboutPage.heroH1_2}</span>
             </motion.h1>
           </div>
 
@@ -169,18 +131,18 @@ export default function AboutHero() {
               initial={{ y: '100%', opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 1.15, ease: [0.16, 1, 0.3, 1], delay: 0.65 }}
-              className="font-display font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] tracking-tight leading-[0.95]"
+              className="font-display font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] tracking-tight leading-[0.95] uppercase"
             >
-              <span className="text-white/80">WE CLEAR</span>
+              <span className="text-white/80">{t.aboutPage.heroH1_3}</span>
               <br />
               <span className="text-[#00A9D6] relative inline-block">
-                THE WAY FORWARD.
+                {t.aboutPage.heroH1_4}
                 {/* Thin Architectural Horizon Line */}
                 <motion.span
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
                   transition={{ duration: 1.2, delay: 1.1, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute -bottom-2 sm:-bottom-4 left-0 right-0 h-[2px] sm:h-[3px] bg-gradient-to-r from-[#00A9D6] via-[#00A9D6]/80 to-transparent origin-left"
+                  className={`absolute -bottom-2 sm:-bottom-4 left-0 right-0 h-[2px] sm:h-[3px] bg-gradient-to-r from-[#00A9D6] via-[#00A9D6]/80 to-transparent ${isRTL ? 'origin-right' : 'origin-left'}`}
                 />
               </span>
             </motion.div>
@@ -195,19 +157,19 @@ export default function AboutHero() {
           >
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#00A9D6]" />
-              <span>MOFA Attestations</span>
+              <span>{lang === 'ar' ? 'تصديقات الخارجية' : 'MOFA Attestations'}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#00A9D6]" />
-              <span>DET Business Setup</span>
+              <span>{lang === 'ar' ? 'تأسيس الشركات واقتصادية دبي' : 'DET Business Setup'}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#00A9D6]" />
-              <span>Golden Visa Clearance</span>
+              <span>{lang === 'ar' ? 'تأشيرات الإقامة الذهبية' : 'Golden Visa Clearance'}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#00A9D6]" />
-              <span>MOHRE & GDRFA PRO</span>
+              <span>{lang === 'ar' ? 'معاملات الموارد البشرية والإقامة' : 'MOHRE & GDRFA PRO'}</span>
             </div>
           </motion.div>
 
@@ -241,7 +203,7 @@ export default function AboutHero() {
           aria-label="Scroll to discover New Guide"
         >
           <div className="font-mono text-[11px] sm:text-xs font-bold tracking-[0.25em] uppercase text-white/70 group-hover:text-[#00A9D6] transition-colors">
-            SCROLL TO DISCOVER
+            {lang === 'ar' ? 'مرر للأسفل لاكتشاف المزيد' : 'SCROLL TO DISCOVER'}
           </div>
           <motion.div
             animate={{ y: [0, 5, 0] }}

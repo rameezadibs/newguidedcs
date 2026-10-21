@@ -1,29 +1,57 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Check, ShieldCheck, Clock, FileText, ChevronRight, MessageCircle, HelpCircle, Building2, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, ShieldCheck, Clock, FileText, ChevronRight, MessageCircle, HelpCircle, CheckCircle2 } from 'lucide-react';
 import { getServiceById, getNextService, getPrevService } from './servicesData';
+import { useLanguage } from '../../context/LanguageContext';
+import { ARABIC_SERVICES } from '../../translations/translations';
 
 export default function ServiceDetailPage({ serviceId, onNavigate, onOpenAssistance }) {
-  const service = getServiceById(serviceId) || getServiceById('government-transactions');
-  const prevService = getPrevService(service.id);
-  const nextService = getNextService(service.id);
+  const { lang, isRTL } = useLanguage();
+  const rawService = getServiceById(serviceId) || getServiceById('government-transactions');
+  const prevService = getPrevService(rawService.id);
+  const nextService = getNextService(rawService.id);
+
+  // Merge Arabic service override if lang === 'ar'
+  const service = useMemo(() => {
+    if (lang === 'ar' && ARABIC_SERVICES[rawService.id]) {
+      const ar = ARABIC_SERVICES[rawService.id];
+      return {
+        ...rawService,
+        title: ar.title || rawService.title,
+        description: ar.description || rawService.description,
+        context: ar.context || rawService.context,
+        authority: ar.authority || rawService.authority,
+        authorityFull: ar.authorityFull || rawService.authorityFull,
+        jurisdiction: ar.jurisdiction || rawService.jurisdiction,
+        categoryType: ar.categoryType || rawService.categoryType,
+        turnaround: ar.turnaround || rawService.turnaround,
+        procedures: ar.procedures && ar.procedures.length > 0 ? ar.procedures : rawService.procedures,
+        requiredDocuments: ar.requiredDocuments && ar.requiredDocuments.length > 0 ? ar.requiredDocuments : rawService.requiredDocuments,
+      };
+    }
+    return rawService;
+  }, [rawService, lang]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
     if (service) {
-      document.title = `${service.title} | UAE Clearance & Corporate Services — New Guide`;
+      document.title = lang === 'ar' 
+        ? `${service.title} | خدمات التخليص الحكومي والـ PRO في الإمارات — نيو غايد`
+        : `${service.title} | UAE Clearance & Corporate Services — New Guide`;
     }
-  }, [service]);
+  }, [service, lang]);
 
   if (!service) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center p-8 bg-[#06162F] text-white">
-        <h2 className="text-2xl font-bold mb-4">Service Not Found</h2>
+        <h2 className="text-2xl font-bold mb-4">
+          {lang === 'ar' ? 'الخدمة غير موجودة' : 'Service Not Found'}
+        </h2>
         <button
           onClick={() => onNavigate && onNavigate('services')}
           className="px-6 py-3 rounded-xl bg-[#00A9D6] text-[#06162F] font-bold text-xs uppercase"
         >
-          Return to Services Directory
+          {lang === 'ar' ? 'العودة لدليل الخدمات' : 'Return to Services Directory'}
         </button>
       </div>
     );
@@ -31,13 +59,15 @@ export default function ServiceDetailPage({ serviceId, onNavigate, onOpenAssista
 
   const handleWhatsAppInquiry = () => {
     const text = encodeURIComponent(
-      `Hello New Guide team, I would like to inquire about the official procedure for: ${service.title} (Code: NG-SVC-${service.num}).`
+      lang === 'ar'
+        ? `مرحباً فريق نيو غايد، أود الاستفسار حول الإجراءات الرسمية لخدمة: ${service.title} (رمز المعاملة: NG-SVC-${service.num}).`
+        : `Hello New Guide team, I would like to inquire about the official procedure for: ${service.title} (Code: NG-SVC-${service.num}).`
     );
     window.open(`https://wa.me/971525453323?text=${text}`, '_blank');
   };
 
   return (
-    <div className="relative w-full bg-[#FFFFFF] text-[#111827] overflow-x-hidden selection:bg-[#00A9D6]/20 selection:text-[#06162F]">
+    <div className={`relative w-full bg-[#FFFFFF] text-[#111827] overflow-x-hidden selection:bg-[#00A9D6]/20 selection:text-[#06162F] ${isRTL ? 'text-right' : 'text-left'}`}>
       
       {/* ====================================================
           01 — DEDICATED SERVICE HERO BANNER (Midnight Navy)
@@ -68,16 +98,16 @@ export default function ServiceDetailPage({ serviceId, onNavigate, onOpenAssista
               onClick={() => onNavigate && onNavigate('home')}
               className="hover:text-white transition-colors cursor-pointer"
             >
-              HOME
+              {lang === 'ar' ? 'الرئيسية' : 'HOME'}
             </button>
-            <ChevronRight className="w-3 h-3 text-[#00A9D6]" />
+            <ChevronRight className={`w-3 h-3 text-[#00A9D6] ${isRTL ? 'rotate-180' : ''}`} />
             <button
               onClick={() => onNavigate && onNavigate('services')}
               className="hover:text-white transition-colors cursor-pointer"
             >
-              SERVICES DIRECTORY
+              {lang === 'ar' ? 'دليل الخدمات' : 'SERVICES DIRECTORY'}
             </button>
-            <ChevronRight className="w-3 h-3 text-[#00A9D6]" />
+            <ChevronRight className={`w-3 h-3 text-[#00A9D6] ${isRTL ? 'rotate-180' : ''}`} />
             <span className="text-[#00A9D6] font-bold">
               {service.num} // {service.title.toUpperCase()}
             </span>
@@ -92,12 +122,12 @@ export default function ServiceDetailPage({ serviceId, onNavigate, onOpenAssista
               <div className="inline-flex items-center gap-3 px-3.5 py-1.5 rounded bg-[#08244A] border border-[#00A9D6]/30">
                 <span className="w-2 h-2 rounded-full bg-[#00A9D6] animate-pulse" />
                 <span className="text-xs font-mono font-bold tracking-[0.2em] text-[#00A9D6] uppercase">
-                  PROCEDURAL CODE: NG-SVC-{service.num} // 17 SERVICES
+                  {lang === 'ar' ? `رمز المعاملة: NG-SVC-${service.num} // 17 خدمة حكومية` : `PROCEDURAL CODE: NG-SVC-${service.num} // 17 SERVICES`}
                 </span>
               </div>
 
               {/* Exact Service Title */}
-              <h1 className="text-4xl sm:text-6xl md:text-7xl font-display font-extrabold tracking-tight leading-[0.96] text-white">
+              <h1 className="text-4xl sm:text-6xl md:text-7xl font-display font-extrabold tracking-tight leading-[0.96] text-white uppercase">
                 {service.title}
               </h1>
 
@@ -115,13 +145,17 @@ export default function ServiceDetailPage({ serviceId, onNavigate, onOpenAssista
               <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                 <button
                   onClick={() => {
-                    const text = encodeURIComponent(`Hello New Guide, I would like to request service filing for: ${service?.title || 'Corporate Services'}.`);
+                    const text = encodeURIComponent(
+                      lang === 'ar'
+                        ? `مرحباً نيو غايد، أود طلب بدء إجراءات: ${service?.title || 'المعاملات'}.`
+                        : `Hello New Guide, I would like to request service filing for: ${service?.title || 'Corporate Services'}.`
+                    );
                     window.open(`https://wa.me/971525453323?text=${text}`, '_blank');
                   }}
                   className="inline-flex items-center justify-center gap-3 px-7 py-4 rounded-xl bg-[#00A9D6] hover:bg-[#087ED1] text-[#06162F] hover:text-white font-display font-extrabold text-xs sm:text-sm tracking-widest uppercase transition-all duration-300 shadow-[0_10px_30px_rgba(0,169,214,0.3)] cursor-pointer"
                 >
-                  <span>REQUEST SERVICE FILING</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span>{lang === 'ar' ? 'طلب بدء المعاملة' : 'REQUEST SERVICE FILING'}</span>
+                  <ArrowRight className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />
                 </button>
 
                 <button
@@ -129,14 +163,14 @@ export default function ServiceDetailPage({ serviceId, onNavigate, onOpenAssista
                   className="inline-flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-[#08244A] hover:bg-[#123D88] text-white border border-[#00A9D6]/30 font-display font-bold text-xs sm:text-sm tracking-wider uppercase transition-all duration-300 cursor-pointer"
                 >
                   <MessageCircle className="w-4 h-4 text-[#00A9D6]" />
-                  <span>DIRECT WHATSAPP DISPATCH</span>
+                  <span>{lang === 'ar' ? 'محادثة فورية عبر واتساب' : 'DIRECT WHATSAPP DISPATCH'}</span>
                 </button>
               </div>
 
               {/* Regulatory Assurance */}
               <div className="pt-3 flex items-center gap-2.5 text-xs font-mono text-white/50">
                 <ShieldCheck className="w-4 h-4 text-[#00A9D6]" />
-                <span>AUTHORIZED UAE CORPORATE SERVICE PROVIDER // ZERO GUESSWORK</span>
+                <span>{lang === 'ar' ? 'مقدم خدمات معتمد في دولة الإمارات // بدون أي تعقيدات' : 'AUTHORIZED UAE CORPORATE SERVICE PROVIDER // ZERO GUESSWORK'}</span>
               </div>
 
             </div>
@@ -177,18 +211,26 @@ export default function ServiceDetailPage({ serviceId, onNavigate, onOpenAssista
           {/* Quick Institutional Meta Bar */}
           <div className="mt-14 pt-8 border-t border-white/10 grid grid-cols-1 sm:grid-cols-3 gap-6 text-xs font-mono">
             <div className="p-4 rounded-xl bg-[#08244A]/50 border border-white/5">
-              <div className="text-[#00A9D6] uppercase tracking-wider font-bold mb-1">AUTHORITY JURISDICTION</div>
+              <div className="text-[#00A9D6] uppercase tracking-wider font-bold mb-1">
+                {lang === 'ar' ? 'الجهة القضائية والحكومية' : 'AUTHORITY JURISDICTION'}
+              </div>
               <div className="text-white font-semibold">{service.authorityFull || service.authority}</div>
             </div>
 
             <div className="p-4 rounded-xl bg-[#08244A]/50 border border-white/5">
-              <div className="text-[#00A9D6] uppercase tracking-wider font-bold mb-1">REGULATORY SCOPE</div>
+              <div className="text-[#00A9D6] uppercase tracking-wider font-bold mb-1">
+                {lang === 'ar' ? 'النطاق التنظيمي' : 'REGULATORY SCOPE'}
+              </div>
               <div className="text-white font-semibold">{service.jurisdiction}</div>
             </div>
 
             <div className="p-4 rounded-xl bg-[#08244A]/50 border border-white/5">
-              <div className="text-[#00A9D6] uppercase tracking-wider font-bold mb-1">SUBMISSION MECHANISM</div>
-              <div className="text-white font-semibold">Authorized Ministerial Courier &amp; Digital Portal</div>
+              <div className="text-[#00A9D6] uppercase tracking-wider font-bold mb-1">
+                {lang === 'ar' ? 'آلية التقديم المعتمدة' : 'SUBMISSION MECHANISM'}
+              </div>
+              <div className="text-white font-semibold">
+                {lang === 'ar' ? 'بوابة حكومية رسمية ومتابعة ميدانية مباشرة' : 'Authorized Ministerial Courier & Digital Portal'}
+              </div>
             </div>
           </div>
 
@@ -204,16 +246,27 @@ export default function ServiceDetailPage({ serviceId, onNavigate, onOpenAssista
           <div className="max-w-3xl mb-12 sm:mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#08244A]/5 text-xs font-mono font-bold tracking-widest text-[#087ED1] uppercase mb-3">
               <FileText className="w-3.5 h-3.5 text-[#00A9D6]" />
-              <span>STATUTORY CAPABILITIES</span>
+              <span>{lang === 'ar' ? 'الإجراءات والمسارات القانونية' : 'STATUTORY CAPABILITIES'}</span>
             </div>
 
             <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-[#06162F] tracking-tight">
-              What New Guide Handles for <br />
-              <span className="text-[#123D88]">{service.title}</span>
+              {lang === 'ar' ? (
+                <>
+                  ما تقدمه نيو غايد في معاملة <br />
+                  <span className="text-[#123D88]">{service.title}</span>
+                </>
+              ) : (
+                <>
+                  What New Guide Handles for <br />
+                  <span className="text-[#123D88]">{service.title}</span>
+                </>
+              )}
             </h2>
 
             <p className="mt-3 text-base text-[#667085] leading-relaxed">
-              Every step is managed with regulatory accuracy to prevent municipal rejections, unexpected fines, or administrative delays.
+              {lang === 'ar'
+                ? 'تتم إدارة كل مرحلة بأقصى درجات الدقة القانونية لتجنب أي رفض أو غرامات أو تأخير في التنفيذ.'
+                : 'Every step is managed with regulatory accuracy to prevent municipal rejections, unexpected fines, or administrative delays.'}
             </p>
           </div>
 
@@ -228,7 +281,7 @@ export default function ServiceDetailPage({ serviceId, onNavigate, onOpenAssista
                     0{idx + 1}
                   </div>
                   <span className="text-[10px] font-mono font-bold text-[#00A9D6] tracking-wider uppercase">
-                    GOV PROTOCOL
+                    {lang === 'ar' ? 'إجراء رسمي' : 'GOV PROTOCOL'}
                   </span>
                 </div>
 
@@ -237,7 +290,9 @@ export default function ServiceDetailPage({ serviceId, onNavigate, onOpenAssista
                 </h3>
 
                 <p className="text-xs sm:text-sm text-[#667085] leading-relaxed">
-                  Comprehensive ministerial filing and document processing handled end-to-end with verified compliance stamps and physical submission receipts.
+                  {lang === 'ar'
+                    ? 'إيداع رسمي ومتابعة شاملة عبر الكاونترات والمنصات الوزارية مع إيصالات رسمية وأختام اعتماد موثوقة.'
+                    : 'Comprehensive ministerial filing and document processing handled end-to-end with verified compliance stamps and physical submission receipts.'}
                 </p>
               </div>
             ))}
@@ -257,15 +312,17 @@ export default function ServiceDetailPage({ serviceId, onNavigate, onOpenAssista
             {/* Left: Required Documentation */}
             <div className="lg:col-span-5 space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#08244A]/5 text-xs font-mono font-bold tracking-widest text-[#08244A] uppercase">
-                <span>PREREQUISITES</span>
+                <span>{lang === 'ar' ? 'المستندات والمتطلبات' : 'PREREQUISITES'}</span>
               </div>
 
               <h2 className="text-2xl sm:text-4xl font-display font-extrabold text-[#06162F]">
-                Required Documents
+                {lang === 'ar' ? 'المستندات المطلوبة' : 'Required Documents'}
               </h2>
 
               <p className="text-sm text-[#667085] leading-relaxed">
-                To initiate {service.title}, our liaison officers will require the following standard documentation:
+                {lang === 'ar'
+                  ? `لبدء إجراءات ${service.title}، يحتاج مسؤولو الـ PRO لدينا إلى المستندات التالية:`
+                  : `To initiate ${service.title}, our liaison officers will require the following standard documentation:`}
               </p>
 
               <div className="space-y-3 pt-2">
@@ -278,9 +335,13 @@ export default function ServiceDetailPage({ serviceId, onNavigate, onOpenAssista
               </div>
 
               <div className="p-4 rounded-xl bg-[#06162F] text-white space-y-2">
-                <div className="text-xs font-mono font-bold text-[#00A9D6]">MISSING A PREREQUISITE?</div>
+                <div className="text-xs font-mono font-bold text-[#00A9D6]">
+                  {lang === 'ar' ? 'هل ينقصك أحد المستندات؟' : 'MISSING A PREREQUISITE?'}
+                </div>
                 <p className="text-xs text-white/70 leading-relaxed">
-                  If you are missing an Ejari, certified translation, or foreign attestation, our team can formulate these prerequisite filings simultaneously.
+                  {lang === 'ar'
+                    ? 'إذا كان ينقصك عقد إيجاري، أو ترجمة قانونية، أو تصديق خارجي، يمكن لفريقنا تجهيز هذه المتطلبات بالتزامن.'
+                    : 'If you are missing an Ejari, certified translation, or foreign attestation, our team can formulate these prerequisite filings simultaneously.'}
                 </p>
               </div>
             </div>
@@ -288,34 +349,42 @@ export default function ServiceDetailPage({ serviceId, onNavigate, onOpenAssista
             {/* Right: 4-Stage Pathway Timeline */}
             <div className="lg:col-span-7 space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#08244A]/5 text-xs font-mono font-bold tracking-widest text-[#08244A] uppercase">
-                <span>WORKFLOW TIMELINE</span>
+                <span>{lang === 'ar' ? 'مراحل التنفيذ' : 'WORKFLOW TIMELINE'}</span>
               </div>
 
               <h2 className="text-2xl sm:text-4xl font-display font-extrabold text-[#06162F]">
-                How We Process Your Filing
+                {lang === 'ar' ? 'كيف ننجز معاملتك خطوة بخطوة' : 'How We Process Your Filing'}
               </h2>
 
               <div className="space-y-4 pt-2">
                 {[
                   {
                     step: '01',
-                    title: 'Intake Audit & Document Verification',
-                    desc: 'Our senior PRO team audits your dossier against current 2026 ministerial guidelines to ensure zero discrepancies or rejection risks.',
+                    title: lang === 'ar' ? 'مراجعة المتطلبات وتدقيق المستندات' : 'Intake Audit & Document Verification',
+                    desc: lang === 'ar'
+                      ? 'يقوم كبار مسؤولي العلاقات العامة بمطابقة أوراقك مع أحدث اللوائح والاشتراطات لضمان عدم وجود أي نقص.'
+                      : 'Our senior PRO team audits your dossier against current 2026 ministerial guidelines to ensure zero discrepancies or rejection risks.',
                   },
                   {
                     step: '02',
-                    title: 'Bilingual Drafting & Ministerial Typing',
-                    desc: 'We type official government submission packets, format bilingual documents, and secure internal approvals before filing.',
+                    title: lang === 'ar' ? 'الطباعة الحكومية وإعداد الاستمارات' : 'Bilingual Drafting & Ministerial Typing',
+                    desc: lang === 'ar'
+                      ? 'طباعة استمارات التقديم الحكومية وتنسيق المعاملات باللغتين العربية والإنجليزية لضمان دقة البيانات.'
+                      : 'We type official government submission packets, format bilingual documents, and secure internal approvals before filing.',
                   },
                   {
                     step: '03',
-                    title: 'Direct Government Liaison & Case Officer Follow-Up',
-                    desc: 'Authorized New Guide representatives submit filings through specialized ministerial portals and physically track case movement.',
+                    title: lang === 'ar' ? 'الإيداع الرسمي والمتابعة مع الموظف المختص' : 'Direct Government Liaison & Case Officer Follow-Up',
+                    desc: lang === 'ar'
+                      ? 'يقوم مندوبونا المعتمدون بتقديم الملف عبر البوابات ومتابعته ميدانياً خطوة بخطوة.'
+                      : 'Authorized New Guide representatives submit filings through specialized ministerial portals and physically track case movement.',
                   },
                   {
                     step: '04',
-                    title: 'Statutory Resolution & Verified Handover',
-                    desc: 'Upon official seal or approval certificate release, we deliver verified physical and electronic documents straight to you.',
+                    title: lang === 'ar' ? 'استلام الاعتماد والتسليم الموثق' : 'Statutory Resolution & Verified Handover',
+                    desc: lang === 'ar'
+                      ? 'بمجرد صدور الموافقة أو الشهادة المعتمدة، نسلمك المستندات الأصلية والرقمية فوراً.'
+                      : 'Upon official seal or approval certificate release, we deliver verified physical and electronic documents straight to you.',
                   },
                 ].map((item) => (
                   <div key={item.step} className="p-5 rounded-2xl bg-white border border-slate-200 flex items-start gap-4">
@@ -346,10 +415,10 @@ export default function ServiceDetailPage({ serviceId, onNavigate, onOpenAssista
             <div className="text-center mb-12">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#08244A]/5 text-xs font-mono font-bold tracking-widest text-[#087ED1] uppercase mb-2">
                 <HelpCircle className="w-3.5 h-3.5 text-[#00A9D6]" />
-                <span>REGULATORY GUIDANCE</span>
+                <span>{lang === 'ar' ? 'الأسئلة الشائعة والمعلومات التنظيمية' : 'REGULATORY GUIDANCE'}</span>
               </div>
               <h2 className="text-3xl sm:text-4xl font-display font-extrabold text-[#06162F]">
-                Frequently Asked Questions
+                {lang === 'ar' ? 'الأسئلة الأكثر شيوعاً' : 'Frequently Asked Questions'}
               </h2>
             </div>
 
@@ -382,12 +451,14 @@ export default function ServiceDetailPage({ serviceId, onNavigate, onOpenAssista
               className="group flex items-center gap-3 text-left cursor-pointer"
             >
               <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 group-hover:text-[#00A9D6] group-hover:border-[#00A9D6] transition-colors">
-                <ArrowLeft className="w-4 h-4" />
+                <ArrowLeft className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />
               </div>
               <div>
-                <div className="text-[10px] font-mono text-[#667085] uppercase">PREVIOUS SERVICE</div>
+                <div className="text-[10px] font-mono text-[#667085] uppercase">
+                  {lang === 'ar' ? 'الخدمة السابقة' : 'PREVIOUS SERVICE'}
+                </div>
                 <div className="text-xs sm:text-sm font-bold text-[#06162F] group-hover:text-[#087ED1] transition-colors">
-                  {prevService.num} — {prevService.title}
+                  {prevService.num} — {lang === 'ar' && ARABIC_SERVICES[prevService.id]?.title ? ARABIC_SERVICES[prevService.id].title : prevService.title}
                 </div>
               </div>
             </button>
@@ -397,21 +468,23 @@ export default function ServiceDetailPage({ serviceId, onNavigate, onOpenAssista
               onClick={() => onNavigate && onNavigate('services')}
               className="text-xs font-mono font-bold tracking-widest text-[#08244A] hover:text-[#00A9D6] uppercase transition-colors px-4 py-2 rounded-lg bg-white border border-slate-200"
             >
-              VIEW ALL 17 SERVICES DIRECTORY
+              {lang === 'ar' ? 'عرض دليل الـ 17 خدمة كاملاً' : 'VIEW ALL 17 SERVICES DIRECTORY'}
             </button>
 
             {/* Next Service Link */}
             <button
               onClick={() => onNavigate && onNavigate('service-detail', nextService.id)}
-              className="group flex items-center gap-3 text-right cursor-pointer flex-row-reverse"
+              className={`group flex items-center gap-3 ${isRTL ? 'text-left' : 'text-right'} cursor-pointer flex-row-reverse`}
             >
               <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 group-hover:text-[#00A9D6] group-hover:border-[#00A9D6] transition-colors">
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />
               </div>
               <div>
-                <div className="text-[10px] font-mono text-[#667085] uppercase">NEXT SERVICE</div>
+                <div className="text-[10px] font-mono text-[#667085] uppercase">
+                  {lang === 'ar' ? 'الخدمة التالية' : 'NEXT SERVICE'}
+                </div>
                 <div className="text-xs sm:text-sm font-bold text-[#06162F] group-hover:text-[#087ED1] transition-colors">
-                  {nextService.num} — {nextService.title}
+                  {nextService.num} — {lang === 'ar' && ARABIC_SERVICES[nextService.id]?.title ? ARABIC_SERVICES[nextService.id].title : nextService.title}
                 </div>
               </div>
             </button>
@@ -426,16 +499,27 @@ export default function ServiceDetailPage({ serviceId, onNavigate, onOpenAssista
       <section className="py-20 sm:py-28 bg-[#06162F] text-white relative overflow-hidden">
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#08244A] border border-[#00A9D6]/30 text-xs font-mono font-bold tracking-widest text-[#00A9D6] uppercase">
-            <span>START PROCEDURE NOW</span>
+            <span>{lang === 'ar' ? 'ابدأ الإجراءات فوراً' : 'START PROCEDURE NOW'}</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-display font-extrabold tracking-tight text-white leading-tight">
-            Ready to Begin <br />
-            <span className="text-[#00A9D6]">{service.title}?</span>
+            {lang === 'ar' ? (
+              <>
+                هل أنت جاهز لبدء <br />
+                <span className="text-[#00A9D6]">{service.title}؟</span>
+              </>
+            ) : (
+              <>
+                Ready to Begin <br />
+                <span className="text-[#00A9D6]">{service.title}?</span>
+              </>
+            )}
           </h2>
 
           <p className="text-base text-[#F3F8FC]/80 max-w-xl mx-auto">
-            Speak directly with an assigned New Guide specialist. We review your dossier and initiate governmental processing immediately.
+            {lang === 'ar'
+              ? 'تحدث مباشرة مع مستشار التخليص المخصص لمعاملتك في نيو غايد. سنقوم بتدقيق الملف والبدء بالإجراءات الحكومية فوراً.'
+              : 'Speak directly with an assigned New Guide specialist. We review your dossier and initiate governmental processing immediately.'}
           </p>
 
           <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -443,8 +527,8 @@ export default function ServiceDetailPage({ serviceId, onNavigate, onOpenAssista
               onClick={() => onOpenAssistance(service.title)}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-[#00A9D6] hover:bg-[#087ED1] text-[#06162F] hover:text-white font-display font-extrabold text-xs sm:text-sm tracking-widest uppercase transition-all duration-300 shadow-xl cursor-pointer"
             >
-              <span>SUBMIT INQUIRY</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>{lang === 'ar' ? 'إرسال طلب استشارة' : 'SUBMIT INQUIRY'}</span>
+              <ArrowRight className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />
             </button>
 
             <button
@@ -452,7 +536,7 @@ export default function ServiceDetailPage({ serviceId, onNavigate, onOpenAssista
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl bg-[#25D366]/15 hover:bg-[#25D366]/25 border border-[#25D366]/40 text-[#25D366] font-display font-bold text-xs sm:text-sm tracking-wider uppercase transition-colors cursor-pointer"
             >
               <MessageCircle className="w-4 h-4" />
-              <span>WHATSAPP CLEARANCE DESK</span>
+              <span>{lang === 'ar' ? 'مكتب تخليص الواتساب المباشر' : 'WHATSAPP CLEARANCE DESK'}</span>
             </button>
           </div>
         </div>

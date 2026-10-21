@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ChevronRight, ShieldCheck } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import { translations, ARABIC_SERVICES } from '../translations/translations';
 
 export default function ServicesIndex({ onOpenAssistance, onSelectService }) {
+  const { lang, isRTL } = useLanguage();
+  const t = translations[lang] || translations.en;
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const services = [
+  const baseServices = [
     {
       id: 'government-transactions',
       num: '01',
@@ -52,6 +56,21 @@ export default function ServicesIndex({ onOpenAssistance, onSelectService }) {
     },
   ];
 
+  const services = baseServices.map((srv) => {
+    if (lang === 'ar' && ARABIC_SERVICES[srv.id]) {
+      const ar = ARABIC_SERVICES[srv.id];
+      return {
+        ...srv,
+        title: ar.title,
+        tagline: ar.context,
+        description: ar.description,
+        turnaround: ar.turnaround,
+        tags: ar.procedures.slice(0, 3),
+      };
+    }
+    return srv;
+  });
+
   const activeService = services[activeIndex];
 
   return (
@@ -65,21 +84,22 @@ export default function ServicesIndex({ onOpenAssistance, onSelectService }) {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
 
-        {/* SEO Section Header */}
-        <div className="max-w-3xl mb-8 sm:mb-10">
+        {/* Section Header */}
+        <div className={`max-w-3xl mb-8 sm:mb-10 ${isRTL ? 'text-right' : 'text-left'}`}>
+          <div className={`flex items-center gap-3 mb-3 ${isRTL ? 'justify-start flex-row-reverse' : ''}`}>
+            <span className="w-7 h-[2px] bg-[#09A9D4]" />
+            <span className="text-xs sm:text-sm font-mono font-bold tracking-[0.22em] text-[#09A9D4] uppercase">
+              {t.servicesIndex.tag}
+            </span>
+          </div>
+
           <h2 id="services-heading" className="text-3xl sm:text-5xl lg:text-6xl font-display font-extrabold tracking-tight leading-tight text-[#071D45] mb-5">
-            <div className="flex items-center gap-3 mb-3">
-              <span className="w-7 h-[2px] bg-[#09A9D4]" />
-              <span className="text-xs sm:text-sm font-mono font-bold tracking-[0.22em] text-[#09A9D4] uppercase">
-                OUR SERVICES
-              </span>
-            </div>
-            DOCUMENT CLEARING & <br />
-            <span className="text-[#123D88]">PRO SERVICES IN DUBAI.</span>
+            {t.servicesIndex.title1} <br />
+            <span className="text-[#123D88]">{t.servicesIndex.title2}</span>
           </h2>
 
           <p className="text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed font-normal">
-            Authorized government liaison for <strong>MOFA attestations</strong>, <strong>company formation</strong>, <strong>trade licensing</strong>, and <strong>Golden Visas</strong> across Dubai and all 7 Emirates.
+            {t.servicesIndex.subtitle}
           </p>
         </div>
 
@@ -105,11 +125,11 @@ export default function ServicesIndex({ onOpenAssistance, onSelectService }) {
                       isActive ? 'bg-[#123D88]/5' : 'hover:bg-slate-50'
                     }`}
                   >
-                    {/* Active Left Cyan Border Indicator */}
+                    {/* Active Left/Right Cyan Border Indicator */}
                     {isActive && (
                       <motion.div
                         layoutId="activeServiceBar"
-                        className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#09A9D4]"
+                        className={`absolute ${isRTL ? 'right-0' : 'left-0'} top-0 bottom-0 w-[3px] bg-[#09A9D4]`}
                         transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                       />
                     )}
@@ -128,8 +148,8 @@ export default function ServicesIndex({ onOpenAssistance, onSelectService }) {
                         <h3
                           className={`text-lg sm:text-xl font-display font-bold transition-all duration-300 ${
                             isActive
-                              ? 'text-[#071D45] translate-x-1 sm:translate-x-2'
-                              : 'text-slate-700 group-hover:text-[#071D45] group-hover:translate-x-1'
+                              ? `text-[#071D45] ${isRTL ? '-translate-x-1 sm:-translate-x-2' : 'translate-x-1 sm:translate-x-2'}`
+                              : `text-slate-700 group-hover:text-[#071D45] ${isRTL ? 'group-hover:-translate-x-1' : 'group-hover:translate-x-1'}`
                           }`}
                         >
                           {service.title}
@@ -143,16 +163,16 @@ export default function ServicesIndex({ onOpenAssistance, onSelectService }) {
                             isActive ? 'opacity-100 text-[#09A9D4]' : 'opacity-0'
                           }`}
                         >
-                          Explore
+                          {lang === 'ar' ? 'استعراض' : 'Explore'}
                         </span>
                         <div
                           className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
                             isActive
-                              ? 'bg-[#09A9D4] text-white translate-x-1'
+                              ? `bg-[#09A9D4] text-white ${isRTL ? '-translate-x-1' : 'translate-x-1'}`
                               : 'bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-slate-700'
                           }`}
                         >
-                          <ChevronRight className="w-4 h-4" />
+                          <ChevronRight className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />
                         </div>
                       </div>
                     </div>
@@ -225,15 +245,15 @@ export default function ServicesIndex({ onOpenAssistance, onSelectService }) {
               <button
                 id="services-view-all-btn"
                 onClick={onOpenAssistance}
-                className="inline-flex items-center gap-2.5 text-xs font-bold font-mono tracking-widest text-[#123D88] hover:text-[#09A9D4] transition-colors uppercase group"
+                className="inline-flex items-center gap-2.5 text-xs font-bold font-mono tracking-widest text-[#123D88] hover:text-[#09A9D4] transition-colors uppercase group cursor-pointer"
                 aria-label="View all document clearing and corporate PRO services"
               >
-                <span>VIEW ALL SERVICES & CONSULTATION</span>
-                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                <span>{t.servicesIndex.viewAllBtn}</span>
+                <ArrowRight className={`w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 ${isRTL ? 'rotate-180 group-hover:-translate-x-1' : ''}`} />
               </button>
 
               <span className="text-[11px] font-mono text-slate-400">
-                CUSTOM PACKAGES AVAILABLE
+                {lang === 'ar' ? 'باقات وحلول مخصصة للشركات' : 'CUSTOM PACKAGES AVAILABLE'}
               </span>
             </div>
           </div>
@@ -269,9 +289,9 @@ export default function ServicesIndex({ onOpenAssistance, onSelectService }) {
               <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#09A9D4] via-[#123D88] to-transparent z-20" />
 
               {/* Top Service Badge */}
-              <div className="absolute top-6 left-6 z-20 bg-[#071D45]/90 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-white/15">
+              <div className={`absolute top-6 ${isRTL ? 'right-6' : 'left-6'} z-20 bg-[#071D45]/90 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-white/15`}>
                 <span className="text-xs font-mono font-bold text-[#09A9D4] tracking-widest mr-2">
-                  INDEX {activeService.num}
+                  {lang === 'ar' ? `المسار ${activeService.num}` : `INDEX ${activeService.num}`}
                 </span>
                 <span className="text-[11px] uppercase tracking-wider text-white/80">
                   {activeService.turnaround}
@@ -279,7 +299,7 @@ export default function ServicesIndex({ onOpenAssistance, onSelectService }) {
               </div>
 
               {/* Bottom Content Card over Image */}
-              <div className="relative z-20 p-8 bg-gradient-to-t from-[#071D45] to-[#071D45]/70 backdrop-blur-sm border-t border-white/10">
+              <div className={`relative z-20 p-8 bg-gradient-to-t from-[#071D45] to-[#071D45]/70 backdrop-blur-sm border-t border-white/10 ${isRTL ? 'text-right' : 'text-left'}`}>
                 <div className="text-xs font-mono font-semibold text-[#09A9D4] uppercase tracking-widest mb-1.5">
                   {activeService.tagline}
                 </div>
@@ -293,18 +313,22 @@ export default function ServicesIndex({ onOpenAssistance, onSelectService }) {
                 <div className="flex items-center justify-between pt-4 border-t border-white/10">
                   <div className="flex items-center gap-2 text-xs text-[#09A9D4] font-mono">
                     <ShieldCheck className="w-3.5 h-3.5 text-[#09A9D4]" />
-                    <span>Official UAE Department Filing</span>
+                    <span>{lang === 'ar' ? 'إيداع رسمي معتمد في الإمارات' : 'Official UAE Department Filing'}</span>
                   </div>
                   <button
                     onClick={() => {
-                      const text = encodeURIComponent(`Hello New Guide, I would like to request official department filing for: ${activeService?.title || 'UAE Document Services'}.`);
+                      const text = encodeURIComponent(
+                        lang === 'ar'
+                          ? `مرحباً نيو غايد، أود الاستفسار عن خدمة: ${activeService?.title || 'تخليص المعاملات'}.`
+                          : `Hello New Guide, I would like to request official department filing for: ${activeService?.title || 'UAE Document Services'}.`
+                      );
                       window.open(`https://wa.me/971525453323?text=${text}`, '_blank');
                     }}
                     className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-white bg-[#123D88] hover:bg-[#071D45] px-4 py-2 rounded-lg shadow transition-all duration-300 cursor-pointer"
                     aria-label={`Request filing for ${activeService.title}`}
                   >
-                    <span>Request Filing</span>
-                    <ArrowRight className="w-3 h-3" />
+                    <span>{t.servicesIndex.inquireService}</span>
+                    <ArrowRight className={`w-3 h-3 ${isRTL ? 'rotate-180' : ''}`} />
                   </button>
                 </div>
               </div>
